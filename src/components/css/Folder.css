@@ -1,0 +1,19 @@
+
+
+li {
+  border: 1px solid green;
+  padding: 5px; 
+  margin: 10px;
+  max-width: 250px;
+}
+
+.parentFolder:hover .Folder {
+  display: block;
+}
+
+.Folder {
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  display: none;
+}
