@@ -1,15 +1,16 @@
-
-
 export const  SET_STATUS = 'SET_STATUS';
-export const STATUS = {
+export const FOLDER_STATUS = {
   IS_CREATE_DONE: 'IS_CREATE_DONE',
-  IS_RENAME: 'IS_RENAME',
   IS_RENAME_DONE: 'IS_RENAME_DONE',
-  IS_RENAME_CANCEL: 'IS_RENAME_CANCEL',
   IS_REMOVE_DONE: 'IS_REMOVE_DONE'
 }
 
-export const CREATE_SUBFOLDER = 'CREATE_SUBFOLDER';
+export const SWITCH_RENAME_INPUT = 'SWITCH_RENAME_INPUT';
+
+export const switchRenameInput = (id) => ({
+  type: SWITCH_RENAME_INPUT,
+  id
+});
 
 export const setStatus = (status) => {
   return {
@@ -20,28 +21,15 @@ export const setStatus = (status) => {
 
 export const createFolder = (id, name) => {
   return {
-    type: STATUS.IS_CREATE_DONE,
+    type: FOLDER_STATUS.IS_CREATE_DONE,
     id,
     name
   }
 }; 
 
-export const isRename = (id) => {
-  return {
-    type: STATUS.IS_RENAME,
-    id,
-  }
-}
-
-export const isRenameCancel = () => {
-  return {
-    type: STATUS.IS_RENAME_CANCEL,
-  }
-}
-
 export const renameFolder = (id, newName) => {
   return {
-    type: STATUS.IS_RENAME_DONE,
+    type: FOLDER_STATUS.IS_RENAME_DONE,
     id,
     newName
   }
@@ -49,15 +37,7 @@ export const renameFolder = (id, newName) => {
 
 export const removeFolder = (id) => {
   return {
-    type: STATUS.IS_REMOVE_DONE,
+    type: FOLDER_STATUS.IS_REMOVE_DONE,
     id
-  }
-};
-
-export const createSubFolder = (parentFolderId, name) => {
-  return {
-    type: CREATE_SUBFOLDER,
-    parentFolderId,
-    name
   }
 };
