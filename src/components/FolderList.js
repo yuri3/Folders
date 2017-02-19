@@ -1,15 +1,15 @@
-import React, {Component, PropTypes} from 'react';
+import React from 'react';
 import Folder from './Folder';
 
 const style = {listStyleType: 'none', padding: '15px', border: '1px solid red'};
 
-class FolderList extends Component {
+class FolderList extends React.Component {
   render() {
     const {
       folders,
       status,
-      selected,
-      folderId
+      renameId,
+      params
     } = this.props;
     return (
       <ul style={style}>
@@ -18,8 +18,8 @@ class FolderList extends Component {
             key={folder.name}
             folder={folder}
             status={status}
-            selected={selected === folder.id}
-            folderId={folderId} />
+            isShowRenameInput={renameId === folder.id}
+            params={params}/>
         ))}
       </ul>
     );
@@ -27,8 +27,12 @@ class FolderList extends Component {
 }
 
 FolderList.propTypes = {
-  folders: PropTypes.array.isRequired,
-  folderId: PropTypes.string
+  folders: React.PropTypes.array.isRequired,
+  status: React.PropTypes.string.isRequired,
+  renameId: React.PropTypes.oneOfType([
+    React.PropTypes.object.isRequired, React.PropTypes.number.isRequired
+  ]),
+  params: React.PropTypes.object.isRequired,
 };
 
 export default FolderList;

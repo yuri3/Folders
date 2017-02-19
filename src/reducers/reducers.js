@@ -3,6 +3,7 @@
 import { 
   SET_STATUS, 
   FOLDER_STATUS,
+  SWITCH_CREATE_INPUT,
   SWITCH_RENAME_INPUT 
 } from '../actions/actions';
 
@@ -45,7 +46,7 @@ const folder = (state = {}, action) => {
       return {
         id: action.id,
         name: action.name,
-      }
+      };
     case FOLDER_STATUS.IS_RENAME_DONE:
       if(state.id !== action.id) {return state;}
       return {...state, name: action.newName};
@@ -57,7 +58,7 @@ const folder = (state = {}, action) => {
     default:
       return state;
   }
-}
+};
 
 const folders = (state = FOLDERS, action) => {
   switch(action.type) {
@@ -73,14 +74,17 @@ const folders = (state = FOLDERS, action) => {
     default:
       return state;
   }
-}
+};
 
 const options = (state = {
-  selected: null
+  createId: null,
+  renameId: null,
 }, action) => {
   switch(action.type) {
+    case SWITCH_CREATE_INPUT:
+      return {...state, createId: action.id};
     case SWITCH_RENAME_INPUT:
-      return {...state, selected: action.id};
+      return {...state, renameId: action.id};
     default:
       return state;
   }
@@ -94,6 +98,7 @@ const status = (state = '', action) => {
       return state;
   }
 };
+
 /*
 const rootReducer = (state = {}, action) => ({
   status: status(state.status, action),
@@ -101,12 +106,10 @@ const rootReducer = (state = {}, action) => ({
   folders: folders(state.folders, action),
 });*/
 
-
 const rootReducer = combineReducers({
   status,
   options,
   folders,
 });
-
 
 export default rootReducer;
