@@ -8,9 +8,16 @@ import Rename from './Rename';
 import './css/Folder.css';
 
 class Folder extends React.Component {
+  constructor(props) {
+    super(props);
+    this.createFolder = this.createFolder.bind(this);
+    this.showRenameInput = this.showRenameInput.bind(this);
+    this.removeFolder = this.removeFolder.bind(this);
+  }
   componentDidMount() {
     if(this.props.status === FOLDER_STATUS.IS_CREATE_DONE) {
       this.newFolder.querySelector('a').click();
+      this.props.setStatus('');
     }
   }
   componentWillUpdate(nextProps, nextState) {
@@ -22,25 +29,33 @@ class Folder extends React.Component {
       this.props.setStatus('');
     }
   }
-  createFolder = (id) => {
-    console.log(id);
-  };
-  showRenameInput = (id) => {
+  createFolder(id) {
+    this.props.createFolder(id);
+    this.props.setStatus(FOLDER_STATUS.IS_CREATE_DONE);
+  }
+  showRenameInput(id) {
     const {switchRenameInput} = this.props;
     switchRenameInput(id);
-  };
-  removeFolder = (id) => {
+  }
+  removeFolder(id) {
     this.props.removeFolder(id);
     this.props.setStatus(FOLDER_STATUS.IS_REMOVE_DONE);
-  };
+  }
   render() {
     const {
+      status,
       folder,
+      subfolders,
       params,
       isShowRenameInput,
+      renameId,
+      setStatus,
+      createFolder,
       switchRenameInput,
-      renameFolder
+      renameFolder,
+      removeFolder
     } = this.props;
+
     return (
       <li>
         {!isShowRenameInput && <div>
@@ -55,15 +70,23 @@ class Folder extends React.Component {
             <span className="Folder Rename"
                   onClick={() => this.showRenameInput(folder.id)}>/</span>
           </div>
-          {folder.subfolders ? (
+          {subfolders && subfolders.length > 0 ? (
             <ul style={{listStyleType: 'none'}}>
-              {folder.subfolders.map((subFolder) => (
-                <Folder key={subFolder.id} folder={subFolder}
-                        onSetStatusClick={this.props.onSetStatusClick}
-                        onIsRenameClick={this.props.onIsRenameClick}
-                        onIsRenameCancelClick={this.props.onIsRenameCancelClick}
-                        onRenameFolderClick={this.props.onRenameFolderClick}
-                        onRemoveFolderClick={this.props.onRemoveFolderClick} />
+              {subfolders.map((subFolder, index) => (
+                folder.id === subFolder.parentId ?
+                  <Folder
+                    key={subFolder.id + index}
+                    folder={subFolder}
+                    subfolders={subfolders}
+                    params={params}
+                    status={status}
+                    isShowRenameInput={renameId === subFolder.id}
+                    renameId={renameId}
+                    setStatus={setStatus}
+                    createFolder={createFolder}
+                    switchRenameInput={switchRenameInput}
+                    renameFolder={renameFolder}
+                    removeFolder={removeFolder} /> : null
               ))}
             </ul>
           ) : ''}

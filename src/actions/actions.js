@@ -1,4 +1,5 @@
 export const  SET_STATUS = 'SET_STATUS';
+
 export const FOLDER_STATUS = {
   IS_CREATE_DONE: 'IS_CREATE_DONE',
   IS_RENAME_DONE: 'IS_RENAME_DONE',
@@ -19,9 +20,11 @@ export const switchCreateInput = (id) => ({
   id,
 });
 
+export const CREATE_FOLDER = 'CREATE_FOLDER';
+
 export const createFolder = (id, name = 'New Folder') => {
   return {
-    type: FOLDER_STATUS.IS_CREATE_DONE,
+    type: CREATE_FOLDER,
     id,
     name
   }
@@ -42,9 +45,11 @@ export const renameFolder = (id, newName) => {
   }
 };
 
+export const REMOVE_FOLDER = 'REMOVE_FOLDER';
+
 export const removeFolder = (id) => {
   return {
-    type: FOLDER_STATUS.IS_REMOVE_DONE,
+    type: REMOVE_FOLDER,
     id
   }
 };

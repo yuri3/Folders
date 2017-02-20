@@ -4,53 +4,70 @@ import {
   SET_STATUS, 
   FOLDER_STATUS,
   SWITCH_CREATE_INPUT,
-  SWITCH_RENAME_INPUT 
+  SWITCH_RENAME_INPUT,
+  CREATE_FOLDER,
+  REMOVE_FOLDER
 } from '../actions/actions';
 
 import { combineReducers } from 'redux';
 
 const FOLDERS = [
   {
-    id: 1,
+    id: 'HTML',
     name: 'HTML',
   },
   {
-    id: 2,
+    id: 'CSS',
     name: 'CSS',
   },
   {
-    id: 3,
+    id: 'JavaScript',
     name: 'JavaScript',
   },
   {
-    id: 4,
+    id: 'React',
     name: 'React',
   },
   {
-    id: 5,
+    id: 'Angular2',
     name: 'Angular2',
   },
   {
-    id: 6,
+    id: 'NodeJS',
     name: 'NodeJS',
   },
   {
-    id: 7,
+    id: 'Webpack',
     name: 'Webpack',
-  }
+  },
+  /*{
+    id: 'New Folder',
+    name: 'New Folder',
+    parentId: 'Webpack',
+  }*/
 ];
+
+let subFolderId = 0;
 
 const folder = (state = {}, action) => {
   switch(action.type) {
-    case FOLDER_STATUS.IS_CREATE_DONE:
+    case CREATE_FOLDER:
+      if(/New Folder/.test(action.name)) {
+        subFolderId++;
+        return {
+          id: action.name + ` (${subFolderId})`,
+          name: action.name + ` (${subFolderId})`,
+          parentId: action.id,
+        };
+      }
       return {
         id: action.id,
         name: action.name,
       };
     case FOLDER_STATUS.IS_RENAME_DONE:
       if(state.id !== action.id) {return state;}
-      return {...state, name: action.newName};
-    case FOLDER_STATUS.IS_REMOVE_DONE:
+      return {...state, id: action.newName, name: action.newName};
+    case REMOVE_FOLDER:
       if(state.id !== action.id) {
         return state;
       }
@@ -60,16 +77,35 @@ const folder = (state = {}, action) => {
   }
 };
 
+//let subFolderId = 0;
+/*
+const subfolders = (state = [], action) => {
+  switch(action.type) {
+    case CREATE_SUB_FOLDER:
+      subFolderId++;
+      return [
+        ...state,
+        {
+          id: action.name + ` (${subFolderId})`,
+          name: action.name + ` (${subFolderId})`,
+          parentId: action.id,
+        }
+      ];
+    default:
+      return state;
+  }
+};*/
+
 const folders = (state = FOLDERS, action) => {
   switch(action.type) {
-    case FOLDER_STATUS.IS_CREATE_DONE:
+    case CREATE_FOLDER:
       return [
         ...state,
         folder(undefined, action)
       ];
     case FOLDER_STATUS.IS_RENAME_DONE:
       return state.map((f) => folder(f, action));
-    case FOLDER_STATUS.IS_REMOVE_DONE:
+    case REMOVE_FOLDER:
       return state.filter((f) => folder(f, action));
     default:
       return state;
@@ -110,6 +146,7 @@ const rootReducer = combineReducers({
   status,
   options,
   folders,
+  //subfolders,
 });
 
 export default rootReducer;

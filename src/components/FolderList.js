@@ -7,6 +7,7 @@ class FolderList extends React.Component {
   render() {
     const {
       folders,
+      subfolders,
       status,
       renameId,
       params
@@ -14,13 +15,16 @@ class FolderList extends React.Component {
     return (
       <ul style={style}>
         {folders.map(folder => (
-          <Folder 
-            key={folder.name}
-            folder={folder}
-            status={status}
-            isShowRenameInput={renameId === folder.id}
-            params={params}/>
-        ))}
+          !folder.parentId ?
+            <Folder
+              key={folder.name}
+              folder={folder}
+              subfolders={subfolders}
+              status={status}
+              isShowRenameInput={renameId === folder.id}
+              renameId={renameId}
+              params={params}/> : null
+          ))}
       </ul>
     );
   }
@@ -30,7 +34,7 @@ FolderList.propTypes = {
   folders: React.PropTypes.array.isRequired,
   status: React.PropTypes.string.isRequired,
   renameId: React.PropTypes.oneOfType([
-    React.PropTypes.object.isRequired, React.PropTypes.number.isRequired
+    React.PropTypes.object.isRequired, React.PropTypes.string.isRequired
   ]),
   params: React.PropTypes.object.isRequired,
 };

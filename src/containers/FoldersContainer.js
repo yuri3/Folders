@@ -8,6 +8,7 @@ class Folders extends React.Component {
   render() {
     const {
       folders,
+      subfolders,
       status,
       options,
       params,
@@ -19,11 +20,11 @@ class Folders extends React.Component {
       <div>
         <CreateFolderForm
           title={'FOLDERS'}
-          lastId={folders[folders.length - 1].id}
           setStatus={setStatus}
           createFolder={createFolder} />
         <FolderList
           folders={folders}
+          subfolders={subfolders}
           status={status}
           renameId={options.renameId}
           params={params} />
@@ -45,6 +46,7 @@ Folders.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   folders: state.folders,
+  subfolders: state.folders.filter((folder) => folder.parentId),
   options: state.options,
   status: state.status
 });

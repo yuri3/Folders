@@ -32,7 +32,7 @@ class CreateFolderForm extends React.Component {
     const foldersName = this.state.title.trim();
     if(!foldersName) {return;}
     this.switchCreateInput();
-    this.props.createFolder(this.props.lastId + 1, foldersName);
+    this.props.createFolder(foldersName, foldersName);
     this.props.setStatus(FOLDER_STATUS.IS_CREATE_DONE);
   }
   render() {
@@ -68,7 +68,6 @@ class CreateFolderForm extends React.Component {
 
 CreateFolderForm.propTypes = {
   title: React.PropTypes.string,
-  lastId: React.PropTypes.number.isRequired,
   createFolder: React.PropTypes.func.isRequired,
   setStatus: React.PropTypes.func.isRequired,
 };
