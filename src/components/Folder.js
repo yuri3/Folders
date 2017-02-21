@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux'
 import { Link } from 'react-router';
 import * as actions from '../actions/actions';
 import { FOLDER_STATUS } from '../actions/actions';
-import Rename from './Rename';
+import RenameInput from './RenameInput';
+import SubFoldersList from './SubFoldersList';
 import './css/Folder.css';
 
 class Folder extends React.Component {
@@ -17,15 +18,6 @@ class Folder extends React.Component {
   componentDidMount() {
     if(this.props.status === FOLDER_STATUS.IS_CREATE_DONE) {
       this.newFolder.querySelector('a').click();
-      this.props.setStatus('');
-    }
-  }
-  componentWillUpdate(nextProps, nextState) {
-    if(
-        nextProps.status === FOLDER_STATUS.IS_REMOVE_DONE &&
-        nextProps.params.folderId === nextProps.folder.name
-      ) {
-      Object.assign(nextProps.params, {folderId: ''});
       this.props.setStatus('');
     }
   }
@@ -43,59 +35,30 @@ class Folder extends React.Component {
   }
   render() {
     const {
-      status,
       folder,
       subfolders,
       params,
       isShowRenameInput,
-      renameId,
-      setStatus,
-      createFolder,
       switchRenameInput,
-      renameFolder,
-      removeFolder
+      renameFolder
     } = this.props;
-
     return (
       <li>
-        {!isShowRenameInput && <div>
-          <div className="parentFolder" ref={(newFolder) => this.newFolder = newFolder}>
-            {params.folderId === folder.name ?
-              folder.name :
-              <Link to={"/" + folder.name}>{folder.name}</Link>}
+        {!isShowRenameInput && <div className="parentFolder" ref={(newFolder) => this.newFolder = newFolder}>
+          {params.folderId === folder.id ?
+            folder.name :
+            <Link to={"/" + folder.id}>{folder.name}</Link>}
             <span className="Folder Create"
                   onClick={() => this.createFolder(folder.id)}>+</span>
             <span className="Folder Remove"
                   onClick={() => this.removeFolder(folder.id)}>X</span>
             <span className="Folder Rename"
                   onClick={() => this.showRenameInput(folder.id)}>/</span>
-          </div>
-          {subfolders && subfolders.length > 0 ? (
-            <ul style={{listStyleType: 'none'}}>
-              {subfolders.map((subFolder, index) => (
-                folder.id === subFolder.parentId ?
-                  <Folder
-                    key={subFolder.id + index}
-                    folder={subFolder}
-                    subfolders={subfolders}
-                    params={params}
-                    status={status}
-                    isShowRenameInput={renameId === subFolder.id}
-                    renameId={renameId}
-                    setStatus={setStatus}
-                    createFolder={createFolder}
-                    switchRenameInput={switchRenameInput}
-                    renameFolder={renameFolder}
-                    removeFolder={removeFolder} /> : null
-              ))}
-            </ul>
-          ) : ''}
-        </div>}
+          </div>}
         {isShowRenameInput &&
-          <Rename
-            folder={folder}
-            switchRenameInput={switchRenameInput}
-            renameFolder={renameFolder} />}
+          <RenameInput folder={folder} switchRenameInput={switchRenameInput} renameFolder={renameFolder} />}
+
+        {subfolders && subfolders.length > 0 ? <SubFoldersList {...this.props} /> : ''}
       </li>
     );
   }

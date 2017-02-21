@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Rename extends React.Component {
+class RenameInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,4 +42,4 @@ class Rename extends React.Component {
   }
 }
 
-export default Rename;
+export default RenameInput;

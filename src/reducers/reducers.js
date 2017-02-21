@@ -40,23 +40,15 @@ const FOLDERS = [
     id: 'Webpack',
     name: 'Webpack',
   },
-  /*{
-    id: 'New Folder',
-    name: 'New Folder',
-    parentId: 'Webpack',
-  }*/
 ];
 
-let subFolderId = 0;
-
-const folder = (state = {}, action) => {
+const folder = (state = {id: 0}, action) => {
   switch(action.type) {
     case CREATE_FOLDER:
       if(/New Folder/.test(action.name)) {
-        subFolderId++;
         return {
-          id: action.name + ` (${subFolderId})`,
-          name: action.name + ` (${subFolderId})`,
+          id: state.id,
+          name: action.name,
           parentId: action.id,
         };
       }
@@ -66,7 +58,7 @@ const folder = (state = {}, action) => {
       };
     case FOLDER_STATUS.IS_RENAME_DONE:
       if(state.id !== action.id) {return state;}
-      return {...state, id: action.newName, name: action.newName};
+      return {...state, name: action.newName};
     case REMOVE_FOLDER:
       if(state.id !== action.id) {
         return state;
@@ -76,25 +68,6 @@ const folder = (state = {}, action) => {
       return state;
   }
 };
-
-//let subFolderId = 0;
-/*
-const subfolders = (state = [], action) => {
-  switch(action.type) {
-    case CREATE_SUB_FOLDER:
-      subFolderId++;
-      return [
-        ...state,
-        {
-          id: action.name + ` (${subFolderId})`,
-          name: action.name + ` (${subFolderId})`,
-          parentId: action.id,
-        }
-      ];
-    default:
-      return state;
-  }
-};*/
 
 const folders = (state = FOLDERS, action) => {
   switch(action.type) {
@@ -113,7 +86,6 @@ const folders = (state = FOLDERS, action) => {
 };
 
 const options = (state = {
-  createId: null,
   renameId: null,
 }, action) => {
   switch(action.type) {
@@ -146,7 +118,6 @@ const rootReducer = combineReducers({
   status,
   options,
   folders,
-  //subfolders,
 });
 
 export default rootReducer;

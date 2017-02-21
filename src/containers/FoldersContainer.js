@@ -23,6 +23,7 @@ class Folders extends React.Component {
           setStatus={setStatus}
           createFolder={createFolder} />
         <FolderList
+          setStatus={setStatus}
           folders={folders}
           subfolders={subfolders}
           status={status}
@@ -44,9 +45,23 @@ Folders.propTypes = {
   children: React.PropTypes.node,
 };
 
+function getSubFolders(folders) {
+  return folders.filter((folder) => folder.parentId);
+}
+
+function setSubFoldersId(subFolders) {
+  return subFolders.map((folder, i, subfolders) => {
+    if(folder['id']) {return folder;}
+    const subFoldersId = subfolders.reduce((maxId, folder) => Math.max(Number.parseInt(folder.id, 10), maxId), -1) + 1;
+    folder.id = subFoldersId + 'a';
+    console.log(folder.id);
+    return folder;
+  });
+}
+
 const mapStateToProps = (state, ownProps) => ({
   folders: state.folders,
-  subfolders: state.folders.filter((folder) => folder.parentId),
+  subfolders: setSubFoldersId(getSubFolders(state.folders)),
   options: state.options,
   status: state.status
 });
