@@ -19,6 +19,7 @@ class Folder extends React.Component {
     if(this.props.status === FOLDER_STATUS.IS_CREATE_DONE) {
       this.newFolder.querySelector('a').click();
       this.props.setStatus('');
+      this.showRenameInput(null);
     }
   }
   createFolder(id) {
