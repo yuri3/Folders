@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createFolder, setStatus } from '../actions/actions';
 import CreateFolderForm from '../components/CreateFolderForm';
 import FolderList from '../components/FolderList';
+import { setSubFoldersId } from '../selectors';
 
 class Folders extends React.Component {
   render() {
@@ -37,6 +38,7 @@ class Folders extends React.Component {
 
 Folders.propTypes = {
   folders: React.PropTypes.array.isRequired,
+  subfolders: React.PropTypes.array.isRequired,
   status: React.PropTypes.string.isRequired,
   options: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired,
@@ -45,23 +47,9 @@ Folders.propTypes = {
   children: React.PropTypes.node,
 };
 
-function getSubFolders(folders) {
-  return folders.filter((folder) => folder.parentId);
-}
-
-function setSubFoldersId(subFolders) {
-  return subFolders.map((folder, i, subfolders) => {
-    if(folder['id']) {return folder;}
-    const subFoldersId = subfolders.reduce((maxId, folder) => Math.max(Number.parseInt(folder.id, 10), maxId), -1) + 1;
-    folder.id = subFoldersId + 'a';
-    console.log(folder.id);
-    return folder;
-  });
-}
-
 const mapStateToProps = (state, ownProps) => ({
   folders: state.folders,
-  subfolders: setSubFoldersId(getSubFolders(state.folders)),
+  subfolders: setSubFoldersId(state),
   options: state.options,
   status: state.status
 });

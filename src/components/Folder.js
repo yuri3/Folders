@@ -19,7 +19,6 @@ class Folder extends React.Component {
     if(this.props.status === FOLDER_STATUS.IS_CREATE_DONE) {
       this.newFolder.querySelector('a').click();
       this.props.setStatus('');
-      this.showRenameInput(null);
     }
   }
   createFolder(id) {
@@ -33,6 +32,7 @@ class Folder extends React.Component {
   removeFolder(id) {
     this.props.removeFolder(id);
     this.props.setStatus(FOLDER_STATUS.IS_REMOVE_DONE);
+    this.showRenameInput(null);
   }
   render() {
     const {
