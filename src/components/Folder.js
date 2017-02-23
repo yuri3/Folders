@@ -11,9 +11,11 @@ import './css/Folder.css';
 class Folder extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {selectedFolderId: null};
     this.createFolder = this.createFolder.bind(this);
     this.showRenameInput = this.showRenameInput.bind(this);
     this.removeFolder = this.removeFolder.bind(this);
+    this.selectFolder = this.selectFolder.bind(this);
   }
   componentDidMount() {
     if(this.props.status === FOLDER_STATUS.IS_CREATE_DONE) {
@@ -22,17 +24,21 @@ class Folder extends React.Component {
     }
   }
   createFolder(id) {
+    this.selectFolder(id);
     this.props.createFolder(id);
     this.props.setStatus(FOLDER_STATUS.IS_CREATE_DONE);
   }
   showRenameInput(id) {
-    const {switchRenameInput} = this.props;
-    switchRenameInput(id);
+    const {selectRenameInput} = this.props;
+    selectRenameInput(id);
   }
   removeFolder(id) {
     this.props.removeFolder(id);
     this.props.setStatus(FOLDER_STATUS.IS_REMOVE_DONE);
     this.showRenameInput(null);
+  }
+  selectFolder(id = null) {
+    this.setState({selectedFolderId: id});
   }
   render() {
     const {
@@ -40,12 +46,20 @@ class Folder extends React.Component {
       subfolders,
       params,
       isShowRenameInput,
-      switchRenameInput,
+      selectRenameInput,
       renameFolder
     } = this.props;
+    const foundFolder = subfolders.find(
+      subFolder => subFolder.parentId === folder.id
+    );
+    const isFolderHasSubFolders = foundFolder && true;
     return (
       <li>
         {!isShowRenameInput && <div className="parentFolder" ref={(newFolder) => this.newFolder = newFolder}>
+          {isFolderHasSubFolders && this.state.selectedFolderId !== folder.id &&
+            <span onClick={() => this.selectFolder(folder.id)}>{'> '}</span>}
+          {isFolderHasSubFolders && this.state.selectedFolderId === folder.id &&
+            <span onClick={this.selectFolder}>{'\\/ '}</span> }
           {params.folderId === folder.id ?
             folder.name :
             <Link to={"/" + folder.id}>{folder.name}</Link>}
@@ -57,13 +71,26 @@ class Folder extends React.Component {
                   onClick={() => this.showRenameInput(folder.id)}>/</span>
           </div>}
         {isShowRenameInput &&
-          <RenameInput folder={folder} switchRenameInput={switchRenameInput} renameFolder={renameFolder} />}
+          <RenameInput folder={folder} selectRenameInput={selectRenameInput} renameFolder={renameFolder} />}
 
-        {subfolders && subfolders.length > 0 ? <SubFoldersList {...this.props} /> : ''}
+        {isFolderHasSubFolders && this.state.selectedFolderId === folder.id &&
+          <SubFoldersList {...this.props}/>}
       </li>
     );
   }
 }
+
+Folder.propTypes = {
+  folder: React.PropTypes.object.isRequired,
+  subfolders: React.PropTypes.array.isRequired,
+  status: React.PropTypes.string.isRequired,
+  params: React.PropTypes.object.isRequired,
+  isShowRenameInput: React.PropTypes.bool.isRequired,
+  renameId: React.PropTypes.oneOfType([
+    React.PropTypes.object.isRequired,
+    React.PropTypes.string.isRequired,
+  ]),
+};
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(actions, dispatch);

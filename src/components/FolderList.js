@@ -16,8 +16,8 @@ class FolderList extends React.Component {
       folders,
       subfolders,
       status,
+      params,
       renameId,
-      params
     } = this.props;
     return (
       <ul style={style}>
@@ -28,9 +28,9 @@ class FolderList extends React.Component {
               folder={folder}
               subfolders={subfolders}
               status={status}
+              params={params}
               isShowRenameInput={renameId === folder.id}
-              renameId={renameId}
-              params={params}/> : null
+              renameId={renameId}/> : null
           ))}
       </ul>
     );
@@ -39,13 +39,13 @@ class FolderList extends React.Component {
 
 FolderList.propTypes = {
   folders: React.PropTypes.array.isRequired,
+  subfolders: React.PropTypes.array.isRequired,
   status: React.PropTypes.string.isRequired,
+  params: React.PropTypes.object.isRequired,
   renameId: React.PropTypes.oneOfType([
     React.PropTypes.object.isRequired,
-    React.PropTypes.string.isRequired,
-    React.PropTypes.number.isRequired,
+    React.PropTypes.string.isRequired
   ]),
-  params: React.PropTypes.object.isRequired,
 };
 
 export default FolderList;

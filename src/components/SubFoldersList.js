@@ -3,7 +3,11 @@ import Folder from './Folder';
 
 class SubFoldersList extends React.Component {
   render() {
-    const {subfolders, folder, renameId} = this.props;
+    const {
+      folder,
+      subfolders,
+      renameId,
+    } = this.props;
     return (
       <ul style={{listStyleType: 'none'}}>
         {subfolders.map((subFolder, index) => (
@@ -17,5 +21,17 @@ class SubFoldersList extends React.Component {
     )
   }
 }
+
+SubFoldersList.propTypes = {
+  folder: React.PropTypes.object.isRequired,
+  subfolders: React.PropTypes.array.isRequired,
+  status: React.PropTypes.string.isRequired,
+  params: React.PropTypes.object.isRequired,
+  isShowRenameInput: React.PropTypes.bool.isRequired,
+  renameId: React.PropTypes.oneOfType([
+    React.PropTypes.object.isRequired,
+    React.PropTypes.string.isRequired,
+  ]),
+};
 
 export default SubFoldersList;

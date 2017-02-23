@@ -29,6 +29,7 @@ class Folders extends React.Component {
           subfolders={subfolders}
           status={status}
           renameId={options.renameId}
+          selectedFolderId={options.selectedFolderId}
           params={params} />
         <div style={{color: 'red'}}>{children}</div>
       </div>

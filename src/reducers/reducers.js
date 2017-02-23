@@ -3,9 +3,8 @@
 import { 
   SET_STATUS, 
   FOLDER_STATUS,
-  SWITCH_CREATE_INPUT,
-  SWITCH_RENAME_INPUT,
   CREATE_FOLDER,
+  SELECT_RENAME_INPUT,
   REMOVE_FOLDER
 } from '../actions/actions';
 
@@ -89,9 +88,7 @@ const options = (state = {
   renameId: null,
 }, action) => {
   switch(action.type) {
-    case SWITCH_CREATE_INPUT:
-      return {...state, createId: action.id};
-    case SWITCH_RENAME_INPUT:
+    case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
     default:
       return state;
@@ -106,13 +103,6 @@ const status = (state = '', action) => {
       return state;
   }
 };
-
-/*
-const rootReducer = (state = {}, action) => ({
-  status: status(state.status, action),
-  options: options(state.options, action),
-  folders: folders(state.folders, action),
-});*/
 
 const rootReducer = combineReducers({
   status,

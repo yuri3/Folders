@@ -23,8 +23,8 @@ class RenameInput extends React.Component {
     this.closeRenameInput();
   };
   closeRenameInput = () => {
-    const {switchRenameInput} = this.props;
-    switchRenameInput(null);
+    const {selectRenameInput} = this.props;
+    selectRenameInput(null);
   };
   render() {
     return (
@@ -41,5 +41,10 @@ class RenameInput extends React.Component {
     );
   }
 }
+
+RenameInput.propTypes = {
+  folder: React.PropTypes.object.isRequired,
+  selectRenameInput: React.PropTypes.func.isRequired,
+};
 
 export default RenameInput;
