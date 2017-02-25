@@ -26,7 +26,6 @@ SubFoldersList.propTypes = {
   folder: React.PropTypes.object.isRequired,
   subfolders: React.PropTypes.array.isRequired,
   status: React.PropTypes.string.isRequired,
-  params: React.PropTypes.object.isRequired,
   isShowRenameInput: React.PropTypes.bool.isRequired,
   renameId: React.PropTypes.oneOfType([
     React.PropTypes.object.isRequired,

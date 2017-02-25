@@ -1,5 +1,3 @@
-
-
 li {
   border: 1px solid green;
   padding: 5px; 
@@ -8,12 +6,15 @@ li {
 }
 
 .parentFolder:hover .Folder {
-  display: block;
+  display: inline;
+}
+
+span {
+  cursor: pointer;
 }
 
 .Folder {
   float: right;
   margin-right: 15px;
-  cursor: pointer;
   display: none;
 }

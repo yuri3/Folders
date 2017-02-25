@@ -45,6 +45,7 @@ class RenameInput extends React.Component {
 RenameInput.propTypes = {
   folder: React.PropTypes.object.isRequired,
   selectRenameInput: React.PropTypes.func.isRequired,
+  renameFolder: React.PropTypes.func.isRequired,
 };
 
 export default RenameInput;
