@@ -32,7 +32,7 @@ class CreateFolderForm extends React.Component {
     const foldersName = this.state.title.trim();
     if(!foldersName) {return;}
     this.switchCreateInput();
-    this.props.createFolder(foldersName, foldersName);
+    this.props.createFolder(undefined, foldersName);
     this.props.setStatus(FOLDER_STATUS.IS_CREATE_DONE);
   }
   render() {

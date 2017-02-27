@@ -1,20 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createFolder, setStatus } from '../actions/actions';
+import { bindActionCreators } from 'redux'
+import * as actions from '../actions/actions';
 import CreateFolderForm from '../components/CreateFolderForm';
 import FolderList from '../components/FolderList';
-import { setSubFoldersId } from '../selectors';
+import { getSubFolders } from '../selectors';
 
 class Folders extends React.Component {
   render() {
     const {
       folders,
       subfolders,
-      status,
       options,
+      status,
       params,
       setStatus,
       createFolder,
+      selectRenameInput,
+      renameFolder,
+      removeFolder,
       children
     } = this.props;
     return (
@@ -24,12 +28,16 @@ class Folders extends React.Component {
           setStatus={setStatus}
           createFolder={createFolder} />
         <FolderList
-          setStatus={setStatus}
           folders={folders}
           subfolders={subfolders}
           status={status}
+          params={params}
           renameId={options.renameId}
-          params={params}/>
+          setStatus={setStatus}
+          createFolder={createFolder}
+          selectRenameInput={selectRenameInput}
+          renameFolder={renameFolder}
+          removeFolder={removeFolder}/>
         <div style={{color: 'red'}}>{children}</div>
       </div>
     );
@@ -39,30 +47,26 @@ class Folders extends React.Component {
 Folders.propTypes = {
   folders: React.PropTypes.array.isRequired,
   subfolders: React.PropTypes.array.isRequired,
-  status: React.PropTypes.string.isRequired,
   options: React.PropTypes.object.isRequired,
+  status: React.PropTypes.string.isRequired,
   params: React.PropTypes.object.isRequired,
   setStatus: React.PropTypes.func.isRequired,
   createFolder: React.PropTypes.func.isRequired,
+  selectRenameInput: React.PropTypes.func.isRequired,
+  renameFolder: React.PropTypes.func.isRequired,
+  removeFolder: React.PropTypes.func.isRequired,
   children: React.PropTypes.node,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   folders: state.folders,
-  subfolders: setSubFoldersId(state),
+  subfolders: getSubFolders(state),
   options: state.options,
   status: state.status
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    createFolder: (id, value) => {
-      dispatch(createFolder(id, value));
-    },
-    setStatus: (status) => {
-      dispatch(setStatus(status));
-    },
-  };
+  return bindActionCreators(actions, dispatch);
 };
 
 const FoldersContainer = connect(

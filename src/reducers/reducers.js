@@ -1,10 +1,8 @@
-
-
-import { 
-  SET_STATUS, 
-  FOLDER_STATUS,
+import {
+  SET_STATUS,
   CREATE_FOLDER,
   SELECT_RENAME_INPUT,
+  RENAME_FOLDER,
   REMOVE_FOLDER
 } from '../actions/actions';
 
@@ -46,16 +44,16 @@ const folder = (state = {id: 0}, action) => {
     case CREATE_FOLDER:
       if(/New Folder/.test(action.name)) {
         return {
-          id: state.id,
+          id: action.id,
           name: action.name,
-          parentId: action.id,
+          parentId: action.parentId,
         };
       }
       return {
         id: action.id,
         name: action.name,
       };
-    case FOLDER_STATUS.IS_RENAME_DONE:
+    case RENAME_FOLDER:
       if(state.id !== action.id) {return state;}
       return {...state, name: action.newName};
     case REMOVE_FOLDER:
@@ -75,7 +73,7 @@ const folders = (state = FOLDERS, action) => {
         ...state,
         folder(undefined, action)
       ];
-    case FOLDER_STATUS.IS_RENAME_DONE:
+    case RENAME_FOLDER:
       return state.map((f) => folder(f, action));
     case REMOVE_FOLDER:
       return state.filter((f) => folder(f, action));
@@ -99,15 +97,21 @@ const status = (state = '', action) => {
   switch(action.type) {
     case SET_STATUS:
       return action.status;
+    case CREATE_FOLDER:
+      return action.type;
+    case SELECT_RENAME_INPUT:
+      return action.type;
+    case REMOVE_FOLDER:
+      return action.type;
     default:
       return state;
   }
 };
 
 const rootReducer = combineReducers({
-  status,
-  options,
   folders,
+  options,
+  status,
 });
 
 export default rootReducer;
