@@ -6,7 +6,6 @@ class SubFoldersList extends React.Component {
     const {
       folder,
       subfolders,
-      status,
       params,
       renameId,
       createFolder,
@@ -22,7 +21,6 @@ class SubFoldersList extends React.Component {
             key={subFolder.id}
             folder={subFolder}
             subfolders={subfolders}
-            status={status}
             isShowRenameInput={renameId === subFolder.id}
             params={params}
             renameId={renameId}
@@ -39,7 +37,6 @@ class SubFoldersList extends React.Component {
 SubFoldersList.propTypes = {
   folder: React.PropTypes.object.isRequired,
   subfolders: React.PropTypes.array.isRequired,
-  status: React.PropTypes.string.isRequired,
   params: React.PropTypes.object.isRequired,
   renameId: React.PropTypes.oneOfType([
     React.PropTypes.object.isRequired,

@@ -1,13 +1,5 @@
 import uuidV1 from 'uuid/v1';
 
-export const  SET_STATUS = 'SET_STATUS';
-export const setStatus = (status) => {
-  return {
-    type: SET_STATUS,
-    status,
-  }
-};
-
 export const CREATE_FOLDER = 'CREATE_FOLDER';
 export const createFolder = (parentId = '', name = 'New Folder') => ({
   type: CREATE_FOLDER,

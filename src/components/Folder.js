@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions/actions';
 import RenameInput from './RenameInput';
@@ -15,12 +15,6 @@ class Folder extends React.Component {
     this.showRenameInput = this.showRenameInput.bind(this);
     this.removeFolder = this.removeFolder.bind(this);
     this.selectFolder = this.selectFolder.bind(this);
-  }
-  componentDidMount() {
-    if(this.props.status === actions.CREATE_FOLDER) {
-      browserHistory.push(`/${this.props.folder.id}`);
-      this.props.setStatus('');
-    }
   }
   createFolder(id) {
     this.selectFolder(id);
@@ -41,7 +35,6 @@ class Folder extends React.Component {
     const {
       folder,
       subfolders,
-      status,
       isShowRenameInput,
       params,
       renameId,
@@ -50,16 +43,16 @@ class Folder extends React.Component {
       renameFolder,
       removeFolder
     } = this.props;
-    const foundFolder = subfolders.find(
+    const isFolderHasSubFolders = subfolders.some(
       subFolder => subFolder.parentId === folder.id
     );
-    const isFolderHasSubFolders = foundFolder && true;
+    const {selectedFolderId} = this.state;
     return (
       <li>
         {!isShowRenameInput && <div className="parentFolder">
-          {isFolderHasSubFolders && this.state.selectedFolderId !== folder.id &&
+          {isFolderHasSubFolders && selectedFolderId !== folder.id &&
             <span onClick={() => this.selectFolder(folder.id)}>{'> '}</span>}
-          {isFolderHasSubFolders && this.state.selectedFolderId === folder.id &&
+          {isFolderHasSubFolders && selectedFolderId === folder.id &&
             <span onClick={this.selectFolder}>{'\\/ '}</span>}
             {params.folderId === folder.id ? folder.name :
               <Link to={"/" + folder.id}>{folder.name}</Link>}
@@ -73,11 +66,10 @@ class Folder extends React.Component {
         {isShowRenameInput &&
           <RenameInput folder={folder} selectRenameInput={selectRenameInput} renameFolder={renameFolder} />}
 
-        {isFolderHasSubFolders && this.state.selectedFolderId === folder.id &&
+        {selectedFolderId === folder.id &&
           <SubFoldersList
             folder={folder}
             subfolders={subfolders}
-            status={status}
             params={params}
             renameId={renameId}
             createFolder={createFolder}
@@ -92,7 +84,6 @@ class Folder extends React.Component {
 Folder.propTypes = {
   folder: React.PropTypes.object.isRequired,
   subfolders: React.PropTypes.array.isRequired,
-  status: React.PropTypes.string.isRequired,
   isShowRenameInput: React.PropTypes.bool.isRequired,
   params: React.PropTypes.object.isRequired,
   renameId: React.PropTypes.oneOfType([

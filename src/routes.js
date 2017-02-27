@@ -6,7 +6,7 @@ import Notes from './components/Notes';
 export default (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <Route path="/:folderId" component={Notes}></Route>
+      <Route path="/:folderId" component={Notes}/>
     </Route>
   </Router>
 );

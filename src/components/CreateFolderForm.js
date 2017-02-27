@@ -1,5 +1,4 @@
 import React from 'react';
-import { FOLDER_STATUS } from '../actions/actions';
 import './css/CreateFolderForm.css';
 
 class CreateFolderForm extends React.Component {
@@ -7,7 +6,7 @@ class CreateFolderForm extends React.Component {
     super(props);
     this.state = {
       isInput: false,
-      title: '',
+      name: '',
     };
     this.switchCreateInput = this.switchCreateInput.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -16,11 +15,11 @@ class CreateFolderForm extends React.Component {
   }
   switchCreateInput() {
     this.setState((prevState, props) => (
-      {...prevState, isInput: !prevState.isInput, title: ''}
+      {...prevState, isInput: !prevState.isInput, name: ''}
     ));
   };
   handleChange(event) {
-    this.setState({title: event.target.value});
+    this.setState({name: event.target.value});
   };
   handleEnter(event) {
     if(event.keyCode === 13) {
@@ -29,38 +28,34 @@ class CreateFolderForm extends React.Component {
     }
   };
   createFolder() {
-    const foldersName = this.state.title.trim();
+    const foldersName = this.state.name.trim();
     if(!foldersName) {return;}
     this.switchCreateInput();
     this.props.createFolder(undefined, foldersName);
-    this.props.setStatus(FOLDER_STATUS.IS_CREATE_DONE);
   }
   render() {
     const {title} = this.props;
+    const {isInput} = this.state;
     return (
       <div>
-        {title ?
-          <span>
-            <strong>{title}</strong>{' '}
+        {title ? <span><strong>{title}</strong>{' '}
             <span className="NewFolder Create"
                   onClick={this.switchCreateInput}>+</span><br/>
-          </span>
-          :
+          </span> :
           <span className="NewFolder Create"
                 onClick={this.switchCreateInput}>+</span>
         }
-        <form style={{display: this.state.isInput ? 'inline' : 'none'}}>
+        {isInput && <form>
           <label>
-            <input type="text" placeholder="Title"
+            <input type="text" placeholder="Name"
                    ref={(input) => input && input.focus()}
-                   value={this.state.title}
                    onChange={this.handleChange}
                    onKeyDown={this.handleEnter} />{' '}
             <span className="NewFolder Save"
                   onClick={this.createFolder}>+</span>{' '}
             <span className="NewFolder Cancel" onClick={this.switchCreateInput}>X</span>
           </label>
-        </form>
+        </form>}
       </div>
     );
   }
@@ -69,7 +64,6 @@ class CreateFolderForm extends React.Component {
 CreateFolderForm.propTypes = {
   title: React.PropTypes.string,
   createFolder: React.PropTypes.func.isRequired,
-  setStatus: React.PropTypes.func.isRequired,
 };
 
 export default CreateFolderForm;
