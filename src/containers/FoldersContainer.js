@@ -7,11 +7,6 @@ import FolderList from '../components/FolderList';
 import { getSubFolders } from '../selectors';
 
 class Folders extends React.Component {
-  handleSubmit = (values) => {
-    const {name} = values;
-    this.props.createFolder(undefined, name);
-    Object.assign(values, {name: ''});
-  };
   render() {
     const {
       folders,
@@ -28,7 +23,7 @@ class Folders extends React.Component {
       <div>
         <CreateFolderForm
           title={'FOLDERS'}
-          onSubmit={this.handleSubmit}/>
+          createFolder={createFolder}/>
         <FolderList
           folders={folders}
           subfolders={subfolders}
