@@ -1,11 +1,11 @@
+import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 import {
   CREATE_FOLDER,
   SELECT_RENAME_INPUT,
   RENAME_FOLDER,
   REMOVE_FOLDER
 } from '../actions/actions';
-
-import { combineReducers } from 'redux';
 
 const FOLDERS = [
   {
@@ -95,6 +95,7 @@ const options = (state = {
 const rootReducer = combineReducers({
   folders,
   options,
+  form: formReducer,
 });
 
 export default rootReducer;
