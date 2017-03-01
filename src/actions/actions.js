@@ -1,5 +1,11 @@
 import uuidV1 from 'uuid/v1';
 
+export const SELECT_CREATE_INPUT = 'SELECT_CREATE_INPUT';
+export const selectCreateInput = (isSelected) => ({
+  type: SELECT_CREATE_INPUT,
+  isSelected,
+});
+
 export const CREATE_FOLDER = 'CREATE_FOLDER';
 export const createFolder = (parentId = '', name = 'New Folder') => ({
   type: CREATE_FOLDER,

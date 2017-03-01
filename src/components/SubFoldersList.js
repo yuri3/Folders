@@ -7,7 +7,7 @@ class SubFoldersList extends React.Component {
       folder,
       subfolders,
       params,
-      renameId,
+      options,
       createFolder,
       selectRenameInput,
       renameFolder,
@@ -21,9 +21,8 @@ class SubFoldersList extends React.Component {
             key={subFolder.id}
             folder={subFolder}
             subfolders={subfolders}
-            isShowRenameInput={renameId === subFolder.id}
+            options={options}
             params={params}
-            renameId={renameId}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}
@@ -38,10 +37,7 @@ SubFoldersList.propTypes = {
   folder: React.PropTypes.object.isRequired,
   subfolders: React.PropTypes.array.isRequired,
   params: React.PropTypes.object.isRequired,
-  renameId: React.PropTypes.oneOfType([
-    React.PropTypes.object.isRequired,
-    React.PropTypes.string.isRequired,
-  ]),
+  options: React.PropTypes.object.isRequired,
   createFolder: React.PropTypes.func.isRequired,
   selectRenameInput: React.PropTypes.func.isRequired,
   renameFolder: React.PropTypes.func.isRequired,

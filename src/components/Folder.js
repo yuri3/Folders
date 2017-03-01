@@ -24,25 +24,27 @@ class Folder extends React.Component {
     this.setState({selectedFolderId: id});
   }
   showRenameInput(id) {
-    const {selectRenameInput} = this.props;
+    const {options, selectCreateInput, selectRenameInput} = this.props;
+    //if(options.isSelected) {selectCreateInput(false);}
     selectRenameInput(id);
   }
   removeFolder(id) {
-    this.props.removeFolder(id);
-    this.props.isShowRenameInput && this.showRenameInput(null);
+    const {removeFolder, options, folder} = this.props;
+    removeFolder(id);
+    options.renameId === folder.id && this.showRenameInput(null);
   }
   render() {
     const {
       folder,
       subfolders,
-      isShowRenameInput,
+      options,
       params,
-      renameId,
       createFolder,
       selectRenameInput,
       renameFolder,
       removeFolder
     } = this.props;
+    const isShowRenameInput = options.renameId === folder.id;
     const isFolderHasSubFolders = subfolders.some(
       subFolder => subFolder.parentId === folder.id
     );
@@ -64,14 +66,17 @@ class Folder extends React.Component {
                   onClick={() => this.showRenameInput(folder.id)}>/</span>
           </div>}
         {isShowRenameInput &&
-          <RenameInput folder={folder} selectRenameInput={selectRenameInput} renameFolder={renameFolder} />}
+          <RenameInput
+            folder={folder}
+            selectRenameInput={selectRenameInput}
+            renameFolder={renameFolder} />}
 
         {selectedFolderId === folder.id &&
           <SubFoldersList
             folder={folder}
             subfolders={subfolders}
             params={params}
-            renameId={renameId}
+            options={options}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}
@@ -84,12 +89,8 @@ class Folder extends React.Component {
 Folder.propTypes = {
   folder: React.PropTypes.object.isRequired,
   subfolders: React.PropTypes.array.isRequired,
-  isShowRenameInput: React.PropTypes.bool.isRequired,
   params: React.PropTypes.object.isRequired,
-  renameId: React.PropTypes.oneOfType([
-    React.PropTypes.object.isRequired,
-    React.PropTypes.string.isRequired,
-  ]),
+  options: React.PropTypes.object.isRequired,
   createFolder: React.PropTypes.func.isRequired,
   selectRenameInput: React.PropTypes.func.isRequired,
   renameFolder: React.PropTypes.func.isRequired,

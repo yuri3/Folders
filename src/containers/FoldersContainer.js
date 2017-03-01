@@ -15,6 +15,7 @@ class Folders extends React.Component {
       params,
       createFolder,
       selectRenameInput,
+      selectCreateInput,
       renameFolder,
       removeFolder,
       children
@@ -22,13 +23,20 @@ class Folders extends React.Component {
     return (
       <div>
         <CreateFolderForm
+          folders={folders}
+          create={createFolder}
+          options={options}
+          selectRenameInput={selectRenameInput}
+          selectCreateInput={selectCreateInput}
           title={'FOLDERS'}
-          createFolder={createFolder}/>
+          defaultValue="Hello"
+          createSymbol={'+'}
+          closeSymbol={'X'}/>
         <FolderList
           folders={folders}
           subfolders={subfolders}
           params={params}
-          renameId={options.renameId}
+          options={options}
           createFolder={createFolder}
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
@@ -46,6 +54,7 @@ Folders.propTypes = {
   params: React.PropTypes.object.isRequired,
   createFolder: React.PropTypes.func.isRequired,
   selectRenameInput: React.PropTypes.func.isRequired,
+  selectCreateInput: React.PropTypes.func.isRequired,
   renameFolder: React.PropTypes.func.isRequired,
   removeFolder: React.PropTypes.func.isRequired,
   children: React.PropTypes.node,

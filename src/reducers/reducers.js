@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import {
+  SELECT_CREATE_INPUT,
   CREATE_FOLDER,
   SELECT_RENAME_INPUT,
   RENAME_FOLDER,
@@ -83,8 +84,11 @@ const folders = (state = FOLDERS, action) => {
 
 const options = (state = {
   renameId: null,
+  isSelected: false,
 }, action) => {
   switch(action.type) {
+    case SELECT_CREATE_INPUT:
+      return {...state, isSelected: action.isSelected};
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
     default:

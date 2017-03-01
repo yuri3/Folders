@@ -5,49 +5,75 @@ import FolderForm from './FolderForm';
 class CreateFolderForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isInput: false,};
+    this.state = {isSelected: false};
     this.switchCreateInput = this.switchCreateInput.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   switchCreateInput() {
-    this.setState((prevState, props) => (
-      {...prevState, isInput: !prevState.isInput}
-    ));
+    /*const {options, selectCreateInput, selectRenameInput} = this.props;
+    (!options.isSelected) ? selectCreateInput(true) : selectCreateInput(false);
+    if(options.renameId) {selectRenameInput(null);}*/
+    this.setState((prevState) => ({
+      ...prevState, isSelected: !prevState.isSelected,
+    }));
   }
   handleClose(reset) {
     reset();
     this.switchCreateInput();
   }
   handleSubmit = (values) => {
-    const {name} = values;
-    console.log('handleSubmit()', name);
-    this.switchCreateInput();
-    this.props.createFolder(undefined, name);
+    const {title, create} = this.props;
+    if(title === 'FOLDERS') {
+      const {name} = values;
+      this.switchCreateInput();
+      create(undefined, name);
+    } else if(title === 'NOTES') {
+      create();
+    }
   };
   render() {
-    const {title} = this.props;
-    const {isInput} = this.state;
+    const {folders, options, title, defaultValue, createSymbol, closeSymbol} = this.props;
+    //const {isSelected} = options;
+    const {isSelected} = this.state;
     return (
       <div>
-        {title ? <span><strong>{title}</strong>{' '}
-          <span className="NewFolder Create" onClick={this.switchCreateInput}>+</span><br/></span> :
-          <span className="NewFolder Create" onClick={this.switchCreateInput}>+</span>}
-        {isInput &&
+        {title ?
+          <span>
+            <strong>{title}</strong>{' '}
+            <span
+              className="NewFolder Create"
+              onClick={title !== 'NOTES' ? this.switchCreateInput : this.handleSubmit}>
+              +
+            </span><br/>
+          </span> :
+          <span
+            className="NewFolder Create"
+            onClick={title !== 'NOTES' ? this.switchCreateInput : this.handleSubmit}>+</span>}
+        {isSelected &&
           <FolderForm
+            folders={folders}
             onSubmit={this.handleSubmit}
+            title={title}
             handleClose={this.handleClose}
-            defaultValue="Hello"
-            createSymbol={'+'}
-            closeSymbol={'X'}/>}
+            defaultValue={defaultValue}
+            createSymbol={createSymbol}
+            closeSymbol={closeSymbol}/>}
       </div>
     );
   }
 }
 
 CreateFolderForm.propTypes = {
+  folders: React.PropTypes.array.isRequired,
+  create: React.PropTypes.func.isRequired,
+  options: React.PropTypes.object.isRequired,
+  selectRenameInput: React.PropTypes.func.isRequired,
+  selectCreateInput: React.PropTypes.func.isRequired,
   title: React.PropTypes.string,
-  createFolder: React.PropTypes.func.isRequired,
+  defaultValue: React.PropTypes.string,
+  createSymbol: React.PropTypes.string,
+  closeSymbol: React.PropTypes.string,
 };
 
 export default CreateFolderForm;
