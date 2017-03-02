@@ -11,24 +11,39 @@ export const createFolder = (parentId = '', name = 'New Folder') => ({
   type: CREATE_FOLDER,
   id: uuidV1(),
   parentId,
-  name
+  name,
 });
 
 export const SELECT_RENAME_INPUT = 'SELECT_RENAME_INPUT';
 export const selectRenameInput = (id) => ({
   type: SELECT_RENAME_INPUT,
-  id
+  id,
 });
 
 export const RENAME_FOLDER = 'RENAME_FOLDER';
 export const renameFolder = (id, newName) => ({
   type: RENAME_FOLDER,
   id,
-  newName
+  newName,
 });
 
 export const REMOVE_FOLDER = 'REMOVE_FOLDER';
 export const removeFolder = (id) => ({
   type: REMOVE_FOLDER,
-  id
+  id,
+});
+//---NOTES---------------------------------------------------------->
+export const CREATE_NOTE = 'CREATE_NOTE';
+export const createNote = (parentId, name = 'New Note') => ({
+  type: CREATE_NOTE,
+  id: uuidV1(),
+  parentId,
+  name,
+});
+
+export const REMOVE_NOTE = 'REMOVE_NOTE';
+export const removeNote = (parentId, id) => ({
+  type: REMOVE_NOTE,
+  parentId,
+  id,
 });

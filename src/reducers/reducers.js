@@ -1,3 +1,4 @@
+import uuidV1 from 'uuid/v1';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import {
@@ -5,37 +6,57 @@ import {
   CREATE_FOLDER,
   SELECT_RENAME_INPUT,
   RENAME_FOLDER,
-  REMOVE_FOLDER
+  REMOVE_FOLDER,
+  CREATE_NOTE,
+  REMOVE_NOTE
 } from '../actions/actions';
 
 const FOLDERS = [
   {
-    id: 'HTML',
+    id: uuidV1(),
     name: 'HTML',
+    notes: [],
   },
   {
-    id: 'CSS',
+    id: uuidV1(),
     name: 'CSS',
+    notes: [],
   },
   {
-    id: 'JavaScript',
+    id: uuidV1(),
     name: 'JavaScript',
+    notes: [
+      {
+        id: uuidV1(),
+        name: 'ES6',
+        description: '',
+      },
+      {
+        id: uuidV1(),
+        name: 'ES7',
+        description: '',
+      }
+    ]
   },
   {
-    id: 'React',
+    id: uuidV1(),
     name: 'React',
+    notes: [],
   },
   {
-    id: 'Angular2',
+    id: uuidV1(),
     name: 'Angular2',
+    notes: [],
   },
   {
-    id: 'NodeJS',
+    id: uuidV1(),
     name: 'NodeJS',
+    notes: [],
   },
   {
-    id: 'Webpack',
+    id: uuidV1(),
     name: 'Webpack',
+    notes: [],
   },
 ];
 
@@ -47,11 +68,13 @@ const folder = (state = {}, action) => {
           id: action.id,
           name: action.name,
           parentId: action.parentId,
+          notes: [],
         };
       }
       return {
         id: action.id,
         name: action.name,
+        notes: [],
       };
     case RENAME_FOLDER:
       if(state.id !== action.id) {return state;}
@@ -61,6 +84,25 @@ const folder = (state = {}, action) => {
         return state;
       }
       break;
+    default:
+      return state;
+  }
+};
+
+const note = (state = [], action) => {
+  switch(action.type) {
+    case CREATE_NOTE:
+      const {id, name} = action;
+      return [
+        {
+          id,
+          name,
+          description: '',
+        },
+        ...state,
+      ];
+    case REMOVE_NOTE:
+      return state.filter((note) => note.id !== action.id);
     default:
       return state;
   }
@@ -77,6 +119,26 @@ const folders = (state = FOLDERS, action) => {
       return state.map((f) => folder(f, action));
     case REMOVE_FOLDER:
       return state.filter((f) => folder(f, action));
+    case CREATE_NOTE:
+      return state.map((folder) => {
+        if(folder.id === action.parentId) {
+          return {
+            ...folder,
+            notes: note(folder.notes, action),
+          };
+        }
+        return folder;
+      });
+    case REMOVE_NOTE:
+      return state.map((folder) => {
+        if(folder.id === action.parentId) {
+          return {
+            ...folder,
+            notes: note(folder.notes, action),
+          }
+        }
+        return folder;
+      });
     default:
       return state;
   }

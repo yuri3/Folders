@@ -1,8 +1,8 @@
 import React from 'react';
-import './css/CreateFolderForm.css';
+import './css/CreateForm.css';
 import FolderForm from './FolderForm';
 
-class CreateFolderForm extends React.Component {
+class CreateForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {isSelected: false};
@@ -64,16 +64,16 @@ class CreateFolderForm extends React.Component {
   }
 }
 
-CreateFolderForm.propTypes = {
+CreateForm.propTypes = {
   folders: React.PropTypes.array.isRequired,
   create: React.PropTypes.func.isRequired,
-  options: React.PropTypes.object.isRequired,
-  selectRenameInput: React.PropTypes.func.isRequired,
-  selectCreateInput: React.PropTypes.func.isRequired,
+  options: React.PropTypes.object,
+  //selectRenameInput: React.PropTypes.func,
+  //selectCreateInput: React.PropTypes.func,
   title: React.PropTypes.string,
   defaultValue: React.PropTypes.string,
   createSymbol: React.PropTypes.string,
   closeSymbol: React.PropTypes.string,
 };
 
-export default CreateFolderForm;
+export default CreateForm;

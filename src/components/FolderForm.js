@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField'
-import './css/CreateFolderForm.css';
+import './css/CreateForm.css';
 
 const validate = (value, folders, title = '') => {
   let error = '';

@@ -8,7 +8,7 @@ class FolderList extends React.Component {
   componentDidMount() {
     browserHistory.push('/');
   }
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     if(nextProps.folders.length > this.props.folders.length) {
       const newFolder = nextProps.folders[0];
       browserHistory.push(`/${newFolder.id}`);

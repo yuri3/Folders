@@ -2,7 +2,7 @@
 
 import React from 'react';
 //import { STATUS } from '../actions/actions';
-import CreateFolderForm from './CreateFolderForm';
+import CreateFolderForm from './CreateForm';
 import Folder from './Folder';
 
 class Folders extends React.Component {

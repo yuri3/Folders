@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions/actions';
-import CreateFolderForm from '../components/CreateFolderForm';
+import CreateForm from '../components/CreateForm';
 import FolderList from '../components/FolderList';
 import { getSubFolders } from '../selectors';
 
@@ -22,12 +22,12 @@ class Folders extends React.Component {
     } = this.props;
     return (
       <div>
-        <CreateFolderForm
+        <CreateForm
           folders={folders}
           create={createFolder}
           options={options}
-          selectRenameInput={selectRenameInput}
-          selectCreateInput={selectCreateInput}
+          //selectRenameInput={selectRenameInput}
+          //selectCreateInput={selectCreateInput}
           title={'FOLDERS'}
           defaultValue="Hello"
           createSymbol={'+'}
