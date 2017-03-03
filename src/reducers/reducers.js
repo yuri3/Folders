@@ -8,53 +8,54 @@ import {
   RENAME_FOLDER,
   REMOVE_FOLDER,
   CREATE_NOTE,
-  REMOVE_NOTE
+  REMOVE_NOTE,
+  SELECT_NOTE
 } from '../actions/actions';
 
 const FOLDERS = [
   {
-    id: uuidV1(),
+    id: '1',
     name: 'HTML',
     notes: [],
   },
   {
-    id: uuidV1(),
+    id: '2',
     name: 'CSS',
     notes: [],
   },
   {
-    id: uuidV1(),
+    id: '3',
     name: 'JavaScript',
     notes: [
       {
-        id: uuidV1(),
+        id: '4',
         name: 'ES6',
         description: '',
       },
       {
-        id: uuidV1(),
+        id: '5',
         name: 'ES7',
         description: '',
       }
     ]
   },
   {
-    id: uuidV1(),
+    id: '6',
     name: 'React',
     notes: [],
   },
   {
-    id: uuidV1(),
+    id: '7',
     name: 'Angular2',
     notes: [],
   },
   {
-    id: uuidV1(),
+    id: '8',
     name: 'NodeJS',
     notes: [],
   },
   {
-    id: uuidV1(),
+    id: '9',
     name: 'Webpack',
     notes: [],
   },
@@ -145,14 +146,17 @@ const folders = (state = FOLDERS, action) => {
 };
 
 const options = (state = {
-  renameId: null,
   isSelected: false,
+  renameId: null,
+  noteId: null,
 }, action) => {
   switch(action.type) {
     case SELECT_CREATE_INPUT:
       return {...state, isSelected: action.isSelected};
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
+    case SELECT_NOTE:
+      return {...state, noteId: action.id};
     default:
       return state;
   }

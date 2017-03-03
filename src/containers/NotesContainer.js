@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions  from '../actions/actions';
-import Note from './Note';
-import CreateForm from './CreateForm';
+import CreateForm from '../components/CreateForm';
+import NoteList from '../components/NoteList';
 
 class Notes extends React.Component {
   render() {
@@ -12,27 +12,29 @@ class Notes extends React.Component {
     const folder = folders.find((folder) => (
       folder.id === folderId
     ));
-    const {notes} = folder;
     return (
       <div style={{border: '1px solid red'}}>
         <CreateForm
           title={'NOTES'}
           folders={folders}
           create={createNote.bind(null, folderId)}/>
-        <ul>
-          {notes && notes.map((note) => (
-            <Note
-              key={note.id}
-              params={params}
-              note={note}
-              removeNote={removeNote.bind(null, folderId)}/>
-          ))}
-        </ul>
+        <NoteList
+          folder={folder}
+          params={params}
+          removeNote={removeNote}/>
         <div>{children}</div>
       </div>
     );
   }
 }
+
+Notes.propTypes = {
+  folders: React.PropTypes.array.isRequired,
+  params: React.PropTypes.object.isRequired,
+  createNote: React.PropTypes.func.isRequired,
+  removeNote: React.PropTypes.func.isRequired,
+  children: React.PropTypes.node,
+};
 
 const mapStateToProps = (state, ownProps) => ({
   folders: state.folders,
