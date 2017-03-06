@@ -2,29 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
-import FolderForm from '../components/FolderForm';
+import NoteForm from '../components/NoteForm';
 
 const style = {padding: '10px', border: '1px solid blue',};
 
 class NoteDetails extends React.Component {
   render() {
-    const {folders, params} = this.props;
-    const {noteId} = params;
-    const notes = folders.reduce((prev, curr) => {
-      const {notes} = curr;
-      notes.forEach((note) => prev[note.id] = note);
-      return prev;
-    }, {});
+    const {folders, notes, params, changeNoteName} = this.props;
+    const {folderId, noteId} = params;
     const currentNote = notes[noteId];
     return (
       <div style={style}>
-        {currentNote && <div>{currentNote.name}</div>}
-        {currentNote && <FolderForm
+        <NoteForm
+          folders={folders}
           params={params}
-          defaultValue={currentNote.name}
-          showSymbols={false}
-          autoFocus={false}/>}
-
+          initialValues={{
+            name: currentNote && currentNote.name,
+            notes: currentNote && currentNote.description
+          }}
+          changeNoteName={value => changeNoteName(folderId, noteId, value)}/>
       </div>
     );
   }
@@ -32,7 +28,14 @@ class NoteDetails extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
   folders: state.folders,
-  options: state.options,
+  notes: state.folders.reduce((prev, curr) => {
+    const {notes} = curr;
+    if(notes) {
+      notes.forEach(note => prev[note.id] = note);
+      return prev;
+    }
+    return prev;
+  }, {}),
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -45,15 +48,3 @@ const NoteDetailsContainer = connect(
 )(NoteDetails);
 
 export default NoteDetailsContainer;
-/*
-FolderForm.propTypes = {
-  onSubmit: React.PropTypes.func.isRequired,
-  handleClose: React.PropTypes.func.isRequired,
-  title: React.PropTypes.string,
-  defaultValue: React.PropTypes.string,
-  multiLine: React.PropTypes.bool,
-  rows: React.PropTypes.number,
-  createSymbol: React.PropTypes.string,
-  closeSymbol: React.PropTypes.string,
-};
-*/

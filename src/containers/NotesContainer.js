@@ -2,24 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions  from '../actions/actions';
-import CreateForm from '../components/CreateForm';
+import CreateNote from '../components/CreateNote';
 import NoteList from '../components/NoteList';
 
 class Notes extends React.Component {
   render() {
-    const {folders, params, createNote, removeNote, children} = this.props;
+    const {currentFolder, params, createNote, removeNote, children} = this.props;
     const {folderId} = params;
-    const folder = folders.find((folder) => (
-      folder.id === folderId
-    ));
     return (
       <div style={{border: '1px solid red'}}>
-        <CreateForm
-          title={'NOTES'}
-          folders={folders}
-          create={createNote.bind(null, folderId)}/>
+        <CreateNote
+          folderId={folderId}
+          createNote={createNote}/>
         <NoteList
-          folder={folder}
+          folder={currentFolder}
           params={params}
           removeNote={removeNote}/>
         <div>{children}</div>
@@ -29,7 +25,6 @@ class Notes extends React.Component {
 }
 
 Notes.propTypes = {
-  folders: React.PropTypes.array.isRequired,
   params: React.PropTypes.object.isRequired,
   createNote: React.PropTypes.func.isRequired,
   removeNote: React.PropTypes.func.isRequired,
@@ -37,7 +32,7 @@ Notes.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  folders: state.folders,
+  currentFolder: state.folders.find((folder) => folder.id === ownProps.params.folderId),
 });
 
 const mapDispatchToProps = (dispatch) => {

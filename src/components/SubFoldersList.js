@@ -4,6 +4,7 @@ import Folder from './Folder';
 class SubFoldersList extends React.Component {
   render() {
     const {
+      folders,
       folder,
       subfolders,
       params,
@@ -19,6 +20,7 @@ class SubFoldersList extends React.Component {
           folder.id === subFolder.parentId ?
           <Folder
             key={subFolder.id}
+            folders={folders}
             folder={subFolder}
             subfolders={subfolders}
             options={options}
@@ -34,6 +36,7 @@ class SubFoldersList extends React.Component {
 }
 
 SubFoldersList.propTypes = {
+  folders: React.PropTypes.array.isRequired,
   folder: React.PropTypes.object.isRequired,
   subfolders: React.PropTypes.array.isRequired,
   params: React.PropTypes.object.isRequired,

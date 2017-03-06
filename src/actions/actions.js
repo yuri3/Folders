@@ -1,11 +1,5 @@
 import uuidV1 from 'uuid/v1';
 
-export const SELECT_CREATE_INPUT = 'SELECT_CREATE_INPUT';
-export const selectCreateInput = (isSelected) => ({
-  type: SELECT_CREATE_INPUT,
-  isSelected,
-});
-
 export const CREATE_FOLDER = 'CREATE_FOLDER';
 export const createFolder = (parentId = '', name = 'New Folder') => ({
   type: CREATE_FOLDER,
@@ -48,8 +42,10 @@ export const removeNote = (parentId, id) => ({
   id,
 });
 
-export const SELECT_NOTE = 'SELECT_NOTE';
-export const selectNote = (id) => ({
-  type: SELECT_NOTE,
+export const CHANGE_NOTE_NAME = 'CHANGE_NOTE_NAME';
+export const changeNoteName = (parentId, id, newName) => ({
+  type: CHANGE_NOTE_NAME,
+  parentId,
   id,
+  newName,
 });

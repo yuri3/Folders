@@ -4,7 +4,6 @@ import Note from './Note';
 const style = {border: '1px solid blue'};
 
 const NoteList = ({folder, params, removeNote}) => {
-  const {folderId} = params;
   return (
     <ul style={style}>
       {folder && folder.notes.map((note) => (
@@ -12,7 +11,7 @@ const NoteList = ({folder, params, removeNote}) => {
           key={note.id}
           params={params}
           note={note}
-          removeNote={removeNote.bind(null, folderId)}/>
+          removeNote={removeNote}/>
       ))}
     </ul>
   )

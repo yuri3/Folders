@@ -34,6 +34,7 @@ class FolderList extends React.Component {
           !folder.parentId ?
             <Folder
               key={folder.id}
+              folders={folders}
               folder={folder}
               subfolders={subfolders}
               options={options}

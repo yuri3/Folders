@@ -13,13 +13,13 @@ const remove = {
 
 class Note extends React.Component {
   render() {
-    const {params, removeNote, note} = this.props;
+    const {params, note, removeNote} = this.props;
     const {folderId, noteId} = params;
     return (
       <li style={li}>
         {noteId === note.id ? note.name :
           <Link to={`/${folderId}/${note.id}`}>{note.name}</Link>}
-        <span style={remove} onClick={() => removeNote(note.id)}>X</span>
+        <span style={remove} onClick={() => removeNote(folderId, note.id)}>X</span>
       </li>
     );
   }

@@ -1,15 +1,13 @@
-import uuidV1 from 'uuid/v1';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import {
-  SELECT_CREATE_INPUT,
   CREATE_FOLDER,
   SELECT_RENAME_INPUT,
   RENAME_FOLDER,
   REMOVE_FOLDER,
   CREATE_NOTE,
   REMOVE_NOTE,
-  SELECT_NOTE
+  CHANGE_NOTE_NAME
 } from '../actions/actions';
 
 const FOLDERS = [
@@ -104,6 +102,16 @@ const note = (state = [], action) => {
       ];
     case REMOVE_NOTE:
       return state.filter((note) => note.id !== action.id);
+    case CHANGE_NOTE_NAME:
+      return state.map(note => {
+        if(note.id === action.id) {
+          return {
+            ...note,
+            name: action.newName,
+          };
+        }
+        return note;
+      });
     default:
       return state;
   }
@@ -136,7 +144,17 @@ const folders = (state = FOLDERS, action) => {
           return {
             ...folder,
             notes: note(folder.notes, action),
-          }
+          };
+        }
+        return folder;
+      });
+    case CHANGE_NOTE_NAME:
+      return state.map(folder => {
+        if(folder.id === action.parentId) {
+          return {
+            ...folder,
+            notes: note(folder.notes, action),
+          };
         }
         return folder;
       });
@@ -146,17 +164,11 @@ const folders = (state = FOLDERS, action) => {
 };
 
 const options = (state = {
-  isSelected: false,
   renameId: null,
-  noteId: null,
 }, action) => {
   switch(action.type) {
-    case SELECT_CREATE_INPUT:
-      return {...state, isSelected: action.isSelected};
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
-    case SELECT_NOTE:
-      return {...state, noteId: action.id};
     default:
       return state;
   }
