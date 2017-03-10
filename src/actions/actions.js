@@ -49,3 +49,11 @@ export const changeNoteName = (parentId, id, newName) => ({
   id,
   newName,
 });
+
+export const MOVE_NOTE = 'MOVE_NOTE';
+export const moveNote = (parentId, dragIndex, hoverIndex) => ({
+  type: MOVE_NOTE,
+  parentId,
+  dragIndex,
+  hoverIndex,
+});

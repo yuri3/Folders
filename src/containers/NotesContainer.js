@@ -1,4 +1,6 @@
 import React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions  from '../actions/actions';
@@ -7,7 +9,7 @@ import NoteList from '../components/NoteList';
 
 class Notes extends React.Component {
   render() {
-    const {currentFolder, params, createNote, removeNote, children} = this.props;
+    const {currentFolder, params, createNote, moveNote, removeNote, children} = this.props;
     const {folderId} = params;
     return (
       <div style={{border: '1px solid red'}}>
@@ -17,6 +19,7 @@ class Notes extends React.Component {
         <NoteList
           folder={currentFolder}
           params={params}
+          moveNote={moveNote}
           removeNote={removeNote}/>
         <div>{children}</div>
       </div>
@@ -27,6 +30,7 @@ class Notes extends React.Component {
 Notes.propTypes = {
   params: React.PropTypes.object.isRequired,
   createNote: React.PropTypes.func.isRequired,
+  moveNote: React.PropTypes.func.isRequired,
   removeNote: React.PropTypes.func.isRequired,
   children: React.PropTypes.node,
 };
@@ -44,4 +48,4 @@ const NotesContainer = connect(
   mapDispatchToProps
 )(Notes);
 
-export default NotesContainer;
+export default DragDropContext(HTML5Backend)(NotesContainer);

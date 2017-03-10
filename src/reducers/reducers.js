@@ -7,7 +7,8 @@ import {
   REMOVE_FOLDER,
   CREATE_NOTE,
   REMOVE_NOTE,
-  CHANGE_NOTE_NAME
+  CHANGE_NOTE_NAME,
+  MOVE_NOTE
 } from '../actions/actions';
 
 const FOLDERS = [
@@ -112,6 +113,13 @@ const note = (state = [], action) => {
         }
         return note;
       });
+    case MOVE_NOTE:
+      const {dragIndex, hoverIndex} = action;
+      const dragNote = state[dragIndex];
+      const newCopyNotes = state.slice();
+      newCopyNotes.splice(dragIndex, 1);
+      newCopyNotes.splice(hoverIndex, 0, dragNote);
+      return newCopyNotes;
     default:
       return state;
   }
@@ -149,6 +157,16 @@ const folders = (state = FOLDERS, action) => {
         return folder;
       });
     case CHANGE_NOTE_NAME:
+      return state.map(folder => {
+        if(folder.id === action.parentId) {
+          return {
+            ...folder,
+            notes: note(folder.notes, action),
+          };
+        }
+        return folder;
+      });
+    case MOVE_NOTE:
       return state.map(folder => {
         if(folder.id === action.parentId) {
           return {
