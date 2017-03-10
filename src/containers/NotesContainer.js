@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import * as actions  from '../actions/actions';
 import CreateNote from '../components/CreateNote';
 import NoteList from '../components/NoteList';
+import CustomDragLayer from '../components/CustomDragLayer';
 
 class Notes extends React.Component {
   render() {
@@ -21,6 +22,7 @@ class Notes extends React.Component {
           params={params}
           moveNote={moveNote}
           removeNote={removeNote}/>
+       <CustomDragLayer/>
         <div>{children}</div>
       </div>
     );

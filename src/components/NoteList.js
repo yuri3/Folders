@@ -1,27 +1,45 @@
 import React from 'react';
-import Note from './Note';
+import DragAndDropNote from './DragAndDropNote';
 
 const style = {border: '1px solid blue'};
 
+const styles = {
+  width: '200px',
+  margin: '10px',
+  height: '40px',
+  border: '1px dashed gray'
+};
+
 class NoteList extends React.Component {
-  moveNote = (dragIndex, hoverIndex) => {
+  constructor(props) {
+    super(props);
+    this.moveNote = this.moveNote.bind(this);
+  }
+  moveNote(dragIndex, hoverIndex) {
     const {params, moveNote} = this.props;
     moveNote(params.folderId, dragIndex, hoverIndex);
-  };
-  render() {
-    const {folder, params, removeNote} = this.props;
+  }
+  renderDragAndDropNote(note, index, props) {
+    const {params, removeNote} = props;
     return (
-      <ul style={style}>
+      <DragAndDropNote
+        index={index}
+        params={params}
+        note={note}
+        moveNote={this.moveNote}
+        removeNote={removeNote}/>
+    )
+  }
+  render() {
+    const {folder} = this.props;
+    return (
+      <div style={style}>
         {folder && folder.notes.map((note, index) => (
-          <Note
-            key={note.id}
-            index={index}
-            params={params}
-            note={note}
-            moveNote={this.moveNote}
-            removeNote={removeNote}/>
-        ))}
-      </ul>
+          <div key={note.id} style={styles}>
+            {this.renderDragAndDropNote(note, index, this.props)}
+          </div>)
+        )}
+      </div>
     );
   }
 }
