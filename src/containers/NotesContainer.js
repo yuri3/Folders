@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
@@ -6,9 +6,9 @@ import { bindActionCreators } from 'redux';
 import * as actions  from '../actions/actions';
 import CreateNote from '../components/CreateNote';
 import NoteList from '../components/NoteList';
-import CustomDragLayer from '../components/CustomDragLayer';
+//import CustomDragLayer from '../components/CustomDragLayer';
 
-class Notes extends React.Component {
+class Notes extends Component {
   render() {
     const {currentFolder, params, createNote, moveNote, removeNote, children} = this.props;
     const {folderId} = params;
@@ -22,7 +22,6 @@ class Notes extends React.Component {
           params={params}
           moveNote={moveNote}
           removeNote={removeNote}/>
-       <CustomDragLayer/>
         <div>{children}</div>
       </div>
     );
@@ -30,11 +29,11 @@ class Notes extends React.Component {
 }
 
 Notes.propTypes = {
-  params: React.PropTypes.object.isRequired,
-  createNote: React.PropTypes.func.isRequired,
-  moveNote: React.PropTypes.func.isRequired,
-  removeNote: React.PropTypes.func.isRequired,
-  children: React.PropTypes.node,
+  params: PropTypes.object.isRequired,
+  createNote: PropTypes.func.isRequired,
+  moveNote: PropTypes.func.isRequired,
+  removeNote: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 const mapStateToProps = (state, ownProps) => ({

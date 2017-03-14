@@ -20,7 +20,7 @@ class NoteDetails extends React.Component {
             name: currentNote && currentNote.name,
             notes: currentNote && currentNote.description
           }}
-          changeNoteName={value => changeNoteName(folderId, noteId, value)}/>
+          changeNoteName={(value) => changeNoteName(folderId, noteId, value)}/>
       </div>
     );
   }

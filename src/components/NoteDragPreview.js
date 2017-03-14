@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { PropTypes, Component} from 'react';
 import Note from './Note';
 
 const styles = {
   display: 'inline-block',
-  width: '200px',
-  transform: 'rotate(-7deg)',
-  WebkitTransform: 'rotate(-7deg)',
+  transform: 'rotate(-5deg)',
+  WebkitTransform: 'rotate(-5deg)',
 };
 
-class NoteDragPreview extends React.Component {
+class NoteDragPreview extends Component {
   constructor(props) {
     super(props);
     this.tick = this.tick.bind(this);
@@ -32,10 +31,14 @@ class NoteDragPreview extends React.Component {
     const { tickTock } = this.state;
     return (
       <div style={styles}>
-        <Note note={note} color={tickTock && 'yellow'}/>
+        <Note note={note} background={tickTock && 'yellow'}/>
       </div>
     );
   }
 }
+
+NoteDragPreview.propTypes = {
+  note: PropTypes.object,
+};
 
 export default NoteDragPreview;

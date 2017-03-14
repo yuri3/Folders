@@ -1,27 +1,13 @@
-import React from 'react';
-import { getEmptyImage } from 'react-dnd-html5-backend';
+import React, { PropTypes, Component } from 'react';
+//import { getEmptyImage } from 'react-dnd-html5-backend';
 import { NoteTypes } from './NoteTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 import Note from './Note';
 import flow from 'lodash/flow';
 
-function getStyles(props) {
-  const {isDragging} = props;
-  //const transform = `translate3d(${0}px, ${0}px, 0)`;
-  return {
-    position: 'relative',
-    //top: 0,
-    //left: 0,
-    //width: '100%',
-    //transform,
-    //WebkitTransform: transform,
-    // IE fallback: hide the real node using CSS when dragging
-    // because IE will ignore our custom "empty image" drag preview.
-    opacity: isDragging ? 0 : 1,
-    //border: isDragging ? '1px dashed gray' : 'none',
-    //height: isDragging ? 0 : '',
-  };
-}
+const styles = {
+  padding: '10px',
+};
 
 const noteSource = {
   beginDrag(props) {
@@ -65,13 +51,16 @@ function collectTarget(connect, monitor) {
   };
 }
 
-class DragAndDropNote extends React.Component {
+class DragAndDropNote extends Component {
   componentDidMount() {
     // Use empty image as a drag preview so browsers don't draw it
     // and we can draw whatever we want on the custom drag layer instead.
-    this.props.connectDragPreview(getEmptyImage(), {
+    /*this.props.connectDragPreview(getEmptyImage(), {
       captureDraggingState: true,
-    });
+    });*/
+    const img = new Image();
+    img.src = 'description.svg';
+    img.onload = () => {console.log('onload()');this.props.connectDragPreview(img)};
   }
   render() {
     const {
@@ -79,26 +68,27 @@ class DragAndDropNote extends React.Component {
       note,
       removeNote,
       connectDragSource,
-      connectDropTarget
+      connectDropTarget,
+      isDragging
     } = this.props;
     return connectDragSource(connectDropTarget(
-      <div style={getStyles(this.props)}>
-        <Note params={params} note={note} removeNote={removeNote}/>
+      <div style={styles}>
+        <Note params={params} note={note} removeNote={removeNote} isDragging={isDragging}/>
       </div>
     ));
   }
 }
 
 DragAndDropNote.propTypes = {
-  index: React.PropTypes.number.isRequired,
-  params: React.PropTypes.object.isRequired,
-  note: React.PropTypes.object.isRequired,
-  moveNote: React.PropTypes.func.isRequired,
-  removeNote: React.PropTypes.func.isRequired,
-  connectDragSource: React.PropTypes.func,
-  connectDragPreview: React.PropTypes.func,
-  isDragging: React.PropTypes.bool,
-  connectDropTarget: React.PropTypes.func,
+  index: PropTypes.number.isRequired,
+  params: PropTypes.object.isRequired,
+  note: PropTypes.object.isRequired,
+  moveNote: PropTypes.func.isRequired,
+  removeNote: PropTypes.func.isRequired,
+  connectDragSource: PropTypes.func,
+  connectDragPreview: PropTypes.func,
+  isDragging: PropTypes.bool,
+  connectDropTarget: PropTypes.func,
 };
 
 export default flow(

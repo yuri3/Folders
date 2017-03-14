@@ -1,43 +1,29 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import DragAndDropNote from './DragAndDropNote';
 
-const style = {border: '1px solid blue'};
-
-const styles = {
-  width: '200px',
-  margin: '10px',
-  height: '40px',
-  border: '1px dashed gray'
+const style = {
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  //border: '1px solid blue'
 };
 
-class NoteList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.moveNote = this.moveNote.bind(this);
-  }
-  moveNote(dragIndex, hoverIndex) {
-    const {params, moveNote} = this.props;
-    moveNote(params.folderId, dragIndex, hoverIndex);
-  }
-  renderDragAndDropNote(note, index, props) {
-    const {params, removeNote} = props;
-    return (
-      <DragAndDropNote
-        index={index}
-        params={params}
-        note={note}
-        moveNote={this.moveNote}
-        removeNote={removeNote}/>
-    )
-  }
+class NoteList extends Component {
   render() {
-    const {folder} = this.props;
+    const {folder, params, moveNote, removeNote} = this.props;
+    const {folderId} = params;
     return (
       <div style={style}>
         {folder && folder.notes.map((note, index) => (
-          <div key={note.id} style={styles}>
-            {this.renderDragAndDropNote(note, index, this.props)}
-          </div>)
+          <DragAndDropNote
+            key={note.id}
+            index={index}
+            params={params}
+            note={note}
+            moveNote={(dragIndex, hoverIndex) => (
+              moveNote(folderId, dragIndex, hoverIndex)
+            )}
+            removeNote={removeNote}/>)
         )}
       </div>
     );
@@ -45,9 +31,10 @@ class NoteList extends React.Component {
 }
 
 NoteList.propTypes = {
-  folder: React.PropTypes.object,
-  params: React.PropTypes.object.isRequired,
-  removeNote: React.PropTypes.func.isRequired,
+  folder: PropTypes.object,
+  params: PropTypes.object.isRequired,
+  moveNote: PropTypes.func.isRequired,
+  removeNote: PropTypes.func.isRequired,
 };
 
 export default NoteList;

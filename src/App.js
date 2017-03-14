@@ -4,7 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 import FoldersContainer from './containers/FoldersContainer';
 
-const App = ({ params, children }) => (
+const App = ({params, children}) => (
   <MuiThemeProvider>
     <FoldersContainer params={params} children={children}/>
   </MuiThemeProvider>

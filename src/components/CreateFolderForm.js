@@ -9,7 +9,12 @@ const validate = (value, props) => {
     error.name = 'Required';
   } else if(value.name && value.name.length > 15) {
     error.name = 'Must be 15 characters or less!';
-  } else if(props.folders.some((folder) => folder.name === value.name.trim())) {
+  } else if(
+    props.folders.some(folder => (
+      folder.name === value.name.trim() ||
+      folder.notes.some(note => note && note.name !== 'New Note' && note.name === value.name.trim())
+    ))
+  ) {
     error.name = 'This name is already taken!'
   }
   return error;
@@ -36,12 +41,6 @@ const renderTextField = (field) => {
 };
 
 class CreateFolderForm extends React.Component {
-  /*componentWillReceiveProps(nextProps) {
-    const {params, initialize} = this.props;
-    if(params && params.noteId !== nextProps.params.noteId) {
-      initialize(nextProps.initialValues);
-    }
-  }*/
   render() {
     const {
       handleSubmit,

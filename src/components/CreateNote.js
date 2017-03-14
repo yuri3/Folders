@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 
-class CreateNote extends React.Component {
+const styles = {
+  padding: '10px',
+};
+
+class CreateNote extends Component {
   createNote = () => {
     const {folderId, createNote} = this.props;
     createNote(folderId);
   };
   render() {
     return (
-      <div>
+      <div style={styles}>
         <strong>{'NOTES'}</strong>{' '}
-        <span
-          className="NewFolder Create"
-          onClick={this.createNote}>+</span><br/>
+        <span onClick={this.createNote}>
+          <i className="material-icons md-36">note_add</i>
+        </span><br/>
       </div>
     );
   }
 }
 
 CreateNote.propTypes = {
-  folderId: React.PropTypes.string.isRequired,
-  createNote: React.PropTypes.func.isRequired,
+  folderId: PropTypes.string.isRequired,
+  createNote: PropTypes.func.isRequired,
 };
 
 export default CreateNote;
