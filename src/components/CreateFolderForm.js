@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField'
-import './css/FolderForm.css';
 
 const validate = (value, props) => {
   let error = {};
   if(!value.name) {
     error.name = 'Required';
-  } else if(value.name && value.name.length > 15) {
-    error.name = 'Must be 15 characters or less!';
+  } else if(value.name && value.name.length > 18) {
+    error.name = 'Must be 18 characters or less!';
   } else if(
     props.folders.some(folder => (
       folder.name === value.name.trim() ||
@@ -40,44 +39,44 @@ const renderTextField = (field) => {
   );
 };
 
-class CreateFolderForm extends React.Component {
+class CreateFolderForm extends Component {
   render() {
     const {
       handleSubmit,
       handleClose,
       invalid
     } = this.props;
+    const saveStyle = {
+      alignSelf: 'flex-end',
+      opacity: invalid ? 0.5 : 1,
+      pointerEvents: invalid ? 'none' : 'auto',
+    };
     return (
       <div>
-        <form onSubmit={handleSubmit}>
-          <Field
-            name="name"
-            type="text"
-            placeholder="Name"
-            component={renderTextField}/>{' '}
-          <input
-            className="NewFolder Save"
-            type="submit"
-            value='+'
-            disabled={invalid}/>{' '}
-          <span
-            className="NewFolder Cancel"
-            onClick={handleClose}>{'X'}</span>
+        <form>
+          <div style={{display: 'flex',}}>
+            <Field
+              name="name"
+              type="text"
+              placeholder="Name"
+              component={renderTextField}/>{' '}
+            <span style={saveStyle} onClick={handleSubmit}>
+              <i className="material-icons md-36">save</i>
+            </span>
+            <span style={{alignSelf: 'flex-end',}} onClick={handleClose}>
+              <i className="material-icons md-36">close</i>
+            </span>
+          </div>
         </form>
       </div>
     );
   }
 }
 
-CreateFolderForm.defaultProps = {
-  initialValues: {name: ''},
-};
-
 CreateFolderForm.propTypes = {
-  folders: React.PropTypes.array.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  handleClose: React.PropTypes.func.isRequired,
-  initialValues: React.PropTypes.object,
+  folders: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default reduxForm({

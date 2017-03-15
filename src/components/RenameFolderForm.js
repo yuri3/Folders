@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField'
-import './css/FolderForm.css';
 
 const validate = (value, props) => {
   let error = {};
+  if(!props.dirty) {return;}
   if(!value.name) {
     error.name = 'Required';
-  } else if(value.name && value.name.length > 15) {
-    error.name = 'Must be 15 characters or less!';
+  } else if(value.name && value.name.length > 18) {
+    error.name = 'Must be 18 characters or less!';
   } else if(
     props.folders.some(folder => (
       folder.name === value.name.trim() ||
@@ -25,7 +25,7 @@ const renderTextField = (field) => {
     input,
     placeholder,
     meta: {
-      touched,
+      dirty,
       error,
     },
     ...custom
@@ -34,50 +34,53 @@ const renderTextField = (field) => {
     <TextField
       hintText={placeholder}
       floatingLabelText={placeholder}
-      errorText={touched && error}
+      errorText={dirty && error}
       {...input}
       {...custom}/>
   );
 };
 
-class RenameFolderForm extends React.Component {
+class RenameFolderForm extends Component {
   render() {
     const {
       handleSubmit,
       handleClose,
-      invalid
+      invalid,
+      pristine
     } = this.props;
+    const saveStyle = {
+      alignSelf: 'flex-end',
+      opacity: invalid || pristine ? 0.5 : 1,
+      pointerEvents: invalid || pristine ? 'none' : 'auto',
+    };
     return (
       <div>
-        <form onSubmit={handleSubmit}>
-          <Field
-            name="name"
-            type="text"
-            placeholder="Name"
-            component={renderTextField}/>{' '}
-          <span
-            className="NewFolder Cancel"
-            onClick={handleClose}>{'<--'}</span>{' '}
-          <input
-            className="NewFolder Save"
-            type="submit"
-            value='+'
-            disabled={invalid}/>
+        <form>
+          <div style={{display: 'flex'}}>
+            <Field
+              name="name"
+              type="text"
+              placeholder="Name"
+              style={{width: '200px'}}
+              component={renderTextField}/>
+            <span style={{alignSelf: 'flex-end'}} onClick={handleClose}>
+              <i className="material-icons md-36">undo</i>
+            </span>
+            <span style={saveStyle} onClick={handleSubmit}>
+              <i className="material-icons md-36">save</i>
+            </span>
+          </div>
         </form>
       </div>
     );
   }
 }
 
-RenameFolderForm.defaultProps = {
-  initialValues: {name: ''},
-};
-
 RenameFolderForm.propTypes = {
-  folders: React.PropTypes.array.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  handleClose: React.PropTypes.func.isRequired,
-  initialValues: React.PropTypes.object,
+  folders: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
 };
 
 export default reduxForm({

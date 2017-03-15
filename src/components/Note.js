@@ -60,7 +60,7 @@ class Note extends Component {
             <span style={{pointerEvents: 'auto',}}>{noteName}</span>
           </Link>}
         <span style={{...removeStyle, opacity}} onClick={() => removeNote(folderId, note.id)}>
-          <i className="material-icons">delete_forever</i>
+          <i className="material-icons md-24">delete_forever</i>
         </span>
       </div>
     );

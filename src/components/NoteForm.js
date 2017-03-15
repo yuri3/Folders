@@ -1,22 +1,22 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField'
-import './css/FolderForm.css';
 
 const validate = (value, props) => {
+  //if(!props.dirty) {return;}
   let error = {};
   if(!value.name) {
     error.name = 'Required';
   } else if(value.name && value.name.length > 18) {
     error.name = 'Must be 18 characters or less!';
-  } /*else if(
+  } else if(// it does not work correctly!!!
     props.folders.some(folder => (
       folder.name === value.name.trim() ||
       folder.notes.some(note => note && note.name !== 'New Note' && note.name === value.name.trim())
     ))
   ) {
     error.name = 'This name is already taken!'
-  }*/
+  }
   return error;
 };
 
@@ -31,6 +31,7 @@ const renderTextField = (field) => {
     changeNoteName,
     ...custom
   } = field;
+  console.log('error', error);
   return (
     <TextField
       hintText={placeholder}
@@ -46,6 +47,12 @@ const renderTextField = (field) => {
 };
 
 class NoteForm extends Component {
+  componentWillReceiveProps(nextProps) {
+    const {params, initialize} = this.props;
+    if(params && params.noteId !== nextProps.params.noteId) {
+      initialize(nextProps.initialValues);
+    }
+  }
   render() {
     const {changeNoteName} = this.props;
     return (
@@ -61,6 +68,7 @@ class NoteForm extends Component {
             placeholder="Notes"
             multiLine={true}
             rows={2}
+            fullWidth={true}
             component={renderTextField}/>
         </form>
       </div>
@@ -81,6 +89,9 @@ NoteForm.propTypes = {
 
 export default reduxForm({
   form: 'noteForm',
-  enableReinitialize: true,
+  //destroyOnUnmount: false,
+  //forceUnregisterOnUnmount: true,
+  //enableReinitialize: true,
+  //keepDirtyOnReinitialize: true,
   validate,
 })(NoteForm);

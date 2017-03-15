@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import CreateFolderForm from './CreateFolderForm';
 
-class CreateFolder extends React.Component {
+class CreateFolder extends Component {
   constructor(props) {
     super(props);
     this.state = {isSelected: false};
@@ -28,8 +28,12 @@ class CreateFolder extends React.Component {
     const {isSelected} = this.state;
     return (
       <div>
-        <strong>{'FOLDERS'}</strong>{' '}
-        <span className="NewFolder Create" onClick={this.switchCreateInput}>+</span><br/>
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <div style={{marginRight: '30px'}}><strong>{'FOLDERS'}</strong></div>
+          <span onClick={this.switchCreateInput}>
+            <i className="material-icons md-36">create_new_folder</i>
+          </span>
+        </div>
         {isSelected &&
           <CreateFolderForm
             folders={folders}
@@ -41,8 +45,8 @@ class CreateFolder extends React.Component {
 }
 
 CreateFolder.propTypes = {
-  folders: React.PropTypes.array.isRequired,
-  createFolder: React.PropTypes.func.isRequired,
+  folders: PropTypes.array.isRequired,
+  createFolder: PropTypes.func.isRequired,
 };
 
 export default CreateFolder;

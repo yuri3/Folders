@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 //import { connect } from 'react-redux';
 import { Link } from 'react-router';
 //import { bindActionCreators } from 'redux'
@@ -7,7 +7,11 @@ import RenameFolderForm from './RenameFolderForm';
 import SubFoldersList from './SubFoldersList';
 import './css/Folder.css';
 
-class Folder extends React.Component {
+const spanStyle = {
+  flex: '1',
+};
+
+class Folder extends Component {
   constructor(props) {
     super(props);
     this.state = {selectedFolderId: null};
@@ -22,7 +26,7 @@ class Folder extends React.Component {
     this.selectFolder(id);
     this.props.createFolder(id);
   }
-  selectFolder(id = null) {
+  selectFolder(id) {
     this.setState({selectedFolderId: id});
   }
   showRenameInput(id) {
@@ -64,18 +68,40 @@ class Folder extends React.Component {
     return (
       <li>
         {!isShowRenameInput && <div className="parentFolder">
+          {!isFolderHasSubFolders &&
+            <span style={spanStyle}>
+              <i className="material-icons md-36">folder</i>
+            </span>}
           {isFolderHasSubFolders && selectedFolderId !== folder.id &&
-            <span onClick={() => this.selectFolder(folder.id)}>{'> '}</span>}
+            <span style={spanStyle}>
+              <i style={{position: 'relative'}} className="material-icons md-36"
+                 onClick={() => this.selectFolder(folder.id)}>
+                folder_open
+                <span style={{position: 'absolute', left: '35%', top: '15%', fontSize: '20px', fontWeight: 'bold'}}>{'>'}</span>
+              </i>
+            </span>}
           {isFolderHasSubFolders && selectedFolderId === folder.id &&
-            <span onClick={this.selectFolder}>{'\\/ '}</span>}
-            {params.folderId === folder.id ? folder.name :
-              <Link to={"/" + folder.id}>{folder.name}</Link>}
-            <span className="Folder Create"
-                  onClick={() => this.createFolder(folder.id)}>+</span>
-            <span className="Folder Remove"
-                  onClick={() => this.removeFolder(folder.id)}>X</span>
+            <span style={spanStyle}>
+              <i style={{position: 'relative'}} className="material-icons md-36"
+                 onClick={() => this.selectFolder(null)}>
+                folder_open
+                <span style={{position: 'absolute', left: '35%', top: '15%', fontSize: '20px'}}>{'\\/'}</span>
+              </i>
+            </span>}
+            <header>{params.folderId === folder.id ? folder.name :
+              <Link to={"/" + folder.id}>{folder.name}</Link>}</header>
             <span className="Folder Rename"
-                  onClick={() => this.showRenameInput(folder.id)}>/</span>
+              onClick={() => this.showRenameInput(folder.id)}>
+              <i className="material-icons md-36">mode_edit</i>
+            </span>
+            <span className="Folder Remove"
+              onClick={() => this.removeFolder(folder.id)}>
+              <i className="material-icons md-36">delete_forever</i>
+            </span>
+            <span className="Folder Create"
+              onClick={() => this.createFolder(folder.id)}>
+              <i className="material-icons md-36">create_new_folder</i>
+            </span>
           </div>}
         {isShowRenameInput &&
         <RenameFolderForm
@@ -100,15 +126,15 @@ class Folder extends React.Component {
 }
 
 Folder.propTypes = {
-  folders: React.PropTypes.array.isRequired,
-  folder: React.PropTypes.object.isRequired,
-  subfolders: React.PropTypes.array.isRequired,
-  params: React.PropTypes.object.isRequired,
-  options: React.PropTypes.object.isRequired,
-  createFolder: React.PropTypes.func.isRequired,
-  selectRenameInput: React.PropTypes.func.isRequired,
-  renameFolder: React.PropTypes.func.isRequired,
-  removeFolder: React.PropTypes.func.isRequired,
+  folders: PropTypes.array.isRequired,
+  folder: PropTypes.object.isRequired,
+  subfolders: PropTypes.array.isRequired,
+  params: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  createFolder: PropTypes.func.isRequired,
+  selectRenameInput: PropTypes.func.isRequired,
+  renameFolder: PropTypes.func.isRequired,
+  removeFolder: PropTypes.func.isRequired,
 };
 /*
 const mapDispatchToProps = (dispatch) => {

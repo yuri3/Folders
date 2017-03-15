@@ -1,24 +1,23 @@
-ul {
-  list-style-type: none;
+li {
+  margin: 20px;
+  width: 300px;
 }
 
-li {
-  border: 1px solid green;
-  padding: 5px; 
-  margin: 10px;
-  width: 350px;
+.parentFolder {
+  display: flex;
+  align-items: center;
+  cursor: move;
 }
 
 .parentFolder:hover .Folder {
   display: inline;
 }
 
-span {
-  cursor: pointer;
+header {
+  flex: 4;
 }
 
 .Folder {
-  float: right;
-  margin-right: 15px;
+  flex: 1;
   display: none;
 }

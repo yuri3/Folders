@@ -45,9 +45,9 @@ function collectSource(connect, monitor) {
 function collectTarget(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    isOverCurrent: monitor.isOver({shallow: true}),
-    canDrop: monitor.canDrop(),
+    //isOver: monitor.isOver(),
+    //isOverCurrent: monitor.isOver({shallow: true}),
+    //canDrop: monitor.canDrop(),
   };
 }
 
@@ -58,7 +58,7 @@ class DragAndDropNote extends Component {
     /*this.props.connectDragPreview(getEmptyImage(), {
       captureDraggingState: true,
     });*/
-    const img = new Image();
+    const img = new Image(); // When add new Note, it does note show image!!!
     img.src = 'description.svg';
     img.onload = () => {console.log('onload()');this.props.connectDragPreview(img)};
   }

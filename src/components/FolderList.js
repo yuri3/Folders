@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { browserHistory } from 'react-router';
 import Folder from './Folder';
 
-const style = {listStyleType: 'none', padding: '15px', border: '1px solid red'};
+const style = {listStyleType: 'none', padding: '15px'};
 
-class FolderList extends React.Component {
+class FolderList extends Component {
   componentDidMount() {
     browserHistory.push('/');
   }
@@ -50,14 +50,14 @@ class FolderList extends React.Component {
 }
 
 FolderList.propTypes = {
-  folders: React.PropTypes.array.isRequired,
-  subfolders: React.PropTypes.array.isRequired,
-  params: React.PropTypes.object.isRequired,
-  options: React.PropTypes.object.isRequired,
-  createFolder: React.PropTypes.func.isRequired,
-  selectRenameInput: React.PropTypes.func.isRequired,
-  renameFolder: React.PropTypes.func.isRequired,
-  removeFolder: React.PropTypes.func.isRequired,
+  folders: PropTypes.array.isRequired,
+  subfolders: PropTypes.array.isRequired,
+  params: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  createFolder: PropTypes.func.isRequired,
+  selectRenameInput: PropTypes.func.isRequired,
+  renameFolder: PropTypes.func.isRequired,
+  removeFolder: PropTypes.func.isRequired,
 };
 
 export default FolderList;
