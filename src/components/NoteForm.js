@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { Prompt } from 'react-router-dom';
 import TextField from 'material-ui/TextField'
 
 const validate = (value, props) => {
@@ -28,6 +29,7 @@ const renderTextField = (field) => {
       touched,
       error
     },
+    handleBlocking,
     changeNoteName,
     ...custom
   } = field;
@@ -40,27 +42,47 @@ const renderTextField = (field) => {
       {...input}
       {...custom}
       onChange={(event) => {
-        input.onChange(event.target.value);
-        changeNoteName && changeNoteName(event.target.value);
+        const value = event.target.value;
+        input.onChange(value);
+        handleBlocking && handleBlocking(error);
+        changeNoteName && changeNoteName(value);
       }}/>
   );
 };
 
 class NoteForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {isBlocking: false, errorMessage: ''};
+    this.handleBlocking = this.handleBlocking.bind(this);
+  }
+  handleBlocking(error) {
+    this.setState({isBlocking: !!error, errorMessage: error ? error : ''});
+  }
   componentWillReceiveProps(nextProps) {
     const {params, initialize} = this.props;
     if(params && params.noteId !== nextProps.params.noteId) {
+      this.handleBlocking('');
       initialize(nextProps.initialValues);
     }
   }
   render() {
+    const {isBlocking, errorMessage} = this.state;
     const {changeNoteName} = this.props;
     return (
       <div>
         <form>
+          <Prompt
+            when={isBlocking}
+            message={location => (`
+              There is an Error "${errorMessage}"!!!
+              Are you sure you want to go to ${location.pathname}?
+              If Ok. the Note's name will be set to default Name "New Note."`
+            )}/>
           <Field
             name="name"
             placeholder="Name"
+            handleBlocking={this.handleBlocking}
             changeNoteName={changeNoteName}
             component={renderTextField}/><br/>
           <Field
