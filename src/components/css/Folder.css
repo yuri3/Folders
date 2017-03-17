@@ -1,6 +1,6 @@
 li {
-  margin: 20px;
-  width: 300px;
+  margin: 0 0 20px 0;
+  width: 350px;
 }
 
 .parentFolder {
@@ -10,11 +10,11 @@ li {
 }
 
 .parentFolder:hover .Folder {
-  display: inline;
+  display: block;
 }
 
 header {
-  flex: 4;
+  flex: 15;
 }
 
 .Folder {

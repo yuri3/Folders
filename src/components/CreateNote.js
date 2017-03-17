@@ -1,6 +1,10 @@
 import React, { PropTypes, Component } from 'react';
+import IconButton from 'material-ui/IconButton';
+import NoteAddIcon from 'material-ui/svg-icons/action/note-add';
 
 const styles = {
+  display: 'flex',
+  alignItems: 'center',
   padding: '10px',
 };
 
@@ -12,10 +16,11 @@ class CreateNote extends Component {
   render() {
     return (
       <div style={styles}>
-        <strong>{'NOTES'}</strong>{' '}
-        <span onClick={this.createNote}>
-          <i className="material-icons md-36">note_add</i>
-        </span><br/>
+        <h4><strong>{'NOTES'}</strong></h4>
+        <IconButton
+          tooltip="Create New Note"
+          onTouchTap={this.createNote}><NoteAddIcon/>
+        </IconButton>
       </div>
     );
   }

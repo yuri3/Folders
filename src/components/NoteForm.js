@@ -76,15 +76,11 @@ class NoteForm extends Component {
   }
 }
 
-NoteForm.defaultProps = {
-  initialValues: {name: '', notes: ''},
-};
-
 NoteForm.propTypes = {
   folders: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
   changeNoteName: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.object.isRequired,
 };
 
 export default reduxForm({

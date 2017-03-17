@@ -1,6 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField'
+import IconButton from 'material-ui/IconButton';
+import SaveIcon from 'material-ui/svg-icons/content/save';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
+//import styles from '../IconStyles';
+
+const style = {
+  alignSelf: 'flex-end',
+};
 
 const validate = (value, props) => {
   let error = {};
@@ -46,11 +54,6 @@ class CreateFolderForm extends Component {
       handleClose,
       invalid
     } = this.props;
-    const saveStyle = {
-      alignSelf: 'flex-end',
-      opacity: invalid ? 0.5 : 1,
-      pointerEvents: invalid ? 'none' : 'auto',
-    };
     return (
       <div>
         <form>
@@ -59,13 +62,19 @@ class CreateFolderForm extends Component {
               name="name"
               type="text"
               placeholder="Name"
-              component={renderTextField}/>{' '}
-            <span style={saveStyle} onClick={handleSubmit}>
-              <i className="material-icons md-36">save</i>
-            </span>
-            <span style={{alignSelf: 'flex-end',}} onClick={handleClose}>
-              <i className="material-icons md-36">close</i>
-            </span>
+              style={{width: '200px'}}
+              component={renderTextField}/>
+            <IconButton
+              tooltip="Save"
+              style={style}
+              disabled={!!invalid}
+              onTouchTap={handleSubmit}><SaveIcon/>
+            </IconButton>
+            <IconButton
+              tooltip="Close"
+              style={style}
+              onTouchTap={handleClose}><CloseIcon/>
+            </IconButton>
           </div>
         </form>
       </div>

@@ -1,23 +1,27 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
+import { Route } from 'react-router-dom';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import * as actions from '../actions/actions';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
 import { getSubFolders } from '../selectors';
+import NotesContainer from './NotesContainer';
 
-class Folders extends React.Component {
+class Folders extends Component {
   render() {
     const {
       folders,
       subfolders,
       options,
-      params,
+      match,
+      history,
       createFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder,
-      children
+      removeFolder
     } = this.props;
     return (
       <div>
@@ -27,28 +31,30 @@ class Folders extends React.Component {
         <FolderList
           folders={folders}
           subfolders={subfolders}
-          params={params}
+          match={match}
+          history={history}
           options={options}
           createFolder={createFolder}
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
           removeFolder={removeFolder}/>
-        <div>{children}</div>
+        <Route path={`${match.url}:folderId`} component={NotesContainer}/>
       </div>
     );
   }
 }
 
 Folders.propTypes = {
-  folders: React.PropTypes.array.isRequired,
-  subfolders: React.PropTypes.array.isRequired,
-  options: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired,
-  createFolder: React.PropTypes.func.isRequired,
-  selectRenameInput: React.PropTypes.func.isRequired,
-  renameFolder: React.PropTypes.func.isRequired,
-  removeFolder: React.PropTypes.func.isRequired,
-  children: React.PropTypes.node,
+  folders: PropTypes.array.isRequired,
+  subfolders: PropTypes.array.isRequired,
+  options: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  createFolder: PropTypes.func.isRequired,
+  selectRenameInput: PropTypes.func.isRequired,
+  renameFolder: PropTypes.func.isRequired,
+  removeFolder: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -66,4 +72,4 @@ const FoldersContainer = connect(
   mapDispatchToProps
 )(Folders);
 
-export default FoldersContainer;
+export default DragDropContext(HTML5Backend)(FoldersContainer);

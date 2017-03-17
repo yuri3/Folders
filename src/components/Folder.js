@@ -1,13 +1,20 @@
 import React, { PropTypes, Component } from 'react';
 //import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 //import { bindActionCreators } from 'redux'
 //import * as actions from '../actions/actions';
+import IconButton from 'material-ui/IconButton';
+import FolderIcon from 'material-ui/svg-icons/file/folder';
+import FolderOpenIcon from 'material-ui/svg-icons/file/folder-open';
+import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
+import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
+//import styles from '../IconStyles';
 import RenameFolderForm from './RenameFolderForm';
 import SubFoldersList from './SubFoldersList';
 import './css/Folder.css';
 
-const spanStyle = {
+const style = {
   flex: '1',
 };
 
@@ -53,8 +60,8 @@ class Folder extends Component {
       folders,
       folder,
       subfolders,
+      match,
       options,
-      params,
       createFolder,
       selectRenameInput,
       renameFolder,
@@ -69,40 +76,49 @@ class Folder extends Component {
       <li>
         {!isShowRenameInput && <div className="parentFolder">
           {!isFolderHasSubFolders &&
-            <span style={spanStyle}>
-              <i className="material-icons md-36">folder</i>
-            </span>}
+            <IconButton style={style}>
+              <FolderIcon/>
+            </IconButton>}
           {isFolderHasSubFolders && selectedFolderId !== folder.id &&
-            <span style={spanStyle}>
-              <i style={{position: 'relative'}} className="material-icons md-36"
-                 onClick={() => this.selectFolder(folder.id)}>
-                folder_open
-                <span style={{position: 'absolute', left: '35%', top: '15%', fontSize: '20px', fontWeight: 'bold'}}>{'>'}</span>
-              </i>
-            </span>}
+            <IconButton
+              style={style}
+              onTouchTap={() => this.selectFolder(folder.id)}>
+              <FolderOpenIcon/>
+            </IconButton>}
           {isFolderHasSubFolders && selectedFolderId === folder.id &&
-            <span style={spanStyle}>
-              <i style={{position: 'relative'}} className="material-icons md-36"
-                 onClick={() => this.selectFolder(null)}>
-                folder_open
-                <span style={{position: 'absolute', left: '35%', top: '15%', fontSize: '20px'}}>{'\\/'}</span>
-              </i>
-            </span>}
-            <header>{params.folderId === folder.id ? folder.name :
-              <Link to={"/" + folder.id}>{folder.name}</Link>}</header>
-            <span className="Folder Rename"
-              onClick={() => this.showRenameInput(folder.id)}>
-              <i className="material-icons md-36">mode_edit</i>
-            </span>
-            <span className="Folder Remove"
-              onClick={() => this.removeFolder(folder.id)}>
-              <i className="material-icons md-36">delete_forever</i>
-            </span>
-            <span className="Folder Create"
-              onClick={() => this.createFolder(folder.id)}>
-              <i className="material-icons md-36">create_new_folder</i>
-            </span>
-          </div>}
+            <IconButton
+              style={style}
+              onTouchTap={() => this.selectFolder(null)}>
+              <FolderOpenIcon/>
+            </IconButton>}
+          <header>{match.params.folderId === folder.id ? folder.name :
+            <Link to={`${match.url}` + folder.id}>{folder.name}</Link>}
+          </header>
+          <span className="Folder Rename">
+            <IconButton
+              tooltip="Rename Folder"
+              style={style}
+              onTouchTap={() => this.showRenameInput(folder.id)}>
+              <ModeEditIcon/>
+            </IconButton>
+          </span>
+          <span className="Folder Remove">
+            <IconButton
+              tooltip="Remove Folder"
+              style={style}
+              onTouchTap={() => this.removeFolder(folder.id)}>
+              <DeleteForeverIcon/>
+            </IconButton>
+          </span>
+          <span className="Folder Create">
+            <IconButton
+              tooltip="Create Folder"
+              style={style}
+              onTouchTap={() => this.createFolder(folder.id)}>
+              <CreateNewFolderIcon/>
+            </IconButton>
+          </span>
+         </div>}
         {isShowRenameInput &&
         <RenameFolderForm
            folders={folders}
@@ -114,7 +130,7 @@ class Folder extends Component {
             folders={folders}
             folder={folder}
             subfolders={subfolders}
-            params={params}
+            match={match}
             options={options}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
@@ -129,7 +145,7 @@ Folder.propTypes = {
   folders: PropTypes.array.isRequired,
   folder: PropTypes.object.isRequired,
   subfolders: PropTypes.array.isRequired,
-  params: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import Folder from './Folder';
 
-class SubFoldersList extends React.Component {
+class SubFoldersList extends Component {
   render() {
     const {
       folders,
       folder,
       subfolders,
-      params,
+      match,
       options,
       createFolder,
       selectRenameInput,
@@ -16,15 +16,15 @@ class SubFoldersList extends React.Component {
     } = this.props;
     return (
       <ul style={{listStyleType: 'none'}}>
-        {subfolders.map((subFolder, index) => (
+        {subfolders.map(subFolder => (
           folder.id === subFolder.parentId ?
           <Folder
             key={subFolder.id}
             folders={folders}
             folder={subFolder}
             subfolders={subfolders}
+            match={match}
             options={options}
-            params={params}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}
@@ -36,15 +36,15 @@ class SubFoldersList extends React.Component {
 }
 
 SubFoldersList.propTypes = {
-  folders: React.PropTypes.array.isRequired,
-  folder: React.PropTypes.object.isRequired,
-  subfolders: React.PropTypes.array.isRequired,
-  params: React.PropTypes.object.isRequired,
-  options: React.PropTypes.object.isRequired,
-  createFolder: React.PropTypes.func.isRequired,
-  selectRenameInput: React.PropTypes.func.isRequired,
-  renameFolder: React.PropTypes.func.isRequired,
-  removeFolder: React.PropTypes.func.isRequired,
+  folders: PropTypes.array.isRequired,
+  folder: PropTypes.object.isRequired,
+  subfolders: PropTypes.array.isRequired,
+  match: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  createFolder: PropTypes.func.isRequired,
+  selectRenameInput: PropTypes.func.isRequired,
+  renameFolder: PropTypes.func.isRequired,
+  removeFolder: PropTypes.func.isRequired,
 };
 
 export default SubFoldersList;

@@ -1,27 +1,29 @@
 import React, { PropTypes, Component } from 'react';
-import { browserHistory } from 'react-router';
 import Folder from './Folder';
 
-const style = {listStyleType: 'none', padding: '15px'};
+const style = {listStyleType: 'none', padding: 0};
 
 class FolderList extends Component {
-  componentDidMount() {
-    browserHistory.push('/');
-  }
+  /*componentDidMount() {
+    const {history} = this.props;
+    console.log('history = ', history);
+    history.push('/');
+  }*/
   componentWillUpdate(nextProps) {
+    const {history} = this.props;
     if(nextProps.folders.length > this.props.folders.length) {
       const newFolder = nextProps.folders[0];
-      browserHistory.push(`/${newFolder.id}`);
+      history.push(`/${newFolder.id}`);
     }
     if(nextProps.folders.length < this.props.folders.length) {
-      browserHistory.push('/');
+      history.push('/');
     }
   }
   render() {
     const {
       folders,
       subfolders,
-      params,
+      match,
       options,
       createFolder,
       selectRenameInput,
@@ -38,7 +40,7 @@ class FolderList extends Component {
               folder={folder}
               subfolders={subfolders}
               options={options}
-              params={params}
+              match={match}
               createFolder={createFolder}
               selectRenameInput={selectRenameInput}
               renameFolder={renameFolder}
@@ -52,7 +54,8 @@ class FolderList extends Component {
 FolderList.propTypes = {
   folders: PropTypes.array.isRequired,
   subfolders: PropTypes.array.isRequired,
-  params: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,

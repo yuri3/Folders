@@ -6,7 +6,9 @@ import Note from './Note';
 import flow from 'lodash/flow';
 
 const styles = {
-  padding: '10px',
+  margin: '10px',
+  borderRadius: '0px 9px 0px 0px',
+  border: '1px solid gray',
 };
 
 const noteSource = {
@@ -42,7 +44,7 @@ function collectSource(connect, monitor) {
   }
 }
 
-function collectTarget(connect, monitor) {
+function collectTarget(connect) {
   return {
     connectDropTarget: connect.dropTarget(),
     //isOver: monitor.isOver(),
@@ -71,8 +73,9 @@ class DragAndDropNote extends Component {
       connectDropTarget,
       isDragging
     } = this.props;
+    const border = isDragging ? '1px dashed gray' : '1px solid gray';
     return connectDragSource(connectDropTarget(
-      <div style={styles}>
+      <div style={{...styles, border}}>
         <Note params={params} note={note} removeNote={removeNote} isDragging={isDragging}/>
       </div>
     ));

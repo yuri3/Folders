@@ -5,7 +5,7 @@ const style = {
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
-  //border: '1px solid blue'
+  border: '1px solid blue'
 };
 
 class NoteList extends Component {

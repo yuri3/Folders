@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
@@ -6,16 +6,16 @@ import NoteForm from '../components/NoteForm';
 
 const style = {padding: '10px', border: '1px solid blue',};
 
-class NoteDetails extends React.Component {
+class NoteDetails extends Component {
   render() {
-    const {folders, notes, params, changeNoteName} = this.props;
-    const {folderId, noteId} = params;
+    const {folders, notes, match, changeNoteName} = this.props;
+    const {folderId, noteId} = match.params;
     const currentNote = notes[noteId];
     return (
       <div style={style}>
         <NoteForm
           folders={folders}
-          params={params}
+          params={match.params}
           initialValues={{
             name: currentNote && currentNote.name,
             notes: currentNote && currentNote.description

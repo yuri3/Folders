@@ -1,20 +1,17 @@
 import React, { PropTypes, Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+import IconButton from 'material-ui/IconButton';
 
 const styles = {
   display: 'flex',
   position: 'relative',
   width: '200px',
-  height: '40px',
   cursor: 'move',
-  borderRadius: '9px',
 };
 
 const iconStyle = {
   width: '20%',
-  cursor: 'move',
   backgroundColor: 'gray',
-  borderRadius: '9px 0px 0px 9px',
 };
 
 const linkStyle = {
@@ -22,15 +19,13 @@ const linkStyle = {
   width: '80%',
   textAlign: 'center',
   whiteSpace: 'nowrap',
-  overflow: 'hidden',
   padding: '10px 5px 10px 5px',
 };
 
 const removeStyle = {
   position: 'absolute',
-  top: '-14px',
-  right: '-13px',
-  borderRadius: '9px',
+  top: '-25px',
+  right: '-25px',
 };
 
 class Note extends Component {
@@ -47,20 +42,21 @@ class Note extends Component {
     let noteName = note.name ? note.name : 'New Note';
     noteName = noteName.length > 18 ? `${noteName.slice(0, 17)}...` : noteName;
     const color = note.name ? 'black' : 'gray';
-    const border = isDragging ? '1px dashed gray' : '1px solid gray';
     const opacity = isDragging ? 0 : 1;
     return(
-      <div style={{...styles, backgroundColor, border}}>
-        <div style={{...iconStyle, opacity}}>
-          <i className="material-icons md-36">description</i>
-        </div>
+      <div style={{...styles, backgroundColor, opacity}}>
+        <i className="material-icons md-36" style={iconStyle}>description</i>
         {noteId === note.id ?
-          <div style={{...linkStyle, color, opacity}}>{noteName}</div> :
-          <Link style={{...linkStyle, color, opacity}} to={`/${folderId}/${note.id}`}>
+          <div style={{...linkStyle, color}}>{noteName}</div> :
+          <Link style={{...linkStyle, color}} to={`/${folderId}/${note.id}`}>
             <span style={{pointerEvents: 'auto',}}>{noteName}</span>
           </Link>}
-        <span style={{...removeStyle, opacity}} onClick={() => removeNote(folderId, note.id)}>
-          <i className="material-icons md-24">delete_forever</i>
+        <span style={removeStyle}>
+          <IconButton
+            iconClassName="material-icons"
+            tooltip="Remove Note"
+            onTouchTap={() => removeNote(folderId, note.id)}>delete_forever
+          </IconButton>
         </span>
       </div>
     );

@@ -1,6 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField'
+import IconButton from 'material-ui/IconButton';
+import UndoIcon from 'material-ui/svg-icons/content/undo';
+import SaveIcon from 'material-ui/svg-icons/content/save';
+
+const style = {
+  alignSelf: 'flex-end',
+};
 
 const validate = (value, props) => {
   let error = {};
@@ -41,6 +48,14 @@ const renderTextField = (field) => {
 };
 
 class RenameFolderForm extends Component {
+  handleEnter = (event) => {
+    event.preventDefault();
+    console.log(event.keyCode);
+    if(event.keyCode === 13) {
+      const {handleSubmit} = this.props;
+      handleSubmit();
+    }
+  };
   render() {
     const {
       handleSubmit,
@@ -48,14 +63,9 @@ class RenameFolderForm extends Component {
       invalid,
       pristine
     } = this.props;
-    const saveStyle = {
-      alignSelf: 'flex-end',
-      opacity: invalid || pristine ? 0.5 : 1,
-      pointerEvents: invalid || pristine ? 'none' : 'auto',
-    };
     return (
       <div>
-        <form>
+        <form onSubmit={this.handleEnter}>
           <div style={{display: 'flex'}}>
             <Field
               name="name"
@@ -63,12 +73,17 @@ class RenameFolderForm extends Component {
               placeholder="Name"
               style={{width: '200px'}}
               component={renderTextField}/>
-            <span style={{alignSelf: 'flex-end'}} onClick={handleClose}>
-              <i className="material-icons md-36">undo</i>
-            </span>
-            <span style={saveStyle} onClick={handleSubmit}>
-              <i className="material-icons md-36">save</i>
-            </span>
+            <IconButton
+              tooltip="Undo"
+              style={style}
+              onTouchTap={handleClose}><UndoIcon/>
+            </IconButton>
+            <IconButton
+              tooltip="Save"
+              style={style}
+              disabled={!!invalid || !!pristine}
+              onTouchTap={handleSubmit}><SaveIcon/>
+            </IconButton>
           </div>
         </form>
       </div>
@@ -80,7 +95,7 @@ RenameFolderForm.propTypes = {
   folders: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.object.isRequired,
 };
 
 export default reduxForm({
