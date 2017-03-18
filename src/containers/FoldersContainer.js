@@ -43,7 +43,7 @@ class Folders extends Component {
     );
   }
 }
-
+//<Route path={`${match.url}:folderId`} component={NotesContainer}/>
 Folders.propTypes = {
   folders: PropTypes.array.isRequired,
   subfolders: PropTypes.array.isRequired,

@@ -19,6 +19,8 @@ const linkStyle = {
   width: '80%',
   textAlign: 'center',
   whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
   padding: '10px 5px 10px 5px',
 };
 
@@ -39,8 +41,7 @@ class Note extends Component {
     } = this.props;
     const {folderId, noteId} = params;
     const backgroundColor = background ? background : 'white';
-    let noteName = note.name ? note.name : 'New Note';
-    noteName = noteName.length > 18 ? `${noteName.slice(0, 17)}...` : noteName;
+    const noteName = note.name ? note.name : 'New Note';
     const color = note.name ? 'black' : 'gray';
     const opacity = isDragging ? 0 : 1;
     return(

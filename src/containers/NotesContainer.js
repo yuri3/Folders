@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Route } from 'react-router-dom';
+//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 //import { DragDropContext } from 'react-dnd';
 //import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
@@ -14,7 +15,7 @@ class Notes extends Component {
   render() {
     const {currentFolder, match, createNote, moveNote, removeNote} = this.props;
     const {folderId} = match.params;
-    console.log('match of Notes = ', match);
+    console.log('match of NotesContainer = ', match);
     return (
       <div style={{border: '1px solid red'}}>
         <CreateNote
@@ -25,12 +26,12 @@ class Notes extends Component {
           params={match.params}
           moveNote={moveNote}
           removeNote={removeNote}/>
-        <Route path="/:folderId/:noteId" component={NoteDetailsContainer}/>
+        <Route path={`${match.url}/:noteId`} component={NoteDetailsContainer}/>
       </div>
     );
   }
 }
-
+//<Route path="/:folderId/:noteId" component={NoteDetailsContainer}/>
 Notes.propTypes = {
   match: PropTypes.object.isRequired,
   createNote: PropTypes.func.isRequired,
@@ -52,4 +53,5 @@ const NotesContainer = connect(
   mapDispatchToProps
 )(Notes);
 
+//export default DragDropContext(HTML5Backend)(NotesContainer);
 export default NotesContainer;

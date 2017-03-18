@@ -60,8 +60,10 @@ class NoteForm extends Component {
     this.setState({isBlocking: !!error, errorMessage: error ? error : ''});
   }
   componentWillReceiveProps(nextProps) {
-    const {params, initialize} = this.props;
+    const {params, changeNoteName, initialize} = this.props;
+    const {isBlocking} = this.state;
     if(params && params.noteId !== nextProps.params.noteId) {
+      isBlocking && changeNoteName('New Note');
       this.handleBlocking('');
       initialize(nextProps.initialValues);
     }
