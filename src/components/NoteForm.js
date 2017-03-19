@@ -1,23 +1,25 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Prompt } from 'react-router-dom';
+//import { Prompt } from 'react-router-dom';
 import TextField from 'material-ui/TextField'
 
 const validate = (value, props) => {
-  //if(!props.dirty) {return;}
-  let error = {};
+  const error = {};
   if(!value.name) {
     error.name = 'Required';
   } else if(value.name && value.name.length > 18) {
     error.name = 'Must be 18 characters or less!';
-  } else if(// it does not work correctly!!!
+  } else if(
     props.folders.some(folder => (
-      folder.name === value.name.trim() ||
-      folder.notes.some(note => note && note.name !== 'New Note' && note.name === value.name.trim())
+      (folder.name === value.name.trim() && folder.id !== value.id) ||
+      folder.notes.some(
+        note => note && note.name !== 'New Note' && note.name === value.name.trim() && note.id !== value.id
+      )
     ))
   ) {
     error.name = 'This name is already taken!'
   }
+  props.handleBlocking(error.name);
   return error;
 };
 
@@ -29,11 +31,9 @@ const renderTextField = (field) => {
       touched,
       error
     },
-    handleBlocking,
     changeNoteName,
     ...custom
   } = field;
-  console.log('error', error);
   return (
     <TextField
       hintText={placeholder}
@@ -42,49 +42,20 @@ const renderTextField = (field) => {
       {...input}
       {...custom}
       onChange={(event) => {
-        const value = event.target.value;
-        input.onChange(value);
-        handleBlocking && handleBlocking(error);
-        changeNoteName && changeNoteName(value);
+        changeNoteName && changeNoteName(event.target.value);
       }}/>
   );
 };
 
 class NoteForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {isBlocking: false, errorMessage: ''};
-    this.handleBlocking = this.handleBlocking.bind(this);
-  }
-  handleBlocking(error) {
-    this.setState({isBlocking: !!error, errorMessage: error ? error : ''});
-  }
-  componentWillReceiveProps(nextProps) {
-    const {params, changeNoteName, initialize} = this.props;
-    const {isBlocking} = this.state;
-    if(params && params.noteId !== nextProps.params.noteId) {
-      isBlocking && changeNoteName('New Note');
-      this.handleBlocking('');
-      initialize(nextProps.initialValues);
-    }
-  }
   render() {
-    const {isBlocking, errorMessage} = this.state;
     const {changeNoteName} = this.props;
     return (
       <div>
         <form>
-          <Prompt
-            when={isBlocking}
-            message={location => (`
-              There is an Error "${errorMessage}"!!!
-              Are you sure you want to go to ${location.pathname}?
-              If Ok. the Note's name will be set to default Name "New Note."`
-            )}/>
           <Field
             name="name"
             placeholder="Name"
-            handleBlocking={this.handleBlocking}
             changeNoteName={changeNoteName}
             component={renderTextField}/><br/>
           <Field
@@ -109,9 +80,6 @@ NoteForm.propTypes = {
 
 export default reduxForm({
   form: 'noteForm',
-  //destroyOnUnmount: false,
-  //forceUnregisterOnUnmount: true,
-  //enableReinitialize: true,
-  //keepDirtyOnReinitialize: true,
+  enableReinitialize: true,
   validate,
 })(NoteForm);

@@ -4,10 +4,20 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 import FoldersContainer from './containers/FoldersContainer';
 
-const App = ({match, history}) => (
+const App = ({params, children}) => (
+  <MuiThemeProvider>
+    <FoldersContainer params={params} children={children}/>
+  </MuiThemeProvider>
+);
+
+export default App;
+
+
+/*const App = ({match, history}) => (
   <MuiThemeProvider>
     <FoldersContainer match={match} history={history}/>
   </MuiThemeProvider>
 );
 
 export default App;
+*/

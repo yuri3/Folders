@@ -61,8 +61,8 @@ class DragAndDropNote extends Component {
       captureDraggingState: true,
     });*/
     const img = new Image(); // When add new Note, it does note show image!!!
-    img.src = 'description.svg';
-    img.onload = () => {console.log('onload()');this.props.connectDragPreview(img)};
+    img.src = '/description.svg';
+    img.onload = () => this.props.connectDragPreview(img);
   }
   render() {
     const {

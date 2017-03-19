@@ -4,27 +4,10 @@ import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
 import UndoIcon from 'material-ui/svg-icons/content/undo';
 import SaveIcon from 'material-ui/svg-icons/content/save';
+import validate from './syncValidate';
 
 const style = {
   alignSelf: 'flex-end',
-};
-
-const validate = (value, props) => {
-  let error = {};
-  if(!props.dirty) {return;}
-  if(!value.name) {
-    error.name = 'Required';
-  } else if(value.name && value.name.length > 18) {
-    error.name = 'Must be 18 characters or less!';
-  } else if(
-    props.folders.some(folder => (
-      folder.name === value.name.trim() ||
-      folder.notes.some(note => note && note.name !== 'New Note' && note.name === value.name.trim())
-    ))
-  ) {
-    error.name = 'This name is already taken!'
-  }
-  return error;
 };
 
 const renderTextField = (field) => {
@@ -35,6 +18,8 @@ const renderTextField = (field) => {
       dirty,
       error,
     },
+    handleSubmit,
+    handleClose,
     ...custom
   } = field;
   return (
@@ -43,19 +28,20 @@ const renderTextField = (field) => {
       floatingLabelText={placeholder}
       errorText={dirty && error}
       {...input}
-      {...custom}/>
+      {...custom}
+      onKeyDown={(event) => {
+        if(event.keyCode === 13) {
+          event.preventDefault();
+          handleSubmit(event);
+        }
+        if(event.keyCode === 27) {
+          handleClose();
+        }
+      }}/>
   );
 };
 
 class RenameFolderForm extends Component {
-  handleEnter = (event) => {
-    event.preventDefault();
-    console.log(event.keyCode);
-    if(event.keyCode === 13) {
-      const {handleSubmit} = this.props;
-      handleSubmit();
-    }
-  };
   render() {
     const {
       handleSubmit,
@@ -65,13 +51,15 @@ class RenameFolderForm extends Component {
     } = this.props;
     return (
       <div>
-        <form onSubmit={this.handleEnter}>
+        <form>
           <div style={{display: 'flex'}}>
             <Field
               name="name"
               type="text"
               placeholder="Name"
               style={{width: '200px'}}
+              handleSubmit={handleSubmit}
+              handleClose={handleClose}
               component={renderTextField}/>
             <IconButton
               tooltip="Undo"
@@ -98,7 +86,10 @@ RenameFolderForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
 };
 
-export default reduxForm({
-  form: 'renameFolderForm',
-  validate,
-})(RenameFolderForm);
+export default props => {
+  const Form = reduxForm({
+    form: 'renameFolderForm' + props.initialValues.name,
+    validate,
+  })(RenameFolderForm);
+  return <Form {...props}/>;
+}

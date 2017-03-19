@@ -1,14 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Route } from 'react-router-dom';
+//import { Route } from 'react-router-dom';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import * as actions from '../actions/actions';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
 import { getSubFolders } from '../selectors';
-import NotesContainer from './NotesContainer';
+//import NotesContainer from './NotesContainer';
 
 class Folders extends Component {
   render() {
@@ -16,6 +16,8 @@ class Folders extends Component {
       folders,
       subfolders,
       options,
+      params,
+      children,
       match,
       history,
       createFolder,
@@ -31,6 +33,7 @@ class Folders extends Component {
         <FolderList
           folders={folders}
           subfolders={subfolders}
+          params={params}
           match={match}
           history={history}
           options={options}
@@ -38,7 +41,7 @@ class Folders extends Component {
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
           removeFolder={removeFolder}/>
-        <Route path={`${match.url}:folderId`} component={NotesContainer}/>
+        <div>{children}</div>
       </div>
     );
   }
@@ -48,8 +51,8 @@ Folders.propTypes = {
   folders: PropTypes.array.isRequired,
   subfolders: PropTypes.array.isRequired,
   options: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
+  //match: PropTypes.object.isRequired,
+  //history: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,

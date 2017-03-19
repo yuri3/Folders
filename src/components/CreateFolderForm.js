@@ -5,26 +5,10 @@ import IconButton from 'material-ui/IconButton';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 //import styles from '../IconStyles';
+import validate from './syncValidate';
 
 const style = {
   alignSelf: 'flex-end',
-};
-
-const validate = (value, props) => {
-  let error = {};
-  if(!value.name) {
-    error.name = 'Required';
-  } else if(value.name && value.name.length > 18) {
-    error.name = 'Must be 18 characters or less!';
-  } else if(
-    props.folders.some(folder => (
-      folder.name === value.name.trim() ||
-      folder.notes.some(note => note && note.name !== 'New Note' && note.name === value.name.trim())
-    ))
-  ) {
-    error.name = 'This name is already taken!'
-  }
-  return error;
 };
 
 const renderTextField = (field) => {
@@ -35,6 +19,8 @@ const renderTextField = (field) => {
       touched,
       error,
     },
+    handleSubmit,
+    handleClose,
     ...custom
   } = field;
   return (
@@ -43,7 +29,16 @@ const renderTextField = (field) => {
       floatingLabelText={placeholder}
       errorText={touched && error}
       {...input}
-      {...custom}/>
+      {...custom}
+      onKeyDown={(event) => {
+        if(event.keyCode === 13) {
+          event.preventDefault();
+          handleSubmit(event);
+        }
+        if(event.keyCode === 27) {
+          handleClose();
+        }
+      }}/>
   );
 };
 
@@ -62,6 +57,8 @@ class CreateFolderForm extends Component {
               name="name"
               type="text"
               placeholder="Name"
+              handleSubmit={handleSubmit}
+              handleClose={handleClose}
               style={{width: '200px'}}
               component={renderTextField}/>
             <IconButton

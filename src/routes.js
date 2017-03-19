@@ -1,29 +1,40 @@
 import React from 'react';
-import {
+/*import {
   BrowserRouter as Router,
   Route,
   Switch
-} from 'react-router-dom';
+} from 'react-router-dom';*/
+import { Route, Router, browserHistory } from 'react-router';
 import App from './App';
-//import NotesContainer from './containers/NotesContainer';
-//import NoteDetailsContainer from './containers/NoteDetailsContainer';
+import NotesContainer from './containers/NotesContainer';
+import NoteDetailsContainer from './containers/NoteDetailsContainer';
 
-const NoMatch = ({location}) => (
+/*const NoMatch = ({location}) => (
   <div>
     <h3>No match for <code>{location.pathname}</code></h3>
   </div>
-);
+);*/
 
 export default (
-  <Router>
-    <div>
-      <Switch>
-        <Route path="/" component={App}/>
-        <Route component={NoMatch}/>
-      </Switch>
-    </div>
+  <Router history={browserHistory}>
+    <Route path="/" component={App} >
+      <Route path="/:folderId" component={NotesContainer}>
+        <Route path="/:folderId/:noteId" component={NoteDetailsContainer}/>
+      </Route>
+    </Route>
   </Router>
 );
+
+/**
+ *
+ * <div>
+ <Switch>
+ <Route path="/" component={App}/>
+ <Route component={NoMatch}/>
+ </Switch>
+ </div>
+ *
+ * */
 
 /*export default (
   <Router>
