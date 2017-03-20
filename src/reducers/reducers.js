@@ -9,6 +9,7 @@ import {
   CREATE_NOTE,
   REMOVE_NOTE,
   CHANGE_NOTE_NAME,
+  CHANGE_DESCRIPTION,
   MOVE_NOTE
 } from '../actions/actions';
 
@@ -114,6 +115,16 @@ const note = (state = [], action) => {
         }
         return note;
       });
+    case CHANGE_DESCRIPTION:
+      return state.map(note => {
+        if(note.id === action.id) {
+          return {
+            ...note,
+            description: action.description,
+          };
+        }
+        return note;
+      });
     case MOVE_NOTE:
       const {dragIndex, hoverIndex} = action;
       const dragNote = state[dragIndex];
@@ -158,6 +169,16 @@ const folders = (state = FOLDERS, action) => {
         return folder;
       });
     case CHANGE_NOTE_NAME:
+      return state.map(folder => {
+        if(folder.id === action.parentId) {
+          return {
+            ...folder,
+            notes: note(folder.notes, action),
+          };
+        }
+        return folder;
+      });
+    case CHANGE_DESCRIPTION:
       return state.map(folder => {
         if(folder.id === action.parentId) {
           return {

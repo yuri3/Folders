@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { withRouter } from 'react-router';
+//import { Prompt } from 'react-router-dom';
 //import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,7 +20,8 @@ const NoteDetails = withRouter(
     }
     componentWillReceiveProps(nextProps) {
       const {params} = this.props;
-      if(params && params.noteId !== nextProps.params.noteId) {
+      const {isBlocking} = this.state;
+      if(params && params.noteId !== nextProps.params.noteId && isBlocking) {
         this.changeNote('New Note');
       }
     }
@@ -49,10 +51,10 @@ const NoteDetails = withRouter(
       this.setState({isBlocking: !!error, errorMessage: error ? error : ''});
     }
     render() {
-      const {folders, notes, params/*, match*/} = this.props;
+      const {folders, notes, params, changeDescription/*, match*/} = this.props;
       //console.log('match of NoteDetailsContainer = ', match);
       //const {folderId, noteId} = match.params;
-      const {noteId} = params;
+      const {folderId, noteId} = params;
       const currentNote = notes[noteId];
       return (
         <div style={style}>
@@ -65,7 +67,8 @@ const NoteDetails = withRouter(
               name: currentNote && currentNote.name,
               notes: currentNote && currentNote.description
             }}
-            changeNoteName={this.changeNote}/>
+            changeNoteName={this.changeNote}
+            changeDescription={(value) => changeDescription(folderId, noteId, value)}/>
         </div>
       );
     }
@@ -77,6 +80,7 @@ NoteDetails.propTypes = {
   notes: PropTypes.object.isRequired,
   //match: PropTypes.object.isRequired,
   changeNoteName: PropTypes.func.isRequired,
+  changeDescription: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({

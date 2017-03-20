@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
-//import { Prompt } from 'react-router-dom';
 import TextField from 'material-ui/TextField'
 
 const validate = (value, props) => {
@@ -32,6 +31,7 @@ const renderTextField = (field) => {
       error
     },
     changeNoteName,
+    changeDescription,
     ...custom
   } = field;
   return (
@@ -42,14 +42,16 @@ const renderTextField = (field) => {
       {...input}
       {...custom}
       onChange={(event) => {
-        changeNoteName && changeNoteName(event.target.value);
+        const value = event.target.value;
+        changeNoteName && changeNoteName(value);
+        changeDescription && changeDescription(value);
       }}/>
   );
 };
 
 class NoteForm extends Component {
   render() {
-    const {changeNoteName} = this.props;
+    const {changeNoteName, changeDescription} = this.props;
     return (
       <div>
         <form>
@@ -64,6 +66,7 @@ class NoteForm extends Component {
             multiLine={true}
             rows={2}
             fullWidth={true}
+            changeDescription={changeDescription}
             component={renderTextField}/>
         </form>
       </div>
@@ -74,8 +77,9 @@ class NoteForm extends Component {
 NoteForm.propTypes = {
   folders: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
-  changeNoteName: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
+  changeNoteName: PropTypes.func.isRequired,
+  changeDescription: PropTypes.func.isRequired,
 };
 
 export default reduxForm({
