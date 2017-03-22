@@ -7,9 +7,8 @@ class SubFoldersList extends Component {
       folders,
       folder,
       subfolders,
-      params,
-      match,
       options,
+      match,
       createFolder,
       selectRenameInput,
       renameFolder,
@@ -24,7 +23,6 @@ class SubFoldersList extends Component {
             folders={folders}
             folder={subFolder}
             subfolders={subfolders}
-            params={params}
             match={match}
             options={options}
             createFolder={createFolder}
@@ -41,8 +39,8 @@ SubFoldersList.propTypes = {
   folders: PropTypes.array.isRequired,
   folder: PropTypes.object.isRequired,
   subfolders: PropTypes.array.isRequired,
-  //match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,

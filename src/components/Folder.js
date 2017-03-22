@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 //import { connect } from 'react-redux';
-//import { Link } from 'react-router-dom';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 //import { bindActionCreators } from 'redux'
 //import * as actions from '../actions/actions';
 import IconButton from 'material-ui/IconButton';
@@ -61,9 +60,8 @@ class Folder extends Component {
       folders,
       folder,
       subfolders,
-      params,
-      match,
       options,
+      match,
       createFolder,
       selectRenameInput,
       renameFolder,
@@ -93,7 +91,7 @@ class Folder extends Component {
               onTouchTap={() => this.selectFolder(null)}>
               <FolderOpenIcon/>
             </IconButton>}
-          <header>{params.folderId === folder.id ? folder.name :
+          <header>{match.params.folderId === folder.id ? folder.name :
             <Link to={`/` + folder.id}>{folder.name}</Link>}
           </header>
           <span className="Folder Rename">
@@ -132,9 +130,8 @@ class Folder extends Component {
             folders={folders}
             folder={folder}
             subfolders={subfolders}
-            params={params}
-            match={match}
             options={options}
+            match={match}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}
@@ -148,7 +145,7 @@ Folder.propTypes = {
   folders: PropTypes.array.isRequired,
   folder: PropTypes.object.isRequired,
   subfolders: PropTypes.array.isRequired,
-  //match: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,

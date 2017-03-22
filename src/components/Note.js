@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-//import { Link } from 'react-router-dom';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+//import { Link } from 'react-router';
 import IconButton from 'material-ui/IconButton';
 
 const styles = {
@@ -45,6 +45,7 @@ class Note extends Component {
     const noteName = note.name ? note.name : 'New Note';
     const color = note.name ? 'black' : 'gray';
     const opacity = isDragging ? 0 : 1;
+    console.log('Link to = ', params);
     return(
       <div style={{...styles, backgroundColor, opacity}}>
         <i className="material-icons md-36" style={iconStyle}>description</i>
