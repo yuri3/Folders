@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 //import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 //import { bindActionCreators } from 'redux'
 //import * as actions from '../actions/actions';
 import IconButton from 'material-ui/IconButton';
@@ -16,6 +16,12 @@ import './css/Folder.css';
 
 const style = {
   flex: '1',
+};
+
+const activeStyle = {
+  color: 'black',
+  textDecoration: 'none',
+  pointerEvents: 'none'
 };
 
 class Folder extends Component {
@@ -91,12 +97,15 @@ class Folder extends Component {
               onTouchTap={() => this.selectFolder(null)}>
               <FolderOpenIcon/>
             </IconButton>}
-          <header>{match.params.folderId === folder.id ? folder.name :
-            <Link to={`/` + folder.id}>{folder.name}</Link>}
+          <header>
+            <NavLink
+              to={`/notes/${folder.id}`}
+              activeStyle={activeStyle}>{folder.name}</NavLink>
           </header>
           <span className="Folder Rename">
             <IconButton
-              tooltip="Rename Folder"
+              tooltip="RENAME FOLDER"
+              tooltipPosition="bottom-left"
               style={style}
               onTouchTap={() => this.showRenameInput(folder.id)}>
               <ModeEditIcon/>
@@ -104,7 +113,8 @@ class Folder extends Component {
           </span>
           <span className="Folder Remove">
             <IconButton
-              tooltip="Remove Folder"
+              tooltip="REMOVE FOLDER"
+              tooltipPosition="bottom-left"
               style={style}
               onTouchTap={() => this.removeFolder(folder.id)}>
               <DeleteForeverIcon/>
@@ -112,7 +122,8 @@ class Folder extends Component {
           </span>
           <span className="Folder Create">
             <IconButton
-              tooltip="Create Folder"
+              tooltip="CREATE FOLDER"
+              tooltipPosition="bottom-left"
               style={style}
               onTouchTap={() => this.createFolder(folder.id)}>
               <CreateNewFolderIcon/>

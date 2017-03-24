@@ -7,7 +7,6 @@ import flow from 'lodash/flow';
 
 const styles = {
   margin: '10px',
-  borderRadius: '0px 9px 0px 0px',
   border: '1px solid gray',
 };
 

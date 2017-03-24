@@ -8,10 +8,10 @@ class FolderList extends Component {
     const {history} = this.props;
     if(nextProps.folders.length > this.props.folders.length) {
       const newFolder = nextProps.folders[0];
-      history.push(`/${newFolder.id}`);
+      history.push(`/notes/${newFolder.id}`);
     }
     if(nextProps.folders.length < this.props.folders.length) {
-      history.push('/');
+      history.push('/notes');
     }
   }
   render() {

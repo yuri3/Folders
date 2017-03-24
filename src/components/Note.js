@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 //import { Link } from 'react-router';
 import IconButton from 'material-ui/IconButton';
 
@@ -16,13 +16,17 @@ const iconStyle = {
 };
 
 const linkStyle = {
-  pointerEvents: 'none',
   width: '80%',
   textAlign: 'center',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
   overflow: 'hidden',
   padding: '10px 5px 10px 5px',
+};
+
+const activeStyle = {
+  textDecoration: 'none',
+  pointerEvents: 'none'
 };
 
 const removeStyle = {
@@ -34,26 +38,26 @@ const removeStyle = {
 class Note extends Component {
   render() {
     const {
-      params,
+      params: {folderId},
       note,
       removeNote,
       isDragging,
       background,
     } = this.props;
-    const {folderId, noteId} = params;
     const backgroundColor = background ? background : 'white';
     const noteName = note.name ? note.name : 'New Note';
     const color = note.name ? 'black' : 'gray';
     const opacity = isDragging ? 0 : 1;
-    console.log('Link to = ', params);
     return(
       <div style={{...styles, backgroundColor, opacity}}>
         <i className="material-icons md-36" style={iconStyle}>description</i>
-        {noteId === note.id ?
-          <div style={{...linkStyle, color}}>{noteName}</div> :
-          <Link style={{...linkStyle, color}} to={`/${folderId}/${note.id}`}>
-            <span style={{pointerEvents: 'auto',}}>{noteName}</span>
-          </Link>}
+        <header style={{...linkStyle,}}>
+          <NavLink
+            style={{color}}
+            activeStyle={activeStyle}
+            to={`/notes/${folderId}/${note.id}`}>{noteName}
+          </NavLink>
+        </header>
         <span style={removeStyle}>
           <IconButton
             iconClassName="material-icons"

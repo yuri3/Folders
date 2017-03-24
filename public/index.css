@@ -1,0 +1,25 @@
+html, body {
+  margin: 0;
+}
+
+.fade-enter {
+  border: 1px solid blue;
+  opacity: 0;
+}
+
+.fade-enter.fade-enter-active {
+  border: 1px solid blue;
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+
+.fade-leave {
+  border: 1px solid red;
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  border: 1px solid red;
+  opacity: 0;
+  transition: opacity 1000ms ease-in;
+}

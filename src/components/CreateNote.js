@@ -5,7 +5,7 @@ import NoteAddIcon from 'material-ui/svg-icons/action/note-add';
 const styles = {
   display: 'flex',
   alignItems: 'center',
-  padding: '10px',
+  padding: '0 10px 0 10px',
 };
 
 class CreateNote extends Component {
@@ -16,11 +16,14 @@ class CreateNote extends Component {
   render() {
     return (
       <div style={styles}>
-        <h4><strong>{'NOTES'}</strong></h4>
+        <strong style={{marginRight: '30px'}}>{'NOTES'}</strong>
         <IconButton
-          tooltip="Create New Note"
+          style={{width: '72px', height: '72px'}}
+          iconStyle={{width: '36px', height: '36px'}}
+          tooltip="CREATE NEW NOTE"
           onTouchTap={this.createNote}><NoteAddIcon/>
         </IconButton>
+
       </div>
     );
   }

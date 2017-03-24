@@ -4,7 +4,6 @@ import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
-//import styles from '../IconStyles';
 import validate from './syncValidate';
 
 const style = {

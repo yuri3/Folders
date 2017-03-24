@@ -7,7 +7,12 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
 import NoteForm from '../components/NoteForm';
 
-const style = {padding: '10px', border: '1px solid blue',};
+const style = {
+  flex: 1,
+  padding: '10px',
+  margin: '0 0 0 30px',
+  border: '1px solid blue',
+};
 
 //const NoteDetails = withRouter(For Router_3
   class NoteDetails extends Component {

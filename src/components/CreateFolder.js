@@ -1,8 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
-//import styles from '../IconStyles';
 import CreateFolderForm from './CreateFolderForm';
+
+const style = {
+  display: 'flex',
+  alignItems: 'center',
+  padding: '0 12px 0 12px'
+};
 
 class CreateFolder extends Component {
   constructor(props) {
@@ -31,10 +36,12 @@ class CreateFolder extends Component {
     const {isSelected} = this.state;
     return (
       <div>
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <div style={{marginRight: '30px'}}><strong>{'FOLDERS'}</strong></div>
+        <div style={style}>
+          <strong style={{marginRight: '30px'}}>{'FOLDERS'}</strong>
           <IconButton
-            tooltip="Create New Folder"
+            style={{width: '72px', height: '72px'}}
+            iconStyle={{width: '36px', height: '36px'}}
+            tooltip="CREATE NEW FOLDER"
             onTouchTap={this.switchCreateInput}><CreateNewFolderIcon/>
           </IconButton>
         </div>

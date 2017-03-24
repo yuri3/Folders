@@ -2,7 +2,8 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom';
 import App from './App';
 import ModalConfirmation from './ModalConfirmation';
@@ -17,7 +18,8 @@ export const NoMatch = ({location}) => (
 export default(
   <Router getUserConfirmation={getModalConfirmation}>
     <Switch>
-      <Route path="/" component={App}/>
+      <Route exact path="/" render={() => <Redirect to="/notes"/>}/>
+      <Route path="/notes" component={App}/>
       <Route component={NoMatch}/>
     </Switch>
   </Router>

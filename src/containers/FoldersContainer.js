@@ -1,14 +1,18 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Route } from 'react-router-dom';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import * as actions from '../actions/actions';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
 import { getSubFolders } from '../selectors';
-import NotesContainer from './NotesContainer';
+
+const style = {
+  border: '1px solid red',
+  margin: '0 0 0 30px',
+  overflow: 'auto',
+};
 
 class Folders extends Component {
   render() {
@@ -23,9 +27,9 @@ class Folders extends Component {
       renameFolder,
       removeFolder
     } = this.props;
-    console.log('match of FoldersContainer = ', match);
+    console.log('match of FoldersContainer = ', this.props);
     return (
-      <div>
+      <div style={style}>
         <CreateFolder
           folders={folders}
           createFolder={createFolder}/>
@@ -39,7 +43,6 @@ class Folders extends Component {
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
           removeFolder={removeFolder}/>
-        <Route path={`/:folderId`} component={NotesContainer}/>
       </div>
     );
   }
