@@ -6,7 +6,7 @@ import CreateFolderForm from './CreateFolderForm';
 const style = {
   display: 'flex',
   alignItems: 'center',
-  padding: '0 12px 0 12px'
+  padding: '0 12px 0 12px',
 };
 
 class CreateFolder extends Component {
@@ -39,7 +39,7 @@ class CreateFolder extends Component {
         <div style={style}>
           <strong style={{marginRight: '30px'}}>{'FOLDERS'}</strong>
           <IconButton
-            style={{width: '72px', height: '72px'}}
+            style={{width: '72px', height: '72px', zIndex: 1}}
             iconStyle={{width: '36px', height: '36px'}}
             tooltip="CREATE NEW FOLDER"
             onTouchTap={this.switchCreateInput}><CreateNewFolderIcon/>

@@ -95,6 +95,7 @@ DragAndDropFolder.propTypes = {
   folder: PropTypes.object.isRequired,
   subfolders: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,

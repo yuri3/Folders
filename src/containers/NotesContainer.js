@@ -15,7 +15,13 @@ const style = {
 
 class Notes extends Component {
   render() {
-    const {currentFolder, match, createNote, moveNote, removeNote} = this.props;
+    const {
+      currentFolder,
+      match,
+      createNote,
+      moveNote,
+      removeNote
+    } = this.props;
     const {folderId, noteId} = match.params;
     console.log('match of NotesContainer = ', folderId, noteId);
     const flex = folderId && noteId ? '0 1 223px' : '1';
@@ -24,19 +30,20 @@ class Notes extends Component {
         <CreateNote
           folderId={folderId}
           createNote={createNote}/>
-        <NoteList
+        {currentFolder && <NoteList
           folder={currentFolder}
-          params={match.params}
+          match={match}
           moveNote={moveNote}
-          removeNote={removeNote}/>
+          removeNote={removeNote}/>}
       </div>
     );
   }
 }
 
 Notes.propTypes = {
-  match: PropTypes.object.isRequired,
   currentFolder: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   createNote: PropTypes.func.isRequired,
   moveNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
@@ -45,6 +52,7 @@ Notes.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   currentFolder: state.folders.find((folder) => folder.id === ownProps.match.params.folderId),
+  options: state.options,
 });
 
 const mapDispatchToProps = (dispatch) => {

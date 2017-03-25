@@ -1,16 +1,17 @@
 .App {
-  border-right: 2px solid gray;
+  border-right: 1px solid gray;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-  width: 72px;
+  width: 60px;
+  text-align: center;
 }
 
 .App-logo {
-  width: 72px;
-  height: 72px;
+  width: 60px;
+  height: 60px;
   animation: App-logo-spin infinite 20s linear;
 }
 
@@ -18,3 +19,22 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/*.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+*/

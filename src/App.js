@@ -26,9 +26,8 @@ export const NoMatch = ({location}) => (
 const style = {
   border: '1px solid black',
   display: 'flex',
-  flex: 1,
   flexWrap: 'wrap',
-  marginLeft: '72px',
+  marginLeft: '60px',
 };
 
 class App extends Component {
@@ -38,33 +37,20 @@ class App extends Component {
         <Router getUserConfirmation={getModalConfirmation}>
           <Switch>
             <Route exact path="/" render={() => <Redirect to="/notes"/>}/>
-            <Route path="/notes/:folderId/:noteId" render={({location, history, match}) => (
-              <div>
-                <Logo history={history} match={match}/>
-                <div style={style}>
-                  <ReactCSSTransitionGroup
-                    transitionName="fade"
-                    transitionEnter={true}
-                    transitionLeave={true}
-                    transitionEnterTimeout={1000}
-                    transitionLeaveTimeout={1000}
-                  >
-                    <Route
-                      location={location}
-                      key={location.key}
-                      path="/notes"
-                      component={FoldersContainer}
-                    />
-                  </ReactCSSTransitionGroup>
-                  <Route component={NotesContainer}/>
-                  <Route component={NoteDetailsContainer}/>
-                </div>
-              </div>
-              )}/>
-            <Route path="/notes" render={({location, history, match}) => (
+            <Route path="/notes/:folderId/:noteId" render={() => (
               <div style={style}>
                 <Logo/>
-                <Route path="/notes" component={FoldersContainer}/>
+                <Route component={NotesContainer}/>
+                <Route component={NoteDetailsContainer}/>
+              </div>
+            )}/>
+            <Route path="/notes" render={({location}) => (
+              <div style={style}>
+                <Logo/>
+                <Route
+                  location={location}
+                  key={location.key}
+                  component={FoldersContainer}/>
                 <Route path="/notes/:folderId" component={NotesContainer}/>
               </div>
             )}/>

@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-//import { Link } from 'react-router';
 import IconButton from 'material-ui/IconButton';
 
 const styles = {
@@ -36,15 +36,25 @@ const removeStyle = {
 };
 
 class Note extends Component {
+  constructor(props) {
+    super(props);
+    this.handleRemove = this.handleRemove.bind(this);
+  }
+  handleRemove() {
+    const {history, removeNote, match: {params: {folderId, noteId}}, note} = this.props;
+    removeNote(folderId, note.id);
+    console.log(folderId, noteId, note);
+    note.id === noteId && history.push(`/notes/${folderId}`);
+  }
   render() {
     const {
-      params: {folderId},
       note,
-      removeNote,
+      match: {params: {folderId}},
       isDragging,
       background,
     } = this.props;
-    const backgroundColor = background ? background : 'white';
+    console.log('Note = ', this.props);
+    const backgroundColor = background ? background : '';
     const noteName = note.name ? note.name : 'New Note';
     const color = note.name ? 'black' : 'gray';
     const opacity = isDragging ? 0 : 1;
@@ -62,7 +72,7 @@ class Note extends Component {
           <IconButton
             iconClassName="material-icons"
             tooltip="Remove Note"
-            onTouchTap={() => removeNote(folderId, note.id)}>delete_forever
+            onTouchTap={this.handleRemove}>delete_forever
           </IconButton>
         </span>
       </div>
@@ -70,15 +80,14 @@ class Note extends Component {
   }
 }
 
-Note.defaultProps = {
-  params: {folderId: '', noteId: ''},
-};
-
 Note.propTypes = {
-  params: PropTypes.object,
-  note: PropTypes.object,
-  removeNote: PropTypes.func,
+  note: PropTypes.object.isRequired,
+  match: PropTypes.object,
+  location: PropTypes.object,
+  history: PropTypes.object,
+  removeNote: PropTypes.func.isRequired,
   isDragging: PropTypes.bool,
   background: PropTypes.string,
 };
-export default Note;
+
+export default withRouter(Note);

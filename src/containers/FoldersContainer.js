@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import * as actions from '../actions/actions';
@@ -29,21 +30,27 @@ class Folders extends Component {
     } = this.props;
     console.log('match of FoldersContainer = ', this.props);
     return (
-      <div style={style}>
-        <CreateFolder
-          folders={folders}
-          createFolder={createFolder}/>
-        <FolderList
-          folders={folders}
-          subfolders={subfolders}
-          options={options}
-          match={match}
-          history={history}
-          createFolder={createFolder}
-          selectRenameInput={selectRenameInput}
-          renameFolder={renameFolder}
-          removeFolder={removeFolder}/>
-      </div>
+      <ReactCSSTransitionGroup
+        transitionName="fade"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}
+      >
+        <div key={2} style={style}>
+          <CreateFolder
+            folders={folders}
+            createFolder={createFolder}/>
+          <FolderList
+            folders={folders}
+            subfolders={subfolders}
+            options={options}
+            match={match}
+            history={history}
+            createFolder={createFolder}
+            selectRenameInput={selectRenameInput}
+            renameFolder={renameFolder}
+            removeFolder={removeFolder}/>
+        </div>
+      </ReactCSSTransitionGroup>
     );
   }
 }

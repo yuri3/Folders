@@ -5,11 +5,6 @@ import { DragSource, DropTarget } from 'react-dnd';
 import Note from './Note';
 import flow from 'lodash/flow';
 
-const styles = {
-  margin: '10px',
-  border: '1px solid gray',
-};
-
 const noteSource = {
   beginDrag(props) {
     return {
@@ -65,7 +60,6 @@ class DragAndDropNote extends Component {
   }
   render() {
     const {
-      params,
       note,
       removeNote,
       connectDragSource,
@@ -74,17 +68,19 @@ class DragAndDropNote extends Component {
     } = this.props;
     const border = isDragging ? '1px dashed gray' : '1px solid gray';
     return connectDragSource(connectDropTarget(
-      <div style={{...styles, border}}>
-        <Note params={params} note={note} removeNote={removeNote} isDragging={isDragging}/>
+      <div style={{margin: '10px', border}}>
+        <Note
+          note={note}
+          removeNote={removeNote}
+          isDragging={isDragging}/>
       </div>
     ));
   }
 }
 
 DragAndDropNote.propTypes = {
-  index: PropTypes.number.isRequired,
-  params: PropTypes.object.isRequired,
   note: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
   moveNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,
