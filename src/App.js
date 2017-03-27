@@ -47,10 +47,7 @@ class App extends Component {
             <Route path="/notes" render={({location}) => (
               <div style={style}>
                 <Logo/>
-                <Route
-                  location={location}
-                  key={location.key}
-                  component={FoldersContainer}/>
+                <Route component={FoldersContainer}/>
                 <Route path="/notes/:folderId" component={NotesContainer}/>
               </div>
             )}/>

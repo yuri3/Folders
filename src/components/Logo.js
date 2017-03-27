@@ -1,16 +1,37 @@
 import React, { PropTypes, Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import ArrowBackIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import SearchIcon from 'material-ui/svg-icons/action/search';
-//import SearchBar from './SearchBar';
+import Drawer from 'material-ui/Drawer';
+import AppBar from 'material-ui/AppBar';
+import SearchBarContainer from '../containers/SearchBarContainer';
 import logo from './logo.svg';
 import './css/Logo.css';
 
-import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
-import MenuItem from 'material-ui/MenuItem';
+const IconElementLeft = (props) => (
+  <IconMenu
+    iconStyle={{color: 'white'}}
+    touchTapCloseDelay={100}
+    targetOrigin={{horizontal: 'left', vertical: 'bottom'}}
+    anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+    iconButtonElement={
+      <IconButton tooltip="MENU" tooltipPosition="bottom-right">
+        <MoreVertIcon/>
+      </IconButton>
+    }
+    onItemTouchTap={props.handleToggle}
+  >
+    <MenuItem value="1" primaryText="Close"/>
+  </IconMenu>
+);
+
+//IconElementLeft.muiTheme = 'IconMenu';
 
 const style = {
   borderRadius: '50%',
@@ -18,7 +39,7 @@ const style = {
   boxShadow: '0px 5px 8px gray'
 };
 
-const iconStyle = {
+const searchIconStyle = {
   color: 'white'
 };
 
@@ -37,7 +58,8 @@ class Logo extends Component {
     this.setState({isShowDrawer: !this.state.isShowDrawer})
   }
   render() {
-    const {match} = this.props;
+    const {isShowDrawer} = this.state;
+    const {match, history} = this.props;
     const isMatch = match && match.params.folderId && match.params.noteId;
     const iconButton = (
       <div key={1}>
@@ -64,7 +86,7 @@ class Logo extends Component {
         </ReactCSSTransitionGroup>
         <IconButton
           style={style}
-          iconStyle={iconStyle}
+          iconStyle={searchIconStyle}
           hoveredStyle={{opacity: 0.7}}
           tooltip="SEARCH NOTE"
           tooltipPosition="top-right"
@@ -72,28 +94,45 @@ class Logo extends Component {
         >
           <SearchIcon/>
         </IconButton>
-        <div >
         <Drawer
-          width={200}
+          width={250}
           docked={false}
           openSecondary={true}
-          open={this.state.isShowDrawer}
+          open={isShowDrawer}
           onRequestChange={this.handleToggle}
         >
           <div>
-            <AppBar title="Search..."/>
-            <MenuItem>Menu Item</MenuItem>
+            <AppBar
+              title="Search..."
+              iconElementLeft={
+                <IconElementLeft handleToggle={this.handleToggle}/>
+              }
+              iconElementRight={
+                <IconButton
+                  tooltip="CLOSE"
+                  tooltipPosition="bottom-left"
+                  onTouchTap={this.handleToggle}
+                >
+                  <NavigationClose/>
+                </IconButton>
+              }
+            />
+            {isShowDrawer &&
+              <SearchBarContainer
+                handleToggle={this.handleToggle}
+                history={history}
+              />
+            }
           </div>
         </Drawer>
-        </div>
       </div>
     );
   }
 }
 
 Logo.propTypes = {
+  match: PropTypes.object.isRequired,
   history: PropTypes.object,
-  match: PropTypes.object,
 };
 
 export default withRouter(Logo);

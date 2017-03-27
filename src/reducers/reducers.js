@@ -29,13 +29,15 @@ const FOLDERS = [
     name: 'JavaScript',
     notes: [
       {
+        parentId: '3',
         id: '4',
         name: 'ES6',
         description: '',
       },
       {
+        parentId: '3',
         id: '5',
-        name: 'ES7',
+        name: 'es7',
         description: '',
       }
     ]
@@ -94,12 +96,13 @@ const folder = (state = {}, action) => {
 const note = (state = [], action) => {
   switch(action.type) {
     case CREATE_NOTE:
-      const {id, name} = action;
+      const {parentId, id, name} = action;
       return [
         {
           id,
           name,
           description: '',
+          parentId,
         },
         ...state,
       ];
