@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 import Toggle from 'material-ui/Toggle';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../actions/actions';
 
 const style = {
   padding: '10px',
@@ -13,41 +15,64 @@ class SearchBar extends Component {
     this.state = {
       dataSource: [],
       isInputChecked: true,
-      listOfMatchedNotesInTitles: [],
-      listOfMatchedNotesInTags: [],
+      searchText: [],
+      matchInTitles: [],
+      matchInTags: [],
+      matchInDescriptions: [],
     };
     this.handleOnToggle = this.handleOnToggle.bind(this);
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
     this.handleOnNewRequest = this.handleOnNewRequest.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    const {options: {foundNotes}} = nextProps;
+    const {searchText, matchInTitles, matchInTags} = foundNotes;
+    const matchInTitlesLength = matchInTitles.length;
+    const matchInTagsLength = matchInTags.length;
+    const dataSource = matchInTitlesLength > 0 || matchInTagsLength > 0 ?
+      [
+        `${matchInTitlesLength} match(es) in titl(es).`,
+        `${matchInTagsLength} match(es) in tag(s).`,
+      ] : [];
+      this.setState({
+        ...this.state,
+        searchText,
+        matchInTitles,
+        matchInTags,
+        dataSource,
+      });
+  }
   handleOnToggle(event, isInputChecked) {
     this.setState({isInputChecked});
   }
-  handleUpdateInput(value) {
-    const {notes} = this.props;
-    const matchInTitles = (value !== '' && notes.filter((note) => {
-      return note.name.toUpperCase().indexOf(value.toUpperCase()) > -1;
-    }));
-    const matchInTags = [];
-    console.log(matchInTitles, matchInTags);
-    this.setState({
-      ...this.state,
-      listOfMatchedNotesInTitles: matchInTitles,
-      listOfMatchedNotesInTags: matchInTags,
-      dataSource: matchInTitles.length > 0 || matchInTags.length > 0 ? [
-        `${matchInTitles.length} match(es) in titl(es).`,
-        `${matchInTags.length} match(es) in tag(s).`,
-      ] : [],
-    });
+  handleUpdateInput(value, arr, params) {
+    console.log('handleUpdateInput()', value, arr, params);
+    const {source} = params;
+    const {notes, searchNote} = this.props;
+    source !== 'touchTap' && searchNote(notes, value);
   }
   handleOnNewRequest(note, index) {
     console.log('fsdfsd', note, index);
     const {history, handleToggle} = this.props;
-    const {isInputChecked, listOfMatchedNotesInTitles, listOfMatchedNotesInTags} = this.state;
-    if(isInputChecked) {
-      // create route and make request to filtered route...
+    const {
+      searchText,
+      isInputChecked,
+      matchInTitles
+    } = this.state;
+    if(isInputChecked && matchInTitles.length > 0) {
+      history.push({
+        pathname: `/notes/search`,
+        search: `?type=titles&q=${searchText}`,
+        state: {type: 'TITLES'}
+      });
     } else {
-      history.push(`/notes/${note.parentId}/${note.id}`);
+      console.log('Not checked');
+      //history.push(`/notes/${note.parentId}/${note.id}`);
+      history.push({
+        pathname: `/notes/${note.parentId}/${note.id}`,
+        search: '',
+        state: {},
+      });
     }
     handleToggle();
   }
@@ -93,6 +118,7 @@ SearchBar.propTypes = {
     descriptions: PropTypes.string,
   })),
   history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   handleToggle: PropTypes.func
 };
 
@@ -106,10 +132,16 @@ const mapStateToProps = (state, ownProps) => ({
     }
     return prev;
   }, []),
+  options: state.options,
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(actions, dispatch);
+};
 
 const SearchBarContainer = connect(
   mapStateToProps,
+  mapDispatchToProps
 )(SearchBar);
 
 export default SearchBarContainer;

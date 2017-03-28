@@ -10,6 +10,7 @@ import {
   REMOVE_NOTE,
   CHANGE_NOTE_NAME,
   CHANGE_DESCRIPTION,
+  SEARCH_NOTE,
   MOVE_NOTE
 } from '../actions/actions';
 
@@ -208,10 +209,28 @@ const folders = (state = FOLDERS, action) => {
 
 const options = (state = {
   renameId: null,
+  foundNotes: {
+    searchText: '',
+    matchInTitles: [],
+    matchInTags: [],
+    matchInDescriptions: [],
+  },
 }, action) => {
   switch(action.type) {
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
+    case SEARCH_NOTE:
+      const {notes, searchText} = action;
+      const matchInTitles = (searchText !== '' && notes.filter((note) => {
+        return note.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
+      }));
+      return {
+        ...state,
+        foundNotes: {
+          ...state.foundNotes,
+          searchText,
+          matchInTitles: matchInTitles || []
+        }};
     default:
       return state;
   }

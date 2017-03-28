@@ -59,7 +59,7 @@ class Logo extends Component {
   }
   render() {
     const {isShowDrawer} = this.state;
-    const {match, history} = this.props;
+    const {match, history, location} = this.props;
     const isMatch = match && match.params.folderId && match.params.noteId;
     const iconButton = (
       <div key={1}>
@@ -121,6 +121,7 @@ class Logo extends Component {
               <SearchBarContainer
                 handleToggle={this.handleToggle}
                 history={history}
+                location={location}
               />
             }
           </div>
@@ -131,8 +132,9 @@ class Logo extends Component {
 }
 
 Logo.propTypes = {
-  match: PropTypes.object.isRequired,
+  match: PropTypes.object,
   history: PropTypes.object,
+  location: PropTypes.object,
 };
 
 export default withRouter(Logo);

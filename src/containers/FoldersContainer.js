@@ -2,8 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import * as actions from '../actions/actions';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
@@ -83,4 +81,4 @@ const FoldersContainer = connect(
   mapDispatchToProps
 )(Folders);
 
-export default DragDropContext(HTML5Backend)(FoldersContainer);
+export default FoldersContainer;

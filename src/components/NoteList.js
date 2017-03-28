@@ -34,7 +34,7 @@ class NoteList extends Component {
 }
 
 NoteList.propTypes = {
-  folder: PropTypes.object,
+  folder: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   moveNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,

@@ -42,14 +42,13 @@ class Note extends Component {
   }
   handleRemove() {
     const {history, removeNote, match: {params: {folderId, noteId}}, note} = this.props;
-    removeNote(folderId, note.id);
-    console.log(folderId, noteId, note);
+    removeNote(note.parentId, note.id);
+    console.log(note.parentId, noteId, note);
     note.id === noteId && history.push(`/notes/${folderId}`);
   }
   render() {
     const {
       note,
-      match: {params: {folderId}},
       isDragging,
       background,
     } = this.props;
@@ -65,7 +64,7 @@ class Note extends Component {
           <NavLink
             style={{color}}
             activeStyle={activeStyle}
-            to={`/notes/${folderId}/${note.id}`}>{noteName}
+            to={`/notes/${note.parentId}/${note.id}`}>{noteName}
           </NavLink>
         </header>
         <span style={removeStyle}>

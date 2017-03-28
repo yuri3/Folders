@@ -58,6 +58,13 @@ export const changeDescription = (parentId, id, description) => ({
   description,
 });
 
+export const SEARCH_NOTE = 'SEARCH_NOTE';
+export const searchNote = (notes, searchText) => ({
+  type: SEARCH_NOTE,
+  notes,
+  searchText,
+});
+
 export const MOVE_NOTE = 'MOVE_NOTE';
 export const moveNote = (parentId, dragIndex, hoverIndex) => ({
   type: MOVE_NOTE,

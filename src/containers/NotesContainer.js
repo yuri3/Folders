@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import * as actions  from '../actions/actions';
 import CreateNote from '../components/CreateNote';
 import NoteList from '../components/NoteList';
@@ -30,11 +28,12 @@ class Notes extends Component {
         <CreateNote
           folderId={folderId}
           createNote={createNote}/>
-        {currentFolder && <NoteList
-          folder={currentFolder}
-          match={match}
-          moveNote={moveNote}
-          removeNote={removeNote}/>}
+        {currentFolder && currentFolder.notes.length > 0 &&
+          <NoteList
+            folder={currentFolder}
+            match={match}
+            moveNote={moveNote}
+            removeNote={removeNote}/>}
       </div>
     );
   }
@@ -47,7 +46,6 @@ Notes.propTypes = {
   createNote: PropTypes.func.isRequired,
   moveNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
-  children: PropTypes.node,
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -64,5 +62,4 @@ const NotesContainer = connect(
   mapDispatchToProps
 )(Notes);
 
-//export default NotesContainer;
-export default DragDropContext(HTML5Backend)(NotesContainer);
+export default NotesContainer;

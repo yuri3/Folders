@@ -23,7 +23,6 @@ class CreateNote extends Component {
           tooltip="CREATE NEW NOTE"
           onTouchTap={this.createNote}><NoteAddIcon/>
         </IconButton>
-
       </div>
     );
   }
