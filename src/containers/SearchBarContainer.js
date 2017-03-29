@@ -46,33 +46,27 @@ class SearchBar extends Component {
     this.setState({isInputChecked});
   }
   handleUpdateInput(value, arr, params) {
-    console.log('handleUpdateInput()', value, arr, params);
     const {source} = params;
     const {notes, searchNote} = this.props;
     source !== 'touchTap' && searchNote(notes, value);
   }
   handleOnNewRequest(note, index) {
-    console.log('fsdfsd', note, index);
     const {history, handleToggle} = this.props;
     const {
       searchText,
       isInputChecked,
       matchInTitles
     } = this.state;
-    if(isInputChecked && matchInTitles.length > 0) {
+    if(index === 0 || index === -1 && (isInputChecked && matchInTitles.length > 0)) {
+      console.log('titles');
       history.push({
         pathname: `/notes/search`,
         search: `?type=titles&q=${searchText}`,
         state: {type: 'TITLES'}
       });
     } else {
-      console.log('Not checked');
-      //history.push(`/notes/${note.parentId}/${note.id}`);
-      history.push({
-        pathname: `/notes/${note.parentId}/${note.id}`,
-        search: '',
-        state: {},
-      });
+      console.log('fsdffd');
+      history.push(`/notes/${note.parentId}/${note.id}`);
     }
     handleToggle();
   }
@@ -119,14 +113,13 @@ SearchBar.propTypes = {
   })),
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  handleToggle: PropTypes.func
+  handleToggle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   notes: state.folders.reduce((prev, curr) => {// read about normalize???
     const {notes} = curr;
     if(notes.length > 0) {
-      //notes.forEach((note) => prev.push(note.name));
       notes.forEach((note) => prev.push(note));
       return prev;
     }

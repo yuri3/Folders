@@ -7,7 +7,6 @@ import NoteList from '../components/NoteList';
 //import CustomDragLayer from '../components/CustomDragLayer';
 
 const style = {
-  border: '1px solid red',
   margin: '0 0 0 30px',
 };
 
@@ -21,7 +20,6 @@ class Notes extends Component {
       removeNote
     } = this.props;
     const {folderId, noteId} = match.params;
-    console.log('match of NotesContainer = ', folderId, noteId);
     const flex = folderId && noteId ? '0 1 223px' : '1';
     return (
       <div style={{...style, flex}}>
@@ -31,7 +29,6 @@ class Notes extends Component {
         {currentFolder && currentFolder.notes.length > 0 &&
           <NoteList
             folder={currentFolder}
-            match={match}
             moveNote={moveNote}
             removeNote={removeNote}/>}
       </div>

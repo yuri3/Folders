@@ -11,7 +11,8 @@ import {
   CHANGE_NOTE_NAME,
   CHANGE_DESCRIPTION,
   SEARCH_NOTE,
-  MOVE_NOTE
+  MOVE_NOTE,
+  MOVE_FOUND_NOTE
 } from '../actions/actions';
 
 const FOLDERS = [
@@ -231,6 +232,20 @@ const options = (state = {
           searchText,
           matchInTitles: matchInTitles || []
         }};
+    case MOVE_FOUND_NOTE:
+      const {foundNotes} = state;
+      const {dragIndex, hoverIndex} = action;
+      const dragNote = foundNotes.matchInTitles[dragIndex];
+      const newCopyNotes = foundNotes.matchInTitles.slice();
+      newCopyNotes.splice(dragIndex, 1);
+      newCopyNotes.splice(hoverIndex, 0, dragNote);
+      return {
+        ...state,
+        foundNotes: {
+          ...state.foundNotes,
+          matchInTitles: newCopyNotes,
+        }
+      };
     default:
       return state;
   }

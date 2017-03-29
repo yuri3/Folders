@@ -43,7 +43,6 @@ class Note extends Component {
   handleRemove() {
     const {history, removeNote, match: {params: {folderId, noteId}}, note} = this.props;
     removeNote(note.parentId, note.id);
-    console.log(note.parentId, noteId, note);
     note.id === noteId && history.push(`/notes/${folderId}`);
   }
   render() {
@@ -52,7 +51,6 @@ class Note extends Component {
       isDragging,
       background,
     } = this.props;
-    console.log('Note = ', this.props);
     const backgroundColor = background ? background : '';
     const noteName = note.name ? note.name : 'New Note';
     const color = note.name ? 'black' : 'gray';

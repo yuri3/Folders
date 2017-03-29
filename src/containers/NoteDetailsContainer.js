@@ -11,7 +11,6 @@ const style = {
   flex: 1,
   padding: '10px',
   margin: '0 0 0 30px',
-  border: '1px solid blue',
 };
 
 //const NoteDetails = withRouter(For Router_3
@@ -59,7 +58,6 @@ const style = {
       const {folders, notes, changeDescription, match} = this.props;
       const {folderId, noteId} = match.params;
       const currentNote = notes[noteId];
-      console.log('match of NoteDetailsContainer = ', match);
       return (
         <div style={style}>
           <Prompt

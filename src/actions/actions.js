@@ -66,9 +66,16 @@ export const searchNote = (notes, searchText) => ({
 });
 
 export const MOVE_NOTE = 'MOVE_NOTE';
-export const moveNote = (parentId, dragIndex, hoverIndex) => ({
+export const moveNote = (dragIndex, hoverIndex, parentId) => ({
   type: MOVE_NOTE,
+  dragIndex,
+  hoverIndex,
   parentId,
+});
+
+export const MOVE_FOUND_NOTE = 'MOVE_FOUND_NOTE';
+export const moveFoundNote = (dragIndex, hoverIndex) => ({
+  type: MOVE_FOUND_NOTE,
   dragIndex,
   hoverIndex,
 });

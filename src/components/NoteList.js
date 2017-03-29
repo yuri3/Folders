@@ -4,14 +4,12 @@ import DragAndDropNote from './DragAndDropNote';
 const style = {
   display: 'flex',
   flexFlow: 'row wrap',
-  border: '1px solid blue'
 };
 
 class NoteList extends Component {
   render() {
     const {
       folder,
-      match: {params: {folderId}},
       moveNote,
       removeNote
     } = this.props;
@@ -22,11 +20,11 @@ class NoteList extends Component {
             key={note.id}
             index={index}
             note={note}
-            history={history}
             moveNote={(dragIndex, hoverIndex) => (
-              moveNote(folderId, dragIndex, hoverIndex)
+              moveNote(dragIndex, hoverIndex, note.parentId)
             )}
-            removeNote={removeNote}/>)
+            removeNote={removeNote}/>
+          )
         )}
       </div>
     );
@@ -35,7 +33,6 @@ class NoteList extends Component {
 
 NoteList.propTypes = {
   folder: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
   moveNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
 };

@@ -8,7 +8,6 @@ import FolderList from '../components/FolderList';
 import { getSubFolders } from '../selectors';
 
 const style = {
-  border: '1px solid red',
   margin: '0 0 0 30px',
   overflow: 'auto',
 };
@@ -26,7 +25,6 @@ class Folders extends Component {
       renameFolder,
       removeFolder
     } = this.props;
-    console.log('match of FoldersContainer = ', this.props);
     return (
       <ReactCSSTransitionGroup
         transitionName="fade"
@@ -63,7 +61,6 @@ Folders.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
   removeFolder: PropTypes.func.isRequired,
-  children: PropTypes.node,
 };
 
 const mapStateToProps = (state, ownProps) => ({
