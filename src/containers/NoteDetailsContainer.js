@@ -55,7 +55,14 @@ const style = {
       this.setState({isBlocking: !!error, errorMessage: error ? error : ''});
     }
     render() {
-      const {folders, notes, changeDescription, match} = this.props;
+      const {
+        folders,
+        notes,
+        addTag,
+        removeTag,
+        changeDescription,
+        match
+      } = this.props;
       const {folderId, noteId} = match.params;
       const currentNote = notes[noteId];
       return (
@@ -75,9 +82,12 @@ const style = {
             initialValues={{
               id: currentNote && currentNote.id,
               name: currentNote && currentNote.name,
-              notes: currentNote && currentNote.description
+              description: currentNote && currentNote.description,
             }}
+            tags={currentNote && currentNote.tags}
             changeNoteName={this.changeNote}
+            addTag={(label) => addTag(folderId, noteId, label)}
+            removeTag={(key) => removeTag(folderId, noteId, key)}
             changeDescription={(value) => changeDescription(folderId, noteId, value)}/>
         </div>
       );
@@ -90,6 +100,8 @@ NoteDetails.propTypes = {
   notes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   changeNoteName: PropTypes.func.isRequired,
+  addTag: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
   changeDescription: PropTypes.func.isRequired,
 };
 

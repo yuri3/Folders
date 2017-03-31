@@ -25,28 +25,33 @@ class Folders extends Component {
       renameFolder,
       removeFolder
     } = this.props;
+    const root = (
+      <div key={'13'}>
+        <CreateFolder
+          folders={folders}
+          createFolder={createFolder}/>
+        <FolderList
+          folders={folders}
+          subfolders={subfolders}
+          options={options}
+          match={match}
+          history={history}
+          createFolder={createFolder}
+          selectRenameInput={selectRenameInput}
+          renameFolder={renameFolder}
+          removeFolder={removeFolder}/>
+      </div>
+    );
     return (
-      <ReactCSSTransitionGroup
-        transitionName="fade"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}
-      >
-        <div key={2} style={style}>
-          <CreateFolder
-            folders={folders}
-            createFolder={createFolder}/>
-          <FolderList
-            folders={folders}
-            subfolders={subfolders}
-            options={options}
-            match={match}
-            history={history}
-            createFolder={createFolder}
-            selectRenameInput={selectRenameInput}
-            renameFolder={renameFolder}
-            removeFolder={removeFolder}/>
-        </div>
-      </ReactCSSTransitionGroup>
+      <div style={style}>
+        <ReactCSSTransitionGroup
+          transitionName="fade"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+        >
+          {root}
+        </ReactCSSTransitionGroup>
+      </div>
     );
   }
 }

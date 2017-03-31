@@ -42,12 +42,35 @@ export const removeNote = (parentId, id) => ({
   id,
 });
 
+export const REMOVE_FOUND_NOTE = 'REMOVE_FOUND_NOTE';
+export const removeFoundNote = (id) => ({
+  type: REMOVE_FOUND_NOTE,
+  id,
+});
+
 export const CHANGE_NOTE_NAME = 'CHANGE_NOTE_NAME';
 export const changeNoteName = (parentId, id, newName) => ({
   type: CHANGE_NOTE_NAME,
   parentId,
   id,
   newName,
+});
+
+export const ADD_TAG = 'ADD_TAG';
+export const addTag = (parentId, id, label) => ({
+  type: ADD_TAG,
+  parentId,
+  id,
+  key: uuidV1(),
+  label,
+});
+
+export const REMOVE_TAG = 'REMOVE_TAG';
+export const removeTag = (parentId, id, key) => ({
+  type: REMOVE_TAG,
+  parentId,
+  id,
+  key,
 });
 
 export const CHANGE_DESCRIPTION = 'CHANGE_DESCRIPTION';
@@ -58,11 +81,18 @@ export const changeDescription = (parentId, id, description) => ({
   description,
 });
 
-export const SEARCH_NOTE = 'SEARCH_NOTE';
-export const searchNote = (notes, searchText) => ({
-  type: SEARCH_NOTE,
+export const SEARCH_NOTES = 'SEARCH_NOTES';
+export const searchNotes = (notes, searchText) => ({
+  type: SEARCH_NOTES,
   notes,
   searchText,
+});
+
+export const SEARCH_NOTES_BY_TAG = 'SEARCH_NOTES_BY_TAG';
+export const searchNotesByTag = (notes, label) => ({
+  type: SEARCH_NOTES_BY_TAG,
+  notes,
+  label,
 });
 
 export const MOVE_NOTE = 'MOVE_NOTE';
@@ -78,4 +108,11 @@ export const moveFoundNote = (dragIndex, hoverIndex) => ({
   type: MOVE_FOUND_NOTE,
   dragIndex,
   hoverIndex,
+});
+
+export const MOVE_FOUND_NOTE_BY_TAG = 'MOVE_FOUND_NOTE_BY_TAG';
+export const moveFoundNoteByTag = (dragIndexByTag, hoverIndexByTag) => ({
+  type: MOVE_FOUND_NOTE_BY_TAG,
+  dragIndexByTag,
+  hoverIndexByTag,
 });

@@ -8,11 +8,16 @@ import {
   REMOVE_FOLDER,
   CREATE_NOTE,
   REMOVE_NOTE,
+  REMOVE_FOUND_NOTE,
   CHANGE_NOTE_NAME,
+  ADD_TAG,
+  REMOVE_TAG,
   CHANGE_DESCRIPTION,
-  SEARCH_NOTE,
+  SEARCH_NOTES,
+  SEARCH_NOTES_BY_TAG,
   MOVE_NOTE,
-  MOVE_FOUND_NOTE
+  MOVE_FOUND_NOTE,
+  MOVE_FOUND_NOTE_BY_TAG
 } from '../actions/actions';
 
 const FOLDERS = [
@@ -35,12 +40,14 @@ const FOLDERS = [
         id: '4',
         name: 'ES6',
         description: '',
+        tags: [{key: '0', label: 'JavaScriptES7'}, {key: '1', label: 'ES8'}],
       },
       {
         parentId: '3',
         id: '5',
         name: 'es7',
         description: '',
+        tags: [{key: '2', label: 'ES8'}],
       }
     ]
   },
@@ -101,10 +108,11 @@ const note = (state = [], action) => {
       const {parentId, id, name} = action;
       return [
         {
+          parentId,
           id,
           name,
           description: '',
-          parentId,
+          tags: [],
         },
         ...state,
       ];
@@ -116,6 +124,32 @@ const note = (state = [], action) => {
           return {
             ...note,
             name: action.newName,
+          };
+        }
+        return note;
+      });
+    case ADD_TAG:
+      return state.map(note => {
+        if(note.id === action.id) {
+          return {
+            ...note,
+            tags: [
+              ...note.tags,
+              {
+                key: action.key,
+                label: action.label,
+              }
+            ],
+          };
+        }
+        return note;
+      });
+    case REMOVE_TAG:
+      return state.map(note => {
+        if(note.id === action.id) {
+          return {
+            ...note,
+            tags: note.tags.filter(tag => tag.key !== action.key),
           };
         }
         return note;
@@ -183,6 +217,26 @@ const folders = (state = FOLDERS, action) => {
         }
         return folder;
       });
+    case ADD_TAG:
+      return state.map(folder => {
+        if(folder.id === action.parentId) {
+          return {
+            ...folder,
+            notes: note(folder.notes, action),
+          };
+        }
+        return folder;
+      });
+    case REMOVE_TAG:
+      return state.map(folder => {
+        if(folder.id === action.parentId) {
+          return {
+            ...folder,
+            notes: note(folder.notes, action),
+          };
+        }
+        return folder;
+      });
     case CHANGE_DESCRIPTION:
       return state.map(folder => {
         if(folder.id === action.parentId) {
@@ -212,26 +266,57 @@ const options = (state = {
   renameId: null,
   foundNotes: {
     searchText: '',
-    matchInTitles: [],
-    matchInTags: [],
-    matchInDescriptions: [],
+    matchInTitles: null,
+    matchInTags: null,
+    matchInDescriptions: null,
   },
+  foundNotesByTag: null,
 }, action) => {
   switch(action.type) {
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
-    case SEARCH_NOTE:
+    case SEARCH_NOTES:
       const {notes, searchText} = action;
-      const matchInTitles = (searchText !== '' && notes.filter((note) => {
-        return note.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
+      const matchInTitles = (searchText !== '' && notes.filter(({name}) => {
+        return name.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
+      }));
+      const matchInTags = [];
+      (searchText !== '' && notes.forEach(({tags}) => {
+        tags.forEach((tag) => {
+          const isMatch = tag.label.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
+          isMatch && matchInTags.push(tag);
+        });
       }));
       return {
         ...state,
         foundNotes: {
           ...state.foundNotes,
           searchText,
-          matchInTitles: matchInTitles || []
-        }};
+          matchInTitles: matchInTitles || [],
+          matchInTags: matchInTags || [],
+        },
+        foundNotesByTag: null,
+      };
+    case SEARCH_NOTES_BY_TAG:
+      const foundNotesByTag = action.notes.reduce((prev, curr) => {
+        const {tags} = curr;
+        (tags.length > 0 && tags.forEach((tag) => {
+          if(tag.label === action.label) {
+            prev.push(curr);
+          }
+        }));
+        return prev;
+      }, []);
+      return {
+        ...state,
+        foundNotes: {
+          searchText: action.label,
+          matchInTitles: null,
+          matchInTags: null,
+          matchInDescriptions: null,
+        },
+        foundNotesByTag,
+      };
     case MOVE_FOUND_NOTE:
       const {foundNotes} = state;
       const {dragIndex, hoverIndex} = action;
@@ -245,6 +330,30 @@ const options = (state = {
           ...state.foundNotes,
           matchInTitles: newCopyNotes,
         }
+      };
+    case MOVE_FOUND_NOTE_BY_TAG:
+      const {foundNotesByTag: byTag} = state;
+      const {dragIndexByTag, hoverIndexByTag} = action;
+      const dragNoteByTag = byTag[dragIndexByTag];
+      const newCopyNotesByTag = byTag.slice();
+      newCopyNotesByTag.splice(dragIndexByTag, 1);
+      newCopyNotesByTag.splice(hoverIndexByTag, 0, dragNoteByTag);
+      return {
+        ...state,
+        foundNotesByTag: newCopyNotesByTag,
+      };
+    case REMOVE_FOUND_NOTE:
+      return {
+        ...state,
+        foundNotes: {
+          ...state.foundNotes,
+          matchInTitles: state.foundNotes.matchInTitles &&
+            state.foundNotes.matchInTitles.filter(note => (
+              note.id !== action.id
+            )),
+          },
+        foundNotesByTag: state.foundNotesByTag &&
+          state.foundNotesByTag.filter(note => note.id !== action.id),
       };
     default:
       return state;

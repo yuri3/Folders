@@ -1,4 +1,7 @@
 import React, {Component, PropTypes} from 'react';
+//import { Link } from 'react-router-dom';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import Chip from 'material-ui/Chip';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
@@ -19,44 +22,68 @@ const headerStyle = {
 class FoundTitles extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      matchInTitles: [],
+      matchInTags: [],
+    };
   }
-  componentWillMount() {
-    const {options: {foundNotes: {matchInTitles}}} = this.props;
-    this.setState({foundMatch: matchInTitles});
-  }
-  componentWillReceiveProps(nextProps) {
-    const {
-      notes,
-      options: {foundNotes: {matchInTitles}},
-    } = nextProps;
-    if(notes.length < this.props.notes.length) {
-      const foundMatch = matchInTitles.filter((note) => {
-        return notes.find((n) => n.id === note.id);
-      });
-      this.setState({foundMatch});
-    } else {
-      this.setState({foundMatch: matchInTitles});
-    }
-  }
+  handleLink = (label) => {
+    const {searchNotesByTag, notes, location: {state}} = this.props;
+    state.type = 'TAGS';
+    searchNotesByTag(notes, label);
+  };
   render() {
     const {
-      options: {foundNotes: {searchText}},
+      options: {foundNotes, foundNotesByTag},
       location: {state},
       moveFoundNote,
-      removeNote
+      removeFoundNote,
+      moveFoundNoteByTag,
+      removeNote,
     } = this.props;
-    const {foundMatch} = this.state;
+    const {matchInTitles, matchInTags} = foundNotes;
     return (
       <div style={style}>
         <div style={headerStyle}>
-          <strong>{`FOUND (${searchText.toUpperCase()}) BY ${state.type}`}</strong>
+          <strong>{`FOUND (${foundNotes.searchText.toUpperCase()}) BY ${state.type}`}</strong>
         </div>
+        {matchInTitles && state.type === 'TITLES' &&
+          <NoteList
+            folder={{notes: matchInTitles}}
+            moveNote={moveFoundNote}
+            removeNote={(parentId, id) => {
+              removeFoundNote(id);
+              removeNote(parentId, id);
+            }}
+          />}
+        {matchInTags && state.type === 'TAGS' &&
+          <div>
+            <ReactCSSTransitionGroup
+              transitionName="fade"
+              transitionEnterTimeout={500}
+              transitionLeaveTimeout={500}
+              style={{display: 'flex', flexWrap: 'wrap'}}
+            >
+              {matchInTags.map((tag) => (
+                <Chip
+                  key={tag.key}
+                  onTouchTap={() => this.handleLink(tag.label)}
+                  style={{margin: 5}}
+                >
+                  {tag.label}
+                </Chip>
+              ))}
+            </ReactCSSTransitionGroup>
+          </div>}
+        {foundNotesByTag &&
         <NoteList
-          folder={{notes: foundMatch}}
-          moveNote={moveFoundNote}
-          removeNote={removeNote}
-        />
+          folder={{notes: foundNotesByTag}}
+          moveNote={moveFoundNoteByTag}
+          removeNote={(parentId, id) => {
+            removeFoundNote(id);
+            removeNote(parentId, id);
+          }}
+        />}
       </div>
     );
   }
@@ -67,11 +94,17 @@ FoundTitles.propTypes = {
     id: PropTypes.string.isRequired,
     parentId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    tags: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })).isRequired,
     descriptions: PropTypes.string,
   })).isRequired,
   options: PropTypes.object.isRequired,
   moveFoundNote: PropTypes.func.isRequired,
+  moveFoundNoteByTag: PropTypes.func.isRequired,
+  searchNotesByTag: PropTypes.func.isRequired,
+  removeFoundNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
   history: PropTypes.object,
   location: PropTypes.object,

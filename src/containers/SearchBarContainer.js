@@ -27,12 +27,10 @@ class SearchBar extends Component {
   componentWillReceiveProps(nextProps) {
     const {options: {foundNotes}} = nextProps;
     const {searchText, matchInTitles, matchInTags} = foundNotes;
-    const matchInTitlesLength = matchInTitles.length;
-    const matchInTagsLength = matchInTags.length;
-    const dataSource = matchInTitlesLength > 0 || matchInTagsLength > 0 ?
+    const dataSource = matchInTitles || matchInTags ?
       [
-        `${matchInTitlesLength} match(es) in titl(es).`,
-        `${matchInTagsLength} match(es) in tag(s).`,
+        `${matchInTitles.length} match(es) in titl(es).`,
+        `${matchInTags.length} match(es) in tag(s).`,
       ] : [];
       this.setState({
         ...this.state,
@@ -47,23 +45,31 @@ class SearchBar extends Component {
   }
   handleUpdateInput(value, arr, params) {
     const {source} = params;
-    const {notes, searchNote} = this.props;
-    source !== 'touchTap' && searchNote(notes, value);
+    const {notes, searchNotes} = this.props;
+    source !== 'touchTap' && searchNotes(notes, value);
   }
   handleOnNewRequest(note, index) {
     const {history, handleToggle} = this.props;
     const {
       searchText,
       isInputChecked,
-      matchInTitles
+      matchInTitles,
+      matchInTags
     } = this.state;
-    if(index === 0 || index === -1 && (isInputChecked && matchInTitles.length > 0)) {
+    if((index === 0 || index === -1) && (isInputChecked && matchInTitles.length > 0)) {
       console.log('titles');
       history.push({
         pathname: `/notes/search`,
         search: `?type=titles&q=${searchText}`,
         state: {type: 'TITLES'}
       });
+    } else if((index === 1) && (isInputChecked && matchInTags.length > 0)) {
+      console.log('tags');
+      history.push({
+        pathname: '/notes/search',
+        search: `?type=tags&q=${searchText}`,
+        state: {type: 'TAGS'}
+      })
     } else {
       console.log('fsdffd');
       history.push(`/notes/${note.parentId}/${note.id}`);
@@ -108,7 +114,10 @@ SearchBar.propTypes = {
     id: PropTypes.string.isRequired,
     parentId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    tags: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })).isRequired,
     descriptions: PropTypes.string,
   })),
   history: PropTypes.object.isRequired,
