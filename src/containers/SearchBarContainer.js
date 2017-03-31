@@ -15,7 +15,7 @@ class SearchBar extends Component {
     this.state = {
       dataSource: [],
       isInputChecked: true,
-      searchText: [],
+      searchText: '',
       matchInTitles: [],
       matchInTags: [],
       matchInDescriptions: [],
@@ -57,21 +57,18 @@ class SearchBar extends Component {
       matchInTags
     } = this.state;
     if((index === 0 || index === -1) && (isInputChecked && matchInTitles.length > 0)) {
-      console.log('titles');
       history.push({
         pathname: `/notes/search`,
         search: `?type=titles&q=${searchText}`,
         state: {type: 'TITLES'}
       });
     } else if((index === 1) && (isInputChecked && matchInTags.length > 0)) {
-      console.log('tags');
       history.push({
         pathname: '/notes/search',
         search: `?type=tags&q=${searchText}`,
         state: {type: 'TAGS'}
       })
     } else {
-      console.log('fsdffd');
       history.push(`/notes/${note.parentId}/${note.id}`);
     }
     handleToggle();
@@ -81,23 +78,33 @@ class SearchBar extends Component {
     const {notes} = this.props;
     return (
       <div style={style}>
-        <AutoComplete
+        {isInputChecked && <AutoComplete
           ref={(input) => this.input = input}
           floatingLabelText="Type to search..."
           fullWidth={true}
-          maxSearchResults={isInputChecked ? 2 : 10}
-          filter={isInputChecked ? AutoComplete.noFilter :
-            (searchText, note) => (
-              searchText !== '' &&
-                (note.toUpperCase().indexOf(searchText.toUpperCase())) > -1
-            )
-          }
-          dataSource={isInputChecked ? dataSource : notes}
+          maxSearchResults={3}
+          filter={AutoComplete.noFilter}
+          dataSource={dataSource}
           dataSourceConfig={{text: 'name', value: 'name'}}
-          onUpdateInput={isInputChecked ? this.handleUpdateInput : () => {}}
+          onUpdateInput={this.handleUpdateInput}
           onNewRequest={this.handleOnNewRequest}
           onBlur={() => this.input.state.searchText = ''}
-        />
+        />}
+        {!isInputChecked && <AutoComplete
+          ref={(input) => this.input = input}
+          floatingLabelText="Type to search..."
+          fullWidth={true}
+          maxSearchResults={10}
+          filter={(searchText, note) => (
+            searchText !== '' &&
+              (note.toUpperCase().indexOf(searchText.toUpperCase())) > -1
+            )
+          }
+          dataSource={notes}
+          dataSourceConfig={{text: 'name', value: 'name'}}
+          onNewRequest={this.handleOnNewRequest}
+          onBlur={() => this.input.state.searchText = ''}
+        />}
         <Toggle
           label="Deep Search..."
           labelPosition="right"

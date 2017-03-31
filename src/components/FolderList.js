@@ -1,7 +1,13 @@
 import React, { PropTypes, Component } from 'react';
-import Folder from './Folder';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+//import Folder from './Folder';
+import DragAndDropFolder from './DragAndDropFolder';
 
-const style = {listStyleType: 'none', padding: 0};
+const style = {
+  listStyleType: 'none',
+  padding: 0,
+  cursor: 'move',
+};
 
 class FolderList extends Component {
   componentWillUpdate(nextProps) {
@@ -20,29 +26,36 @@ class FolderList extends Component {
       subfolders,
       options,
       match,
-      history,
       createFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder
+      removeFolder,
+      moveFolder
     } = this.props;
     return (
       <ul style={style}>
-        {folders.map(folder => (
+        <ReactCSSTransitionGroup
+          transitionName="fade"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+        >
+        {folders.map((folder, index) => (
           !folder.parentId ?
-            <Folder
+            <DragAndDropFolder
               key={folder.id}
+              index={index}
               folders={folders}
               folder={folder}
               subfolders={subfolders}
               options={options}
               match={match}
-              history={history}
               createFolder={createFolder}
               selectRenameInput={selectRenameInput}
               renameFolder={renameFolder}
-              removeFolder={removeFolder}/> : null
+              removeFolder={removeFolder}
+              moveFolder={moveFolder}/> : null
           ))}
+        </ReactCSSTransitionGroup>
       </ul>
     );
   }
@@ -58,6 +71,7 @@ FolderList.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
   removeFolder: PropTypes.func.isRequired,
+  moveFolder: PropTypes.func.isRequired,
 };
 
 export default FolderList;

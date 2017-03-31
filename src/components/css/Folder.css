@@ -1,12 +1,13 @@
-li {
+/*li {
   margin: 0 0 20px 0;
   width: 350px;
-}
+  //border: 1px solid red;
+  //overflow: auto;
+}*/
 
 .parentFolder {
   display: flex;
   align-items: center;
-  cursor: move;
 }
 
 .parentFolder:hover .Folder {

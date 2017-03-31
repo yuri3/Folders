@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 //import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 //import { bindActionCreators } from 'redux'
@@ -9,7 +10,6 @@ import FolderOpenIcon from 'material-ui/svg-icons/file/folder-open';
 import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteForeverIcon from 'material-ui/svg-icons/action/delete-forever';
 import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
-//import styles from '../IconStyles';
 import RenameFolderForm from './RenameFolderForm';
 import SubFoldersList from './SubFoldersList';
 import './css/Folder.css';
@@ -19,7 +19,7 @@ const style = {
 };
 
 const activeStyle = {
-  color: 'black',
+  color: 'dodgerblue',
   textDecoration: 'none',
   pointerEvents: 'none'
 };
@@ -68,6 +68,8 @@ class Folder extends Component {
       subfolders,
       options,
       match,
+      isDragging,
+      isOver,
       createFolder,
       selectRenameInput,
       renameFolder,
@@ -78,8 +80,9 @@ class Folder extends Component {
       subFolder => subFolder.parentId === folder.id
     );
     const {selectedFolderId} = this.state;
+    const opacity = isDragging ? 0 : 1;
     return (
-      <li>
+      <div style={{border: '1px solid red', opacity}}>
         {!isShowRenameInput && <div className="parentFolder">
           {!isFolderHasSubFolders &&
             <IconButton style={style}>
@@ -136,18 +139,26 @@ class Folder extends Component {
            onSubmit={this.renameFolder}
            handleClose={this.closeRenameInput}
            initialValues={{name: folder.name}}/>}
-        {selectedFolderId === folder.id &&
+        <ReactCSSTransitionGroup
+          transitionName="fade"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+        >
+        {!isDragging && selectedFolderId === folder.id  &&
           <SubFoldersList
             folders={folders}
             folder={folder}
             subfolders={subfolders}
             options={options}
             match={match}
+            isDragging={isDragging}
+            isOver={isOver}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}
             removeFolder={removeFolder}/>}
-      </li>
+        </ReactCSSTransitionGroup>
+      </div>
     );
   }
 }
@@ -158,6 +169,7 @@ Folder.propTypes = {
   subfolders: PropTypes.array.isRequired,
   match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
+  isDragging: PropTypes.bool.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,

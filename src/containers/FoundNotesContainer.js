@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-//import { Link } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
 import { connect } from 'react-redux';
@@ -20,13 +19,6 @@ const headerStyle = {
 };
 
 class FoundTitles extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      matchInTitles: [],
-      matchInTags: [],
-    };
-  }
   handleLink = (label) => {
     const {searchNotesByTag, notes, location: {state}} = this.props;
     state.type = 'TAGS';
@@ -100,7 +92,14 @@ FoundTitles.propTypes = {
     })).isRequired,
     descriptions: PropTypes.string,
   })).isRequired,
-  options: PropTypes.object.isRequired,
+  options: PropTypes.shape({
+    foundNotes: PropTypes.shape({
+      matchInTitles: PropTypes.array,
+      matchInTags: PropTypes.array,
+      matchInDescriptions: PropTypes.array,
+    }),
+    foundNotesByTag: PropTypes.array,
+  }).isRequired,
   moveFoundNote: PropTypes.func.isRequired,
   moveFoundNoteByTag: PropTypes.func.isRequired,
   searchNotesByTag: PropTypes.func.isRequired,

@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-//import { getEmptyImage } from 'react-dnd-html5-backend';
 import { NoteTypes } from './NoteTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 import Note from './Note';
@@ -8,8 +7,6 @@ import flow from 'lodash/flow';
 const noteSource = {
   beginDrag(props) {
     return {
-      id: props.note.id,
-      name: props.note.name,
       index: props.index,
     };
   }
@@ -41,20 +38,12 @@ function collectSource(connect, monitor) {
 function collectTarget(connect) {
   return {
     connectDropTarget: connect.dropTarget(),
-    //isOver: monitor.isOver(),
-    //isOverCurrent: monitor.isOver({shallow: true}),
-    //canDrop: monitor.canDrop(),
   };
 }
 
 class DragAndDropNote extends Component {
   componentDidMount() {
-    // Use empty image as a drag preview so browsers don't draw it
-    // and we can draw whatever we want on the custom drag layer instead.
-    /*this.props.connectDragPreview(getEmptyImage(), {
-      captureDraggingState: true,
-    });*/
-    const img = new Image(); // When add new Note, it does note show image!!!
+    const img = new Image();
     img.src = '/description.svg';
     img.onload = () => this.props.connectDragPreview(img);
   }

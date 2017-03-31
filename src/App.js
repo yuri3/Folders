@@ -15,7 +15,7 @@ import Logo from './components/Logo';
 import FoldersContainer from './containers/FoldersContainer';
 import NotesContainer from './containers/NotesContainer';
 import NoteDetailsContainer from './containers/NoteDetailsContainer';
-import FoundTitles from './components/FoundTitles';
+import FoundTitles from './containers/FoundNotesContainer';
 
 import ModalConfirmation from './ModalConfirmation';
 const getModalConfirmation = ModalConfirmation('modal-holder');

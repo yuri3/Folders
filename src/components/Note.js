@@ -26,7 +26,8 @@ const linkStyle = {
 
 const activeStyle = {
   textDecoration: 'none',
-  pointerEvents: 'none'
+  pointerEvents: 'none',
+  color: 'dodgerblue',
 };
 
 const removeStyle = {
@@ -68,7 +69,7 @@ class Note extends Component {
         <span style={removeStyle}>
           <IconButton
             iconClassName="material-icons"
-            tooltip="Remove Note"
+            tooltip="REMOVE NOTE"
             onTouchTap={this.handleRemove}>delete_forever
           </IconButton>
         </span>

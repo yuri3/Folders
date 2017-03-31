@@ -26,6 +26,14 @@ export const removeFolder = (id) => ({
   type: REMOVE_FOLDER,
   id,
 });
+
+export const MOVE_FOLDER = 'MOVE_FOLDER';
+export const moveFolder = (dragIndex, hoverIndex) => ({
+  type: MOVE_FOLDER,
+  dragIndex,
+  hoverIndex,
+});
+
 //---NOTES---------------------------------------------------------->
 export const CREATE_NOTE = 'CREATE_NOTE';
 export const createNote = (parentId, name = 'New Note') => ({

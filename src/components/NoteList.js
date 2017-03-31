@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import DragAndDropNote from './DragAndDropNote';
 
 const style = {
@@ -15,17 +16,24 @@ class NoteList extends Component {
     } = this.props;
     return (
       <div style={style}>
-        {folder && folder.notes.map((note, index) => (
-          <DragAndDropNote
-            key={note.id}
-            index={index}
-            note={note}
-            moveNote={(dragIndex, hoverIndex) => (
-              moveNote(dragIndex, hoverIndex, note.parentId)
-            )}
-            removeNote={removeNote}/>
-          )
-        )}
+        <ReactCSSTransitionGroup
+          transitionName="fade"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+          style={{display: 'flex', flexWrap: 'wrap'}}
+        >
+          {folder && folder.notes.map((note, index) => (
+            <DragAndDropNote
+              key={note.id}
+              index={index}
+              note={note}
+              moveNote={(dragIndex, hoverIndex) => (
+                moveNote(dragIndex, hoverIndex, note.parentId)
+              )}
+              removeNote={removeNote}/>
+            )
+          )}
+        </ReactCSSTransitionGroup>
       </div>
     );
   }

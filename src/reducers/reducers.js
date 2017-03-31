@@ -6,6 +6,7 @@ import {
   SELECT_RENAME_INPUT,
   RENAME_FOLDER,
   REMOVE_FOLDER,
+  MOVE_FOLDER,
   CREATE_NOTE,
   REMOVE_NOTE,
   REMOVE_FOUND_NOTE,
@@ -187,6 +188,13 @@ const folders = (state = FOLDERS, action) => {
       return state.map((f) => folder(f, action));
     case REMOVE_FOLDER:
       return state.filter((f) => folder(f, action));
+    case MOVE_FOLDER:
+      const {dragIndex, hoverIndex} = action;
+      const dragFolder = state[dragIndex];
+      const newCopyFolders = state.slice();
+      newCopyFolders.splice(dragIndex, 1);
+      newCopyFolders.splice(hoverIndex, 0, dragFolder);
+      return newCopyFolders;
     case CREATE_NOTE:
       return state.map((folder) => {
         if(folder.id === action.parentId) {
@@ -283,7 +291,10 @@ const options = (state = {
       const matchInTags = [];
       (searchText !== '' && notes.forEach(({tags}) => {
         tags.forEach((tag) => {
-          const isMatch = tag.label.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
+          const isMatch = !matchInTags.some(t => t.label === tag.label) &&
+            tag.label.toUpperCase().indexOf(
+              searchText.toUpperCase()
+            ) > -1;
           isMatch && matchInTags.push(tag);
         });
       }));

@@ -12,8 +12,6 @@ const style = {
 const folderSource = {
   beginDrag(props) {
     return {
-      id: props.folder.id,
-      name: props.folder.name,
       index: props.index,
     };
   }
@@ -23,12 +21,14 @@ const folderTarget = {
   hover(props, monitor) {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
+
+    /*const isFolderHasSubFolders = props.subfolders.some(
+      subFolder => subFolder.parentId === props.folder.id
+    );*/
     // Don't replace items with themselves
-    console.log('same', dragIndex, hoverIndex);
-    if(dragIndex === hoverIndex) {
+    if(dragIndex === hoverIndex /*|| isFolderHasSubFolders*/) {
       return;
     }
-    console.log('end', dragIndex, hoverIndex);
     if(dragIndex !== hoverIndex) {
       props.moveFolder(dragIndex, hoverIndex);
     }
@@ -44,24 +44,26 @@ function collectSource(connect, monitor) {
   }
 }
 
-function collectTarget(connect) {
+function collectTarget(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    isOverCurrent: monitor.isOver({ shallow: true }),
   };
 }
 
 class DragAndDropFolder extends Component {
   componentDidMount() {
-    const img = new Image(); // When add new Folder, it does note show image!!!
-    img.src = 'ic_folder_black_48px.svg'; //'ic_folder_open_black_48px';
-    img.onload = () => {console.log('onload()');this.props.connectDragPreview(img)};
+    const img = new Image();
+    img.src = '/ic_folder_black_48px.svg';
+    img.onload = () => this.props.connectDragPreview(img);
   }
   render() {
     const {
       folders,
       folder,
       subfolders,
-      params,
+      match,
       options,
       createFolder,
       selectRenameInput,
@@ -69,10 +71,12 @@ class DragAndDropFolder extends Component {
       removeFolder,
       connectDragSource,
       connectDropTarget,
-      isDragging
+      isDragging,
+      isOver
     } = this.props;
+    const border = isDragging ? '1px dashed gray' : '';
     return connectDragSource(connectDropTarget(
-      <li style={{...style, border: isDragging ? '1px dashed gray' : ''}}>
+      <li style={{...style, border}}>
         <Folder
           folders={folders}
           folder={folder}
@@ -80,6 +84,7 @@ class DragAndDropFolder extends Component {
           match={match}
           options={options}
           isDragging={isDragging}
+          isOver={isOver}
           createFolder={createFolder}
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
@@ -94,13 +99,16 @@ DragAndDropFolder.propTypes = {
   folders: PropTypes.array.isRequired,
   folder: PropTypes.object.isRequired,
   subfolders: PropTypes.array.isRequired,
-  params: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
   removeFolder: PropTypes.func.isRequired,
+  moveFolder: PropTypes.func.isRequired,
+  connectDragSource: PropTypes.func,
+  connectDropTarget: PropTypes.func,
+  isDragging: PropTypes.bool,
 };
 
 export default flow(

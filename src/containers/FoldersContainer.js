@@ -10,6 +10,7 @@ import { getSubFolders } from '../selectors';
 const style = {
   margin: '0 0 0 30px',
   overflow: 'auto',
+  borderRight: '1px dashed gray',
 };
 
 class Folders extends Component {
@@ -23,7 +24,8 @@ class Folders extends Component {
       createFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder
+      removeFolder,
+      moveFolder
     } = this.props;
     const root = (
       <div key={'13'}>
@@ -39,7 +41,8 @@ class Folders extends Component {
           createFolder={createFolder}
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
-          removeFolder={removeFolder}/>
+          removeFolder={removeFolder}
+          moveFolder={moveFolder}/>
       </div>
     );
     return (
@@ -66,6 +69,7 @@ Folders.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
   removeFolder: PropTypes.func.isRequired,
+  moveFolder: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({

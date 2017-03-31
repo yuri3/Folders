@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import * as actions  from '../actions/actions';
 import CreateNote from '../components/CreateNote';
 import NoteList from '../components/NoteList';
-//import CustomDragLayer from '../components/CustomDragLayer';
 
 const style = {
   margin: '0 0 0 30px',
@@ -35,6 +34,12 @@ class Notes extends Component {
     );
   }
 }
+
+Notes.defaultProps = {
+  currentFolder: {
+    notes: [],
+  },
+};
 
 Notes.propTypes = {
   currentFolder: PropTypes.object.isRequired,
