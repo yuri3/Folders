@@ -74,35 +74,6 @@ const FOLDERS = [
   },
 ];
 
-const folder = (state = {}, action) => {
-  switch(action.type) {
-    case CREATE_FOLDER:
-      if(action.name === 'New Folder') {
-        return {
-          id: action.id,
-          name: action.name,
-          parentId: action.parentId,
-          notes: [],
-        };
-      }
-      return {
-        id: action.id,
-        name: action.name,
-        notes: [],
-      };
-    case RENAME_FOLDER:
-      if(state.id !== action.id) {return state;}
-      return {...state, name: action.newName};
-    case REMOVE_FOLDER:
-      if(state.id !== action.id) {
-        return state;
-      }
-      break;
-    default:
-      return state;
-  }
-};
-
 const note = (state = [], action) => {
   switch(action.type) {
     case CREATE_NOTE:
@@ -180,14 +151,35 @@ const note = (state = [], action) => {
 const folders = (state = FOLDERS, action) => {
   switch(action.type) {
     case CREATE_FOLDER:
+      if(action.name === 'New Folder') {
+        return [
+          {
+            parentId: action.parentId,
+            id: action.id,
+            name: action.name,
+            notes: [],
+          },
+          ...state
+        ];
+      }
       return [
-        folder(undefined, action),
+        {
+          id: action.id,
+          name: action.name,
+          notes: [],
+        },
         ...state
       ];
     case RENAME_FOLDER:
-      return state.map((f) => folder(f, action));
+      return state.map((folder) => {
+        if(folder.id !== action.id) {return folder;}
+        return {
+          ...folder,
+          name: action.newName,
+        };
+      });
     case REMOVE_FOLDER:
-      return state.filter((f) => folder(f, action));
+      return state.filter((folder) => folder.id !== action.id);
     case MOVE_FOLDER:
       const {dragIndex, hoverIndex} = action;
       const dragFolder = state[dragIndex];

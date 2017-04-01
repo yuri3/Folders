@@ -69,7 +69,6 @@ class Folder extends Component {
       options,
       match,
       isDragging,
-      isOver,
       createFolder,
       selectRenameInput,
       renameFolder,
@@ -82,7 +81,7 @@ class Folder extends Component {
     const {selectedFolderId} = this.state;
     const opacity = isDragging ? 0 : 1;
     return (
-      <div style={{border: '1px solid red', opacity}}>
+      <div style={{opacity}}>
         {!isShowRenameInput && <div className="parentFolder">
           {!isFolderHasSubFolders &&
             <IconButton style={style}>
@@ -152,7 +151,6 @@ class Folder extends Component {
             options={options}
             match={match}
             isDragging={isDragging}
-            isOver={isOver}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}

@@ -17,7 +17,6 @@ class SubFoldersList extends Component {
       options,
       match,
       isDragging,
-      isOver,
       createFolder,
       selectRenameInput,
       renameFolder,
@@ -31,7 +30,7 @@ class SubFoldersList extends Component {
           transitionLeaveTimeout={500}
         >
         {subfolders.map(subFolder => (
-          folder.id === subFolder.parentId && !isOver ?
+          folder.id === subFolder.parentId ?
           <li key={subFolder.id} style={style}>
             <Folder
               folders={folders}
@@ -40,7 +39,6 @@ class SubFoldersList extends Component {
               match={match}
               options={options}
               isDragging={isDragging}
-              isOver={isOver}
               createFolder={createFolder}
               selectRenameInput={selectRenameInput}
               renameFolder={renameFolder}

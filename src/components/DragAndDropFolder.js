@@ -12,6 +12,7 @@ const style = {
 const folderSource = {
   beginDrag(props) {
     return {
+      id: props.folder.id,
       index: props.index,
     };
   }
@@ -19,20 +20,20 @@ const folderSource = {
 
 const folderTarget = {
   hover(props, monitor) {
+    const dragId = monitor.getItem().id;
+    const hoverId = props.folder.id;
+
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
-
-    /*const isFolderHasSubFolders = props.subfolders.some(
-      subFolder => subFolder.parentId === props.folder.id
-    );*/
     // Don't replace items with themselves
-    if(dragIndex === hoverIndex /*|| isFolderHasSubFolders*/) {
+    if(dragId === hoverId) {
       return;
     }
-    if(dragIndex !== hoverIndex) {
+    if(dragId !== hoverId) {
       props.moveFolder(dragIndex, hoverIndex);
     }
     monitor.getItem().index = hoverIndex;
+    monitor.getItem().id = hoverId;
   },
 };
 
@@ -44,11 +45,9 @@ function collectSource(connect, monitor) {
   }
 }
 
-function collectTarget(connect, monitor) {
+function collectTarget(connect) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    isOverCurrent: monitor.isOver({ shallow: true }),
   };
 }
 
@@ -72,7 +71,6 @@ class DragAndDropFolder extends Component {
       connectDragSource,
       connectDropTarget,
       isDragging,
-      isOver
     } = this.props;
     const border = isDragging ? '1px dashed gray' : '';
     return connectDragSource(connectDropTarget(
@@ -84,7 +82,6 @@ class DragAndDropFolder extends Component {
           match={match}
           options={options}
           isDragging={isDragging}
-          isOver={isOver}
           createFolder={createFolder}
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
