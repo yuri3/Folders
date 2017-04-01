@@ -12,7 +12,7 @@ const style = {
 class Notes extends Component {
   render() {
     const {
-      currentFolder,
+      notes,
       match,
       createNote,
       moveNote,
@@ -25,9 +25,10 @@ class Notes extends Component {
         <CreateNote
           folderId={folderId}
           createNote={createNote}/>
-        {currentFolder && currentFolder.notes.length > 0 &&
+        {notes && notes.length > 0 &&
           <NoteList
-            folder={currentFolder}
+            notes={notes}
+            folderId={folderId}
             moveNote={moveNote}
             removeNote={removeNote}/>}
       </div>
@@ -35,15 +36,12 @@ class Notes extends Component {
   }
 }
 
-Notes.defaultProps = {
-  currentFolder: {
-    notes: [],
-  },
-};
-
 Notes.propTypes = {
-  currentFolder: PropTypes.object.isRequired,
-  options: PropTypes.object.isRequired,
+  notes: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   match: PropTypes.object.isRequired,
   createNote: PropTypes.func.isRequired,
   moveNote: PropTypes.func.isRequired,
@@ -51,8 +49,7 @@ Notes.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  currentFolder: state.folders.find((folder) => folder.id === ownProps.match.params.folderId),
-  options: state.options,
+  notes: state.notes,
 });
 
 const mapDispatchToProps = (dispatch) => {

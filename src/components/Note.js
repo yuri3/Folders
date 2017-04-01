@@ -43,21 +43,19 @@ class Note extends Component {
   }
   handleRemove() {
     const {history, removeNote, match: {params: {folderId, noteId}}, note} = this.props;
-    removeNote(note.parentId, note.id);
+    removeNote(note.id);
     note.id === noteId && history.push(`/notes/${folderId}`);
   }
   render() {
     const {
       note,
       isDragging,
-      background,
     } = this.props;
-    const backgroundColor = background ? background : '';
     const noteName = note.name ? note.name : 'New Note';
     const color = note.name ? 'black' : 'gray';
     const opacity = isDragging ? 0 : 1;
     return(
-      <div style={{...styles, backgroundColor, opacity}}>
+      <div style={{...styles, opacity}}>
         <i className="material-icons md-36" style={iconStyle}>description</i>
         <header style={{...linkStyle,}}>
           <NavLink
@@ -79,13 +77,16 @@ class Note extends Component {
 }
 
 Note.propTypes = {
-  note: PropTypes.object.isRequired,
+  note: PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   match: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
   removeNote: PropTypes.func.isRequired,
   isDragging: PropTypes.bool,
-  background: PropTypes.string,
 };
 
 export default withRouter(Note);

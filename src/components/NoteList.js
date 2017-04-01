@@ -10,7 +10,8 @@ const style = {
 class NoteList extends Component {
   render() {
     const {
-      folder,
+      notes,
+      folderId,
       moveNote,
       removeNote
     } = this.props;
@@ -22,17 +23,17 @@ class NoteList extends Component {
           transitionLeaveTimeout={500}
           style={{display: 'flex', flexWrap: 'wrap'}}
         >
-          {folder && folder.notes.map((note, index) => (
-            <DragAndDropNote
-              key={note.id}
-              index={index}
-              note={note}
-              moveNote={(dragIndex, hoverIndex) => (
-                moveNote(dragIndex, hoverIndex, note.parentId)
-              )}
-              removeNote={removeNote}/>
-            )
-          )}
+          {notes && notes.map((note, index) => (
+            <div key={note.id}>
+              {note.parentId === folderId &&
+                <DragAndDropNote
+                  index={index}
+                  note={note}
+                  moveNote={moveNote}
+                  removeNote={removeNote}
+                />}
+            </div>
+          ))}
         </ReactCSSTransitionGroup>
       </div>
     );
@@ -40,7 +41,12 @@ class NoteList extends Component {
 }
 
 NoteList.propTypes = {
-  folder: PropTypes.object.isRequired,
+  notes: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  folderId: PropTypes.string.isRequired,
   moveNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
 };

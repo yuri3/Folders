@@ -60,9 +60,18 @@ class Folders extends Component {
 }
 
 Folders.propTypes = {
-  folders: PropTypes.array.isRequired,
-  subfolders: PropTypes.array.isRequired,
-  options: PropTypes.object.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  subfolders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  options: PropTypes.shape({
+    renameId: PropTypes.object,
+  }).isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,

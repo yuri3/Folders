@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 //import { withRouter } from 'react-router';
 import { Prompt } from 'react-router-dom';
-//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
@@ -48,23 +47,22 @@ const style = {
     }
     changeNote(value) {
       const {changeNoteName, match} = this.props;
-      const {folderId, noteId} = match.params;
-      changeNoteName(folderId, noteId, value);
+      const {noteId} = match.params;
+      changeNoteName(noteId, value);
     }
     handleBlocking(error) {
-      this.setState({isBlocking: !!error, errorMessage: error ? error : ''});
+      this.setState({isBlocking: !!error, errorMessage: error});
     }
     render() {
       const {
-        folders,
         notes,
         addTag,
         removeTag,
         changeDescription,
         match
       } = this.props;
-      const {folderId, noteId} = match.params;
-      const currentNote = notes[noteId];
+      const {noteId} = match.params;
+      const currentNote = notes.find(note => note.id === noteId);
       return (
         <div style={style}>
           <Prompt
@@ -77,7 +75,7 @@ const style = {
           />
           <NoteForm
             handleBlocking={this.handleBlocking}
-            folders={folders}
+            notes={notes}
             params={match.params}
             initialValues={{
               id: currentNote && currentNote.id,
@@ -86,9 +84,9 @@ const style = {
             }}
             tags={currentNote && currentNote.tags}
             changeNoteName={this.changeNote}
-            addTag={(label) => addTag(folderId, noteId, label)}
-            removeTag={(key) => removeTag(folderId, noteId, key)}
-            changeDescription={(value) => changeDescription(folderId, noteId, value)}/>
+            addTag={(label) => addTag(noteId, label)}
+            removeTag={(key) => removeTag(noteId, key)}
+            changeDescription={(value) => changeDescription(noteId, value)}/>
         </div>
       );
     }
@@ -96,8 +94,16 @@ const style = {
 //);For Router_3
 
 NoteDetails.propTypes = {
-  folders: PropTypes.array.isRequired,
-  notes: PropTypes.object.isRequired,
+  notes: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired
+    })).isRequired,
+  })).isRequired,
   match: PropTypes.object.isRequired,
   changeNoteName: PropTypes.func.isRequired,
   addTag: PropTypes.func.isRequired,
@@ -106,15 +112,7 @@ NoteDetails.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  folders: state.folders,
-  notes: state.folders.reduce((prev, curr) => {// read about normalize???
-    const {notes} = curr;
-    if(notes.length > 0) {
-      notes.forEach(note => prev[note.id] = note);
-      return prev;
-    }
-    return prev;
-  }, {}),
+  notes: state.notes,
 });
 
 const mapDispatchToProps = (dispatch) => {

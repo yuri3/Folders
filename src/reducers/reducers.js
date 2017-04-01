@@ -25,56 +25,51 @@ const FOLDERS = [
   {
     id: '1',
     name: 'HTML',
-    notes: [],
   },
   {
     id: '2',
     name: 'CSS',
-    notes: [],
   },
   {
     id: '3',
     name: 'JavaScript',
-    notes: [
-      {
-        parentId: '3',
-        id: '4',
-        name: 'ES6',
-        description: '',
-        tags: [{key: '0', label: 'JavaScriptES7'}, {key: '1', label: 'ES8'}],
-      },
-      {
-        parentId: '3',
-        id: '5',
-        name: 'es7',
-        description: '',
-        tags: [{key: '2', label: 'ES8'}],
-      }
-    ]
+  },
+  {
+    id: '4',
+    name: 'React',
+  },
+  {
+    id: '5',
+    name: 'Angular',
   },
   {
     id: '6',
-    name: 'React',
-    notes: [],
+    name: 'NodeJS',
   },
   {
     id: '7',
-    name: 'Angular2',
-    notes: [],
-  },
-  {
-    id: '8',
-    name: 'NodeJS',
-    notes: [],
-  },
-  {
-    id: '9',
     name: 'Webpack',
-    notes: [],
   },
 ];
 
-const note = (state = [], action) => {
+const NOTES = [
+  {
+    parentId: '3',
+    id: '8',
+    name: 'ES6',
+    description: '',
+    tags: [{key: '0', label: 'JavaScriptES7'}, {key: '1', label: 'ES8'}],
+  },
+  {
+    parentId: '3',
+    id: '9',
+    name: 'es7',
+    description: '',
+    tags: [{key: '2', label: 'ES8'}],
+  }
+];
+
+const notes = (state = NOTES, action) => {
   switch(action.type) {
     case CREATE_NOTE:
       const {parentId, id, name} = action;
@@ -157,7 +152,6 @@ const folders = (state = FOLDERS, action) => {
             parentId: action.parentId,
             id: action.id,
             name: action.name,
-            notes: [],
           },
           ...state
         ];
@@ -187,76 +181,6 @@ const folders = (state = FOLDERS, action) => {
       newCopyFolders.splice(dragIndex, 1);
       newCopyFolders.splice(hoverIndex, 0, dragFolder);
       return newCopyFolders;
-    case CREATE_NOTE:
-      return state.map((folder) => {
-        if(folder.id === action.parentId) {
-          return {
-            ...folder,
-            notes: note(folder.notes, action),
-          };
-        }
-        return folder;
-      });
-    case REMOVE_NOTE:
-      return state.map((folder) => {
-        if(folder.id === action.parentId) {
-          return {
-            ...folder,
-            notes: note(folder.notes, action),
-          };
-        }
-        return folder;
-      });
-    case CHANGE_NOTE_NAME:
-      return state.map(folder => {
-        if(folder.id === action.parentId) {
-          return {
-            ...folder,
-            notes: note(folder.notes, action),
-          };
-        }
-        return folder;
-      });
-    case ADD_TAG:
-      return state.map(folder => {
-        if(folder.id === action.parentId) {
-          return {
-            ...folder,
-            notes: note(folder.notes, action),
-          };
-        }
-        return folder;
-      });
-    case REMOVE_TAG:
-      return state.map(folder => {
-        if(folder.id === action.parentId) {
-          return {
-            ...folder,
-            notes: note(folder.notes, action),
-          };
-        }
-        return folder;
-      });
-    case CHANGE_DESCRIPTION:
-      return state.map(folder => {
-        if(folder.id === action.parentId) {
-          return {
-            ...folder,
-            notes: note(folder.notes, action),
-          };
-        }
-        return folder;
-      });
-    case MOVE_NOTE:
-      return state.map(folder => {
-        if(folder.id === action.parentId) {
-          return {
-            ...folder,
-            notes: note(folder.notes, action),
-          };
-        }
-        return folder;
-      });
     default:
       return state;
   }
@@ -365,6 +289,7 @@ const options = (state = {
 
 const rootReducer = combineReducers({
   folders,
+  notes,
   options,
   form: formReducer,
   //router: routerReducer,

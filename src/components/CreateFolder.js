@@ -56,7 +56,10 @@ class CreateFolder extends Component {
 }
 
 CreateFolder.propTypes = {
-  folders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   createFolder: PropTypes.func.isRequired,
 };
 

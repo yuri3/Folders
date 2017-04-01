@@ -68,7 +68,11 @@ class DragAndDropNote extends Component {
 }
 
 DragAndDropNote.propTypes = {
-  note: PropTypes.object.isRequired,
+  note: PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   index: PropTypes.number.isRequired,
   moveNote: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,

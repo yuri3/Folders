@@ -6,19 +6,19 @@ import Chip from 'material-ui/Chip';
 
 const validate = (value, props) => {
   const error = {};
+  const {folderId} = props.params;
   if(!value.name) {
     error.name = 'Required';
   } else if(value.name && value.name.length > 18) {
     error.name = 'Must be 18 characters or less!';
   } else if(
-    props.folders.some(folder => (
-      (folder.name === value.name.trim() && folder.id !== value.id) ||
-      folder.notes.some(
-        note => note && note.name !== 'New Note' && note.name === value.name.trim() && note.id !== value.id
-      )
-    ))
+    props.notes.some(
+      note => note && note.parentId === folderId && note.id !== value.id
+                   && note.name !== 'New Note'
+                   && note.name === value.name.trim()
+    )
   ) {
-    error.name = 'This name is already taken!'
+    error.name = 'This name is already taken!';
   }
   props.handleBlocking(error.name);
   return error;
@@ -129,7 +129,16 @@ class NoteForm extends Component {
 }
 
 NoteForm.propTypes = {
-  folders: PropTypes.array.isRequired,
+  notes: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired
+    })).isRequired,
+  })).isRequired,
   params: PropTypes.object.isRequired,
   initialValues: PropTypes.shape({
     id: PropTypes.string.isRequired,
