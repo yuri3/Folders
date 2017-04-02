@@ -54,32 +54,87 @@ const FOLDERS = [
 
 const NOTES = [
   {
-    parentId: '3',
+    parentFolderId: '3',
     id: '8',
     name: 'ES6',
     description: '',
-    tags: [{key: '0', label: 'JavaScriptES7'}, {key: '1', label: 'ES8'}],
   },
   {
-    parentId: '3',
+    parentFolderId: '3',
     id: '9',
     name: 'es7',
     description: '',
-    tags: [{key: '2', label: 'ES8'}],
+  },
+  {
+    parentFolderId: '4',
+    id: '10',
+    name: 'React Native',
+    description: '',
+  },
+  {
+    parentFolderId: '5',
+    id: '11',
+    name: 'Angular Native',
+    description: '',
   }
 ];
+
+const TAGS = [
+  {
+    parentNoteId: '8',
+    key: '1',
+    label: 'ES6',
+  },
+  {
+    parentNoteId: '9',
+    key: '2',
+    label: 'ES7',
+  },
+  {
+    parentNoteId: '10',
+    key: '3',
+    label: 'Native',
+  },
+  {
+    parentNoteId: '10',
+    key: '4',
+    label: 'ES7'
+  },
+  {
+    parentNoteId: '11',
+    key: '5',
+    label: 'ES7'
+  }
+];
+
+const tags = (state = TAGS, action) => {
+  switch(action.type) {
+    case ADD_TAG:
+      return [
+        ...state,
+        {
+          parentNoteId: action.parentNoteId,
+          key: action.key,
+          label: action.label,
+        }
+      ];
+    case REMOVE_TAG:
+      return state.filter(tag => tag.key !== action.key);
+    default:
+      return state;
+  }
+};
 
 const notes = (state = NOTES, action) => {
   switch(action.type) {
     case CREATE_NOTE:
-      const {parentId, id, name} = action;
+      const {parentFolderId, id, name} = action;
       return [
         {
-          parentId,
+          parentFolderId,
           id,
           name,
           description: '',
-          tags: [],
         },
         ...state,
       ];
@@ -91,32 +146,6 @@ const notes = (state = NOTES, action) => {
           return {
             ...note,
             name: action.newName,
-          };
-        }
-        return note;
-      });
-    case ADD_TAG:
-      return state.map(note => {
-        if(note.id === action.id) {
-          return {
-            ...note,
-            tags: [
-              ...note.tags,
-              {
-                key: action.key,
-                label: action.label,
-              }
-            ],
-          };
-        }
-        return note;
-      });
-    case REMOVE_TAG:
-      return state.map(note => {
-        if(note.id === action.id) {
-          return {
-            ...note,
-            tags: note.tags.filter(tag => tag.key !== action.key),
           };
         }
         return note;
@@ -200,27 +229,24 @@ const options = (state = {
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
     case SEARCH_NOTES:
-      const {notes, searchText} = action;
-      const matchInTitles = (searchText !== '' && notes.filter(({name}) => {
-        return name.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
-      }));
-      const matchInTags = [];
-      (searchText !== '' && notes.forEach(({tags}) => {
-        tags.forEach((tag) => {
-          const isMatch = !matchInTags.some(t => t.label === tag.label) &&
-            tag.label.toUpperCase().indexOf(
-              searchText.toUpperCase()
-            ) > -1;
-          isMatch && matchInTags.push(tag);
-        });
-      }));
+      const {notes, tags, searchText} = action;
+      const matchInTitles = (searchText !== '' &&
+        notes.filter(({name}) => {
+          return name.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
+        })
+      );
+      const matchInTags = (searchText !== '' && tags.reduce((matchInTags, tag) => {
+        const isMatch = !matchInTags.some(({label}) => label === tag.label) &&
+          tag.label.toUpperCase().indexOf(searchText.toUpperCase()) > -1;
+        return isMatch ? matchInTags.push(tag) && matchInTags : matchInTags;
+      }, []));
       return {
         ...state,
         foundNotes: {
           ...state.foundNotes,
           searchText,
-          matchInTitles: matchInTitles || [],
-          matchInTags: matchInTags || [],
+          matchInTitles,
+          matchInTags,
         },
         foundNotesByTag: null,
       };
@@ -234,6 +260,7 @@ const options = (state = {
         }));
         return prev;
       }, []);
+
       return {
         ...state,
         foundNotes: {
@@ -290,6 +317,7 @@ const options = (state = {
 const rootReducer = combineReducers({
   folders,
   notes,
+  tags,
   options,
   form: formReducer,
   //router: routerReducer,

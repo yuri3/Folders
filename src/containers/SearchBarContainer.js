@@ -27,7 +27,8 @@ class SearchBar extends Component {
   componentWillReceiveProps(nextProps) {
     const {options: {foundNotes}} = nextProps;
     const {searchText, matchInTitles, matchInTags} = foundNotes;
-    const dataSource = matchInTitles || matchInTags ?
+    const dataSource = (matchInTitles && matchInTitles.length > 0) ||
+      (matchInTags && matchInTags.length > 0) ?
       [
         `${matchInTitles.length} match(es) in titl(es).`,
         `${matchInTags.length} match(es) in tag(s).`,
@@ -45,8 +46,8 @@ class SearchBar extends Component {
   }
   handleUpdateInput(value, arr, params) {
     const {source} = params;
-    const {notes, searchNotes} = this.props;
-    source !== 'touchTap' && searchNotes(notes, value);
+    const {notes, tags, searchNotes} = this.props;
+    source !== 'touchTap' && searchNotes(notes, tags, value);
   }
   handleOnNewRequest(note, index) {
     const {history, handleToggle} = this.props;
@@ -118,13 +119,9 @@ class SearchBar extends Component {
 
 SearchBar.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
+    parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    parentId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    })).isRequired,
     descriptions: PropTypes.string,
   })),
   history: PropTypes.object.isRequired,
@@ -133,14 +130,8 @@ SearchBar.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  notes: state.folders.reduce((prev, curr) => {// read about normalize???
-    const {notes} = curr;
-    if(notes.length > 0) {
-      notes.forEach((note) => prev.push(note));
-      return prev;
-    }
-    return prev;
-  }, []),
+  notes: state.notes,
+  tags: state.tags,
   options: state.options,
 });
 

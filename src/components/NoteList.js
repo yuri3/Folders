@@ -25,7 +25,7 @@ class NoteList extends Component {
         >
           {notes && notes.map((note, index) => (
             <div key={note.id}>
-              {note.parentId === folderId &&
+              {note.parentFolderId === folderId &&
                 <DragAndDropNote
                   index={index}
                   note={note}
@@ -42,7 +42,7 @@ class NoteList extends Component {
 
 NoteList.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
+    parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,

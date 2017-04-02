@@ -61,7 +61,7 @@ class Note extends Component {
           <NavLink
             style={{color}}
             activeStyle={activeStyle}
-            to={`/notes/${note.parentId}/${note.id}`}>{noteName}
+            to={`/notes/${note.parentFolderId}/${note.id}`}>{noteName}
           </NavLink>
         </header>
         <span style={removeStyle}>
@@ -78,7 +78,7 @@ class Note extends Component {
 
 Note.propTypes = {
   note: PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
+    parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,

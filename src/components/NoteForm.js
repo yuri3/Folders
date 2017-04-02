@@ -6,19 +6,25 @@ import Chip from 'material-ui/Chip';
 
 const validate = (value, props) => {
   const error = {};
-  const {folderId} = props.params;
+  const {folderId, noteId} = props.params;
   if(!value.name) {
     error.name = 'Required';
   } else if(value.name && value.name.length > 18) {
     error.name = 'Must be 18 characters or less!';
   } else if(
     props.notes.some(
-      note => note && note.parentId === folderId && note.id !== value.id
+      note => note && note.parentFolderId === folderId && note.id !== value.id
                    && note.name !== 'New Note'
                    && note.name === value.name.trim()
     )
   ) {
     error.name = 'This name is already taken!';
+  } else if(
+    props.tags.some(
+      tag => tag && tag.parentNoteId === noteId && tag.label === value.tag
+    )
+  ) {
+    error.tag = 'This tag is already taken!';
   }
   props.handleBlocking(error.name);
   return error;
@@ -29,49 +35,44 @@ const renderTextField = (field) => {
     input,
     placeholder,
     meta: {
-      touched,
-      error
+      error,
     },
     changeNoteName,
+    addTag,
     changeDescription,
     ...custom
   } = field;
   return (
-    <TextField
-      hintText={placeholder}
-      floatingLabelText={placeholder}
-      errorText={touched && error}
-      {...input}
-      {...custom}
-      onChange={(event) => {
-        const value = event.target.value;
-        changeNoteName && changeNoteName(value);
-        changeDescription && changeDescription(value);
-      }}
-    />
-  );
-};
-
-const renderTextFieldForTags = (field) => {
-  const {
-    input,
-    placeholder,
-    addTag
-  } = field;
-  return (
-    <TextField
-      hintText={placeholder}
-      floatingLabelText={placeholder}
-      {...input}
-      onKeyDown={(event) => {
-        const label = event.target.value;
-        if(addTag && event.keyCode === 13) {
-          event.preventDefault();
-          addTag(label);
-          input.onChange('');
-        }
-      }}
-    />
+    <div>
+      {input.name === 'name' || input.name === 'description' ?
+        <TextField
+          hintText={placeholder}
+          floatingLabelText={placeholder}
+          errorText={error}
+          {...input}
+          {...custom}
+          onChange={(event) => {
+            const value = event.target.value;
+            changeNoteName && changeNoteName(value);
+            changeDescription && changeDescription(value);
+          }}
+        /> :
+        <TextField
+          hintText={placeholder}
+          floatingLabelText={placeholder}
+          errorText={error}
+          {...input}
+          {...custom}
+          onKeyDown={(event) => {
+            const value = event.target.value;
+            if(!error && addTag && event.keyCode === 13) {
+              event.preventDefault();
+              addTag(value);
+              input.onChange('');
+            }
+          }}
+        />}
+    </div>
   );
 };
 
@@ -80,19 +81,26 @@ class NoteForm extends Component {
     const {removeTag} = this.props;
     removeTag(key);
   };
-  renderChip = (data) => {
+  renderChip = (tag) => {
+    const {params: {noteId}} = this.props;
     return (
-      <Chip
-        key={data.key}
-        onRequestDelete={() => this.handleRequestDelete(data.key)}
-        style={{margin: 5}}
-      >
-        {data.label}
-      </Chip>
+      <div key={tag.key}>
+        {tag.parentNoteId === noteId && <Chip
+          onRequestDelete={() => this.handleRequestDelete(tag.key)}
+          style={{margin: 5}}
+        >
+          {tag.label}
+        </Chip>}
+      </div>
     );
   };
   render() {
-    const {changeNoteName, tags, addTag, changeDescription} = this.props;
+    const {
+      changeNoteName,
+      tags,
+      addTag,
+      changeDescription
+    } = this.props;
     return (
       <div>
         <form>
@@ -110,10 +118,11 @@ class NoteForm extends Component {
             {tags.map(this.renderChip)}
           </ReactCSSTransitionGroup>
           <Field
-            name="tags"
-            placeholder="Tags..."
+            name="tag"
+            placeholder="Tag..."
             addTag={addTag}
-            component={renderTextFieldForTags}/><br/>
+            normalize={(value) => value.toUpperCase()}
+            component={renderTextField}/><br/>
           <Field
             name="description"
             placeholder="Description..."
@@ -130,14 +139,15 @@ class NoteForm extends Component {
 
 NoteForm.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
+    parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired
-    })).isRequired,
+  })).isRequired,
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    parentNoteId: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
   })).isRequired,
   params: PropTypes.object.isRequired,
   initialValues: PropTypes.shape({
@@ -145,10 +155,6 @@ NoteForm.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
   }).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  })).isRequired,
   changeNoteName: PropTypes.func.isRequired,
   addTag: PropTypes.func.isRequired,
   changeDescription: PropTypes.func.isRequired,

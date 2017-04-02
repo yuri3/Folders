@@ -4,7 +4,7 @@ import Chip from 'material-ui/Chip';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
-import NoteList from '../components/NoteList';
+import DragAndDropNote from '../components/DragAndDropNote';
 
 const style = {
   margin: '0 0 0 30px',
@@ -39,58 +39,68 @@ class FoundTitles extends Component {
         <div style={headerStyle}>
           <strong>{`FOUND (${foundNotes.searchText.toUpperCase()}) BY ${state.type}`}</strong>
         </div>
-        {matchInTitles && state.type === 'TITLES' &&
-          <NoteList
-            folder={{notes: matchInTitles}}
-            moveNote={moveFoundNote}
-            removeNote={(parentId, id) => {
-              removeFoundNote(id);
-              removeNote(parentId, id);
-            }}
-          />}
-        {matchInTags && state.type === 'TAGS' &&
-          <div>
-            <ReactCSSTransitionGroup
-              transitionName="fade"
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={500}
-              style={{display: 'flex', flexWrap: 'wrap'}}
-            >
-              {matchInTags.map((tag) => (
-                <Chip
-                  key={tag.key}
-                  onTouchTap={() => this.handleLink(tag.label)}
-                  style={{margin: 5}}
-                >
-                  {tag.label}
-                </Chip>
-              ))}
-            </ReactCSSTransitionGroup>
-          </div>}
-        {foundNotesByTag &&
-        <NoteList
-          folder={{notes: foundNotesByTag}}
-          moveNote={moveFoundNoteByTag}
-          removeNote={(parentId, id) => {
-            removeFoundNote(id);
-            removeNote(parentId, id);
-          }}
-        />}
+
       </div>
     );
   }
 }
 
+/*<DragAndDropNote
+ index={index}
+ note={note}
+ moveNote={moveNote}
+ removeNote={removeNote}
+ />*/
+
+/*{matchInTitles && state.type === 'TITLES' &&
+ <NoteList
+ folder={{notes: matchInTitles}}
+ moveNote={moveFoundNote}
+ removeNote={(parentId, id) => {
+ removeFoundNote(id);
+ removeNote(parentId, id);
+ }}
+ />}*/
+/*{matchInTags && state.type === 'TAGS' &&
+ <div>
+ <ReactCSSTransitionGroup
+ transitionName="fade"
+ transitionEnterTimeout={500}
+ transitionLeaveTimeout={500}
+ style={{display: 'flex', flexWrap: 'wrap'}}
+ >
+ {matchInTags.map((tag) => (
+ <Chip
+ key={tag.key}
+ onTouchTap={() => this.handleLink(tag.label)}
+ style={{margin: 5}}
+ >
+ {tag.label}
+ </Chip>
+ ))}
+ </ReactCSSTransitionGroup>
+ </div>}*/
+/*{foundNotesByTag &&
+ <NoteList
+ folder={{notes: foundNotesByTag}}
+ moveNote={moveFoundNoteByTag}
+ removeNote={(parentId, id) => {
+ removeFoundNote(id);
+ removeNote(parentId, id);
+ }}
+ />}*/
+
 FoundTitles.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
+    parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    parentId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    })).isRequired,
     descriptions: PropTypes.string,
+  })).isRequired,
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    parentNoteId: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
   })).isRequired,
   options: PropTypes.shape({
     foundNotes: PropTypes.shape({
@@ -111,14 +121,8 @@ FoundTitles.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  notes: state.folders.reduce((prev, curr) => {// read about normalize???
-    const {notes} = curr;
-    if(notes.length > 0) {
-      notes.forEach((note) => prev.push(note));
-      return prev;
-    }
-    return prev;
-  }, []),
+  notes: state.notes,
+  tags: state.tags,
   options: state.options,
 });
 

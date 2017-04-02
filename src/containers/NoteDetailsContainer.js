@@ -56,6 +56,7 @@ const style = {
     render() {
       const {
         notes,
+        tags,
         addTag,
         removeTag,
         changeDescription,
@@ -76,16 +77,16 @@ const style = {
           <NoteForm
             handleBlocking={this.handleBlocking}
             notes={notes}
+            tags={tags}
             params={match.params}
             initialValues={{
               id: currentNote && currentNote.id,
               name: currentNote && currentNote.name,
               description: currentNote && currentNote.description,
             }}
-            tags={currentNote && currentNote.tags}
             changeNoteName={this.changeNote}
             addTag={(label) => addTag(noteId, label)}
-            removeTag={(key) => removeTag(noteId, key)}
+            removeTag={(key) => removeTag(key)}
             changeDescription={(value) => changeDescription(noteId, value)}/>
         </div>
       );
@@ -95,14 +96,15 @@ const style = {
 
 NoteDetails.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
+    parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired
-    })).isRequired,
+  })).isRequired,
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    parentNoteId: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
   })).isRequired,
   match: PropTypes.object.isRequired,
   changeNoteName: PropTypes.func.isRequired,
@@ -113,6 +115,7 @@ NoteDetails.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   notes: state.notes,
+  tags: state.tags,
 });
 
 const mapDispatchToProps = (dispatch) => {

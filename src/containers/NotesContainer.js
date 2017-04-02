@@ -38,7 +38,7 @@ class Notes extends Component {
 
 Notes.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string,
+    parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,

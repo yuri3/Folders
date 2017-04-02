@@ -36,10 +36,10 @@ export const moveFolder = (dragIndex, hoverIndex) => ({
 
 //---NOTES---------------------------------------------------------->
 export const CREATE_NOTE = 'CREATE_NOTE';
-export const createNote = (parentId, name = 'New Note') => ({
+export const createNote = (parentFolderId, name = 'New Note') => ({
   type: CREATE_NOTE,
   id: uuidV1(),
-  parentId,
+  parentFolderId,
   name,
 });
 
@@ -63,17 +63,16 @@ export const changeNoteName = (id, newName) => ({
 });
 
 export const ADD_TAG = 'ADD_TAG';
-export const addTag = (id, label) => ({
+export const addTag = (parentNoteId, label) => ({
   type: ADD_TAG,
-  id,
+  parentNoteId,
   key: uuidV1(),
   label,
 });
 
 export const REMOVE_TAG = 'REMOVE_TAG';
-export const removeTag = (id, key) => ({
+export const removeTag = (key) => ({
   type: REMOVE_TAG,
-  id,
   key,
 });
 
@@ -85,9 +84,10 @@ export const changeDescription = (id, description) => ({
 });
 
 export const SEARCH_NOTES = 'SEARCH_NOTES';
-export const searchNotes = (notes, searchText) => ({
+export const searchNotes = (notes, tags, searchText) => ({
   type: SEARCH_NOTES,
   notes,
+  tags,
   searchText,
 });
 
