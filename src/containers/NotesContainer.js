@@ -16,6 +16,7 @@ class Notes extends Component {
       match,
       createNote,
       moveNote,
+      removeTag,
       removeNote
     } = this.props;
     const {folderId, noteId} = match.params;
@@ -30,6 +31,7 @@ class Notes extends Component {
             notes={notes}
             folderId={folderId}
             moveNote={moveNote}
+            removeTag={removeTag}
             removeNote={removeNote}/>}
       </div>
     );
@@ -40,11 +42,14 @@ Notes.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
     parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    hasTags: PropTypes.bool,
   })).isRequired,
   match: PropTypes.object.isRequired,
   createNote: PropTypes.func.isRequired,
   moveNote: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
 };
 

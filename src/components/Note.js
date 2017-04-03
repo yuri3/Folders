@@ -42,7 +42,8 @@ class Note extends Component {
     this.handleRemove = this.handleRemove.bind(this);
   }
   handleRemove() {
-    const {history, removeNote, match: {params: {folderId, noteId}}, note} = this.props;
+    const {history, removeNote, removeTag, match: {params: {folderId, noteId}}, note} = this.props;
+    note.hasTags && removeTag(undefined, note.id);
     removeNote(note.id);
     note.id === noteId && history.push(`/notes/${folderId}`);
   }
@@ -80,11 +81,14 @@ Note.propTypes = {
   note: PropTypes.shape({
     parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    hasTags: PropTypes.bool,
   }).isRequired,
   match: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
+  removeTag: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
   isDragging: PropTypes.bool,
 };

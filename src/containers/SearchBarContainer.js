@@ -27,8 +27,7 @@ class SearchBar extends Component {
   componentWillReceiveProps(nextProps) {
     const {options: {foundNotes}} = nextProps;
     const {searchText, matchInTitles, matchInTags} = foundNotes;
-    const dataSource = (matchInTitles && matchInTitles.length > 0) ||
-      (matchInTags && matchInTags.length > 0) ?
+    const dataSource = matchInTitles.length > 0 || matchInTags.length > 0 ?
       [
         `${matchInTitles.length} match(es) in titl(es).`,
         `${matchInTags.length} match(es) in tag(s).`,

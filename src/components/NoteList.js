@@ -13,6 +13,7 @@ class NoteList extends Component {
       notes,
       folderId,
       moveNote,
+      removeTag,
       removeNote
     } = this.props;
     return (
@@ -30,6 +31,7 @@ class NoteList extends Component {
                   index={index}
                   note={note}
                   moveNote={moveNote}
+                  removeTag={removeTag}
                   removeNote={removeNote}
                 />}
             </div>
@@ -44,10 +46,13 @@ NoteList.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
     parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    hasTags: PropTypes.bool,
   })).isRequired,
   folderId: PropTypes.string.isRequired,
   moveNote: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
 };
 

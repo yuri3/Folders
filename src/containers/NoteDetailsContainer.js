@@ -57,6 +57,7 @@ const style = {
       const {
         notes,
         tags,
+        updateTagFlag,
         addTag,
         removeTag,
         changeDescription,
@@ -85,7 +86,10 @@ const style = {
               description: currentNote && currentNote.description,
             }}
             changeNoteName={this.changeNote}
-            addTag={(label) => addTag(noteId, label)}
+            addTag={(label) => {
+              !currentNote.hasTags && updateTagFlag(currentNote.id);
+              addTag(noteId, label)
+            }}
             removeTag={(key) => removeTag(key)}
             changeDescription={(value) => changeDescription(noteId, value)}/>
         </div>
@@ -100,6 +104,7 @@ NoteDetails.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    hasTags: PropTypes.bool.isRequired,
   })).isRequired,
   tags: PropTypes.arrayOf(PropTypes.shape({
     parentNoteId: PropTypes.string.isRequired,
@@ -108,6 +113,7 @@ NoteDetails.propTypes = {
   })).isRequired,
   match: PropTypes.object.isRequired,
   changeNoteName: PropTypes.func.isRequired,
+  updateTagFlag: PropTypes.func.isRequired,
   addTag: PropTypes.func.isRequired,
   removeTag: PropTypes.func.isRequired,
   changeDescription: PropTypes.func.isRequired,

@@ -143,6 +143,7 @@ NoteForm.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    hasTags: PropTypes.bool,
   })).isRequired,
   tags: PropTypes.arrayOf(PropTypes.shape({
     parentNoteId: PropTypes.string.isRequired,

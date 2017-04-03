@@ -50,6 +50,7 @@ class DragAndDropNote extends Component {
   render() {
     const {
       note,
+      removeTag,
       removeNote,
       connectDragSource,
       connectDropTarget,
@@ -60,6 +61,7 @@ class DragAndDropNote extends Component {
       <div style={{margin: '10px', border}}>
         <Note
           note={note}
+          removeTag={removeTag}
           removeNote={removeNote}
           isDragging={isDragging}/>
       </div>
@@ -71,10 +73,13 @@ DragAndDropNote.propTypes = {
   note: PropTypes.shape({
     parentFolderId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    hasTags: PropTypes.bool,
   }).isRequired,
   index: PropTypes.number.isRequired,
   moveNote: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
   removeNote: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,
   connectDragPreview: PropTypes.func,
