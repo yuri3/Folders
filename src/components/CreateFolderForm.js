@@ -4,7 +4,6 @@ import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
-//import validate from './syncValidate';
 
 const style = {
   alignSelf: 'flex-end',
@@ -12,11 +11,10 @@ const style = {
 
 const validate = (value, props) => {
   const error = {};
-  if(!value.name) {
-    error.name = 'Required';
-  } else if(value.name && value.name.length > 18) {
+  if(!props.dirty) {return;}
+  if(value.name && value.name.length > 18) {
     error.name = 'Must be 18 characters or less!';
-  } else if(props.folders.some(folder => folder.name === value.name.trim())) {
+  } else if(props.folders.some(folder => !folder.parentId && folder.name === value.name.trim())) {
     error.name = 'This name is already taken!'
   }
   return error;
@@ -27,7 +25,7 @@ const renderTextField = (field) => {
     input,
     placeholder,
     meta: {
-      touched,
+      dirty,
       error,
     },
     handleSubmit,
@@ -38,7 +36,7 @@ const renderTextField = (field) => {
     <TextField
       hintText={placeholder}
       floatingLabelText={placeholder}
-      errorText={touched && error}
+      errorText={dirty && error}
       {...input}
       {...custom}
       onKeyDown={(event) => {
@@ -59,7 +57,8 @@ class CreateFolderForm extends Component {
     const {
       handleSubmit,
       handleClose,
-      invalid
+      invalid,
+      pristine,
     } = this.props;
     return (
       <div>
@@ -76,7 +75,7 @@ class CreateFolderForm extends Component {
             <IconButton
               tooltip="SAVE"
               style={style}
-              disabled={!!invalid}
+              disabled={!!invalid || !!pristine}
               onTouchTap={handleSubmit}><SaveIcon/>
             </IconButton>
             <IconButton

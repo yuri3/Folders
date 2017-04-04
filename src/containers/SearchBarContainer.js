@@ -69,7 +69,7 @@ class SearchBar extends Component {
         state: {type: 'TAGS'}
       })
     } else {
-      history.push(`/notes/${note.parentId}/${note.id}`);
+      history.push(`/notes/${note.parentFolderId}/${note.id}`);
     }
     handleToggle();
   }
@@ -78,7 +78,8 @@ class SearchBar extends Component {
     const {notes} = this.props;
     return (
       <div style={style}>
-        {isInputChecked && <AutoComplete
+        {isInputChecked &&
+        <AutoComplete
           ref={(input) => this.input = input}
           floatingLabelText="Type to search..."
           fullWidth={true}
@@ -90,7 +91,8 @@ class SearchBar extends Component {
           onNewRequest={this.handleOnNewRequest}
           onBlur={() => this.input.state.searchText = ''}
         />}
-        {!isInputChecked && <AutoComplete
+        {!isInputChecked &&
+        <AutoComplete
           ref={(input) => this.input = input}
           floatingLabelText="Type to search..."
           fullWidth={true}
@@ -123,6 +125,19 @@ SearchBar.propTypes = {
     name: PropTypes.string.isRequired,
     descriptions: PropTypes.string,
   })),
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    parentNoteId: PropTypes.string.isRequired,
+    key: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  })).isRequired,
+  options: PropTypes.shape({
+    foundNotes: PropTypes.shape({
+      searchText: PropTypes.string.isRequired,
+      matchInTitles: PropTypes.array.isRequired,
+      matchInTags: PropTypes.array.isRequired,
+      matchInDescriptions: PropTypes.array,
+    }),
+  }).isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   handleToggle: PropTypes.func.isRequired,

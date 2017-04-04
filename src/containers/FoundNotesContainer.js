@@ -23,14 +23,38 @@ class FoundTitles extends Component {
     super(props);
     this.state = {label: ''};
     this.handleLink = this.handleLink.bind(this);
+    this.matchInNotes = this.matchInNotes.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps()');
-    const {notes, tags, history, location: {state}} = nextProps;
-    if(notes.length === 0 || tags.length === 0) {
+    const {notes, history, location: {state}} = this.props;
+    if(nextProps.notes.length === notes.length) {
+      return;
+    }
+    const {matchInTitles, matchInTags} = this.matchInNotes(nextProps);
+    if(
+      state.type === 'TITLES' &&
+      nextProps.notes.length < notes.length && matchInTitles.length === 0
+    ) {
+      history.push(`/notes`);
+    } else if(
+      state.type === 'TAGS' &&
+      nextProps.notes.length < notes.length && matchInTags.length === 0
+    ) {
       history.push(`/notes`);
     }
   }
+  matchInNotes(nextProps) {
+    const {notes, tags, options: {foundNotes: {matchInTitles}}} = nextProps;
+    const {label} = this.state;
+    return notes.reduce((match, note) => {
+      const isMatchInTitles = matchInTitles.find(n => n.id === note.id);
+      const isMatchInTags = label && tags.find(t => t.parentNoteId === note.id && t.label === label);
+      isMatchInTitles && match.matchInTitles.push(note);
+      isMatchInTags && match.matchInTags.push(note);
+      return match;
+    }, {matchInTitles: [], matchInTags: []});
+  }
+
   handleLink(label) {
     this.setState({label});
   }
@@ -44,8 +68,8 @@ class FoundTitles extends Component {
       removeTag,
       removeNote,
     } = this.props;
-    const {matchInTitles, matchInTags} = foundNotes;
     const {label} = this.state;
+    const {matchInTitles, matchInTags} = foundNotes;
     return (
       <div style={style}>
         <div style={headerStyle}>
@@ -71,7 +95,7 @@ class FoundTitles extends Component {
               </ReactCSSTransitionGroup>)
             )}
           </div>}
-          {state.type === 'TAGS' &&
+          {state.type === 'TAGS' && !label &&
             <div style={{display: 'flex'}}>
               {tags.map((tag, index) => (
                 <ReactCSSTransitionGroup
@@ -130,9 +154,9 @@ FoundTitles.propTypes = {
   })).isRequired,
   options: PropTypes.shape({
     foundNotes: PropTypes.shape({
-      searchText: PropTypes.string,
-      matchInTitles: PropTypes.array,
-      matchInTags: PropTypes.array,
+      searchText: PropTypes.string.isRequired,
+      matchInTitles: PropTypes.array.isRequired,
+      matchInTags: PropTypes.array.isRequired,
       matchInDescriptions: PropTypes.array,
     }),
   }).isRequired,

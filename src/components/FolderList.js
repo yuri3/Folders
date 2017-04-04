@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-//import Folder from './Folder';
 import DragAndDropFolder from './DragAndDropFolder';
 
 const style = {
@@ -62,11 +61,18 @@ class FolderList extends Component {
 }
 
 FolderList.propTypes = {
-  folders: PropTypes.array.isRequired,
-  subfolders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  subfolders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  options: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  options: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,

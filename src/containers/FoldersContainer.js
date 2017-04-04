@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import * as actions from '../actions/actions';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
@@ -27,8 +26,8 @@ class Folders extends Component {
       removeFolder,
       moveFolder
     } = this.props;
-    const root = (
-      <div key={'13'}>
+    return (
+      <div style={style}>
         <CreateFolder
           folders={folders}
           createFolder={createFolder}/>
@@ -45,17 +44,6 @@ class Folders extends Component {
           moveFolder={moveFolder}/>
       </div>
     );
-    return (
-      <div style={style}>
-        <ReactCSSTransitionGroup
-          transitionName="fade"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-        >
-          {root}
-        </ReactCSSTransitionGroup>
-      </div>
-    );
   }
 }
 
@@ -69,9 +57,7 @@ Folders.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
-  options: PropTypes.shape({
-    renameId: PropTypes.object,
-  }).isRequired,
+  options: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,

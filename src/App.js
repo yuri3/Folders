@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-//import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
   BrowserRouter as Router,
   Switch,
@@ -15,7 +15,7 @@ import Logo from './components/Logo';
 import FoldersContainer from './containers/FoldersContainer';
 import NotesContainer from './containers/NotesContainer';
 import NoteDetailsContainer from './containers/NoteDetailsContainer';
-import FoundTitles from './containers/FoundNotesContainer';
+import FoundNotesContainer from './containers/FoundNotesContainer';
 
 import ModalConfirmation from './ModalConfirmation';
 const getModalConfirmation = ModalConfirmation('modal-holder');
@@ -27,6 +27,7 @@ export const NoMatch = ({location}) => (
 );
 
 const style = {
+  border: '1px solid red',
   display: 'flex',
   flexWrap: 'wrap',
   marginLeft: '60px',
@@ -43,21 +44,29 @@ class App extends Component {
               <div style={style}>
                 <Logo/>
                 <Route component={FoldersContainer}/>
-                <Route component={FoundTitles}/>
+                <Route component={FoundNotesContainer}/>
               </div>
             )}/>
-            <Route path="/notes/:folderId/:noteId" render={() => (
+            <Route path="/notes/:folderId/:noteId" render={({location}) => (
               <div style={style}>
                 <Logo/>
-                <Route component={NotesContainer}/>
-                <Route component={NoteDetailsContainer}/>
+                  <Route location={location} key={location.key} component={NotesContainer}/>
+                  <Route location={location} key={location.key + '1'} component={NoteDetailsContainer}/>
               </div>
             )}/>
             <Route path="/notes" render={({location}) => (
               <div style={style}>
                 <Logo/>
                 <Route component={FoldersContainer}/>
-                <Route path="/notes/:folderId" component={NotesContainer}/>
+                <div style={{display: 'flex', flex: 1, position: 'relative', border: '2px solid green'}}>
+                <ReactCSSTransitionGroup
+                  transitionName="fade"
+                  transitionEnterTimeout={3000}
+                  transitionLeaveTimeout={3000}
+                >
+                  <Route location={location} key={location.key} path="/notes/:folderId" component={NotesContainer}/>
+                </ReactCSSTransitionGroup>
+                </div>
               </div>
             )}/>
             <Route component={NoMatch}/>

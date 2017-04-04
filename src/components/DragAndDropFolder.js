@@ -93,9 +93,19 @@ class DragAndDropFolder extends Component {
 
 DragAndDropFolder.propTypes = {
   index: PropTypes.number.isRequired,
-  folders: PropTypes.array.isRequired,
-  folder: PropTypes.object.isRequired,
-  subfolders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  folder: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  subfolders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createFolder: PropTypes.func.isRequired,

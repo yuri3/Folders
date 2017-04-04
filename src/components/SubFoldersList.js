@@ -52,10 +52,25 @@ class SubFoldersList extends Component {
 }
 
 SubFoldersList.propTypes = {
-  folders: PropTypes.array.isRequired,
-  folder: PropTypes.object.isRequired,
-  subfolders: PropTypes.array.isRequired,
-  options: PropTypes.object.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  folder: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  subfolders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  options: PropTypes.shape({
+    renameId: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.string,
+    ]),
+  }).isRequired,
   match: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
   createFolder: PropTypes.func.isRequired,

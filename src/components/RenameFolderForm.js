@@ -4,10 +4,32 @@ import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
 import UndoIcon from 'material-ui/svg-icons/content/undo';
 import SaveIcon from 'material-ui/svg-icons/content/save';
-import validate from './syncValidate';
 
 const style = {
   alignSelf: 'flex-end',
+};
+
+const validate = (value, props) => {
+  const error = {};
+  if(!props.dirty) {return;}
+  if(!value.name) {
+    error.name = 'Required';
+  } else if(value.name && value.name.length > 18) {
+    error.name = 'Must be 18 characters or less!';
+  } else if(
+    props.folders.some(
+      folder => !folder.parentId && !value.parentId && folder.name === value.name.trim()
+    )
+  ) {
+    error.name = 'This name is already taken!'
+  } else if(
+    props.folders.some(folder => (
+      folder.parentId && value.parentId === folder.parentId && folder.name === value.name.trim()
+    ))
+  ) {
+    error.name = 'This name is already taken!'
+  }
+  return error;
 };
 
 const renderTextField = (field) => {
@@ -37,7 +59,8 @@ const renderTextField = (field) => {
         if(event.keyCode === 27) {
           handleClose();
         }
-      }}/>
+      }}
+    />
   );
 };
 
@@ -80,10 +103,16 @@ class RenameFolderForm extends Component {
 }
 
 RenameFolderForm.propTypes = {
-  folders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   onSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired,
+  initialValues: PropTypes.shape({
+    parentId: PropTypes.string,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default props => {
