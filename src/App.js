@@ -44,23 +44,25 @@ class App extends Component {
       <MuiThemeProvider>
         <Router getUserConfirmation={getModalConfirmation}>
           <div style={style}>
-            <Logo/>
             <Switch>
               <Route exact path="/" render={() => <Redirect to="/notes"/>}/>
               <Route path="/notes/search" render={() => (
                 <div style={routeStyle}>
+                  <Logo/>
                   <Route component={FoldersContainer}/>
                   <Route component={FoundNotesContainer}/>
                 </div>
               )}/>
               <Route path="/notes/:folderId/:noteId" render={({location}) => (
                 <div style={routeStyle}>
+                  <Logo/>
                   <Route component={NotesContainer}/>
                   <Route component={NoteDetailsContainer}/>
                 </div>
               )}/>
               <Route path="/notes" render={({location}) => (
                 <div style={routeStyle}>
+                  <Logo/>
                   <Route component={FoldersContainer}/>
                   <Route path="/notes/:folderId" component={NotesContainer}/>
                 </div>

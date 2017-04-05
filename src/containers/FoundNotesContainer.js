@@ -32,12 +32,12 @@ class FoundTitles extends Component {
     }
     const {matchInTitles, matchInTags} = this.matchInNotes(nextProps);
     if(
-      state.type === 'TITLES' &&
+      (state.type === 'TITLES' || state.type === '') &&
       nextProps.notes.length < notes.length && matchInTitles.length === 0
     ) {
       history.push(`/notes`);
     } else if(
-      state.type === 'TAGS' &&
+      (state.type === 'TAGS' || state.type === '') &&
       nextProps.notes.length < notes.length && matchInTags.length === 0
     ) {
       history.push(`/notes`);
@@ -54,8 +54,9 @@ class FoundTitles extends Component {
       return match;
     }, {matchInTitles: [], matchInTags: []});
   }
-
   handleLink(label) {
+    const {location: {state}} = this.props;
+    state.type = '';
     this.setState({label});
   }
   render() {
@@ -73,7 +74,7 @@ class FoundTitles extends Component {
     return (
       <div style={style}>
         <div style={headerStyle}>
-          <strong>{`FOUND (${label ? label : foundNotes.searchText.toUpperCase()}) BY ${state.type}`}</strong>
+          <strong>{`FOUND (${label ? label : foundNotes.searchText.toUpperCase()}) BY ${state.type ? state.type : 'TAGS'}`}</strong>
         </div>
         {state.type === 'TITLES' &&
           <div style={{display: 'flex', flexWrap: 'wrap'}}>
@@ -95,7 +96,7 @@ class FoundTitles extends Component {
               </ReactCSSTransitionGroup>)
             )}
           </div>}
-          {state.type === 'TAGS' && !label &&
+          {state.type === 'TAGS' &&
             <div style={{display: 'flex'}}>
               {tags.map((tag, index) => (
                 <ReactCSSTransitionGroup
@@ -114,7 +115,7 @@ class FoundTitles extends Component {
                 </ReactCSSTransitionGroup>)
               )}
             </div>}
-          {label &&
+          {state.type === '' && label &&
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
               {notes.map((note, index) => (
                 <ReactCSSTransitionGroup
