@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+//import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,10 +27,15 @@ export const NoMatch = ({location}) => (
 );
 
 const style = {
-  border: '1px solid red',
   display: 'flex',
   flexWrap: 'wrap',
   marginLeft: '60px',
+};
+
+const routeStyle = {
+  display: 'flex',
+  flex: 1,
+  flexWrap: 'wrap',
 };
 
 class App extends Component {
@@ -38,39 +43,31 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <Router getUserConfirmation={getModalConfirmation}>
-          <Switch>
-            <Route exact path="/" render={() => <Redirect to="/notes"/>}/>
-            <Route path="/notes/search" render={() => (
-              <div style={style}>
-                <Logo/>
-                <Route component={FoldersContainer}/>
-                <Route component={FoundNotesContainer}/>
-              </div>
-            )}/>
-            <Route path="/notes/:folderId/:noteId" render={({location}) => (
-              <div style={style}>
-                <Logo/>
-                  <Route location={location} key={location.key} component={NotesContainer}/>
-                  <Route location={location} key={location.key + '1'} component={NoteDetailsContainer}/>
-              </div>
-            )}/>
-            <Route path="/notes" render={({location}) => (
-              <div style={style}>
-                <Logo/>
-                <Route component={FoldersContainer}/>
-                <div style={{display: 'flex', flex: 1, position: 'relative', border: '2px solid green'}}>
-                <ReactCSSTransitionGroup
-                  transitionName="fade"
-                  transitionEnterTimeout={3000}
-                  transitionLeaveTimeout={3000}
-                >
-                  <Route location={location} key={location.key} path="/notes/:folderId" component={NotesContainer}/>
-                </ReactCSSTransitionGroup>
+          <div style={style}>
+            <Logo/>
+            <Switch>
+              <Route exact path="/" render={() => <Redirect to="/notes"/>}/>
+              <Route path="/notes/search" render={() => (
+                <div style={routeStyle}>
+                  <Route component={FoldersContainer}/>
+                  <Route component={FoundNotesContainer}/>
                 </div>
-              </div>
-            )}/>
-            <Route component={NoMatch}/>
-          </Switch>
+              )}/>
+              <Route path="/notes/:folderId/:noteId" render={({location}) => (
+                <div style={routeStyle}>
+                  <Route component={NotesContainer}/>
+                  <Route component={NoteDetailsContainer}/>
+                </div>
+              )}/>
+              <Route path="/notes" render={({location}) => (
+                <div style={routeStyle}>
+                  <Route component={FoldersContainer}/>
+                  <Route path="/notes/:folderId" component={NotesContainer}/>
+                </div>
+              )}/>
+              <Route component={NoMatch}/>
+            </Switch>
+          </div>
         </Router>
       </MuiThemeProvider>
     );

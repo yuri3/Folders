@@ -2,54 +2,20 @@ html, body {
   margin: 0;
 }
 
-/*.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter.fade-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-
-.fade-leave {
-  opacity: 1;
-}
-
-.fade-leave.fade-leave-active {
-  opacity: 0;
-  transition: opacity 500ms ease-in;
-}
-*/
-
 .fade-enter {
-  position: relative;
+  opacity: 0;
 }
 
 .fade-enter.fade-enter-active {
-  animation-name: from-left-to-right;
-  animation-duration: 3s;
+  opacity: 1;
+  transition: opacity 500ms ease-in;
 }
 
 .fade-leave {
-  position: relative;
+  opacity: 1;
 }
 
 .fade-leave.fade-leave-active {
-  animation-name: from-right-to-left;
-  animation-duration: 3s;
-}
-
-/*animation-name: from-left-to-right;
-animation-duration: 3s;
-animation: from-left-to-right 3s;
-animation-direction: reverse;
-*/
-@keyframes from-left-to-right {
-  from {left: -100%; top: 0}
-  to {left: 0; top: 0}
-}
-
-@keyframes from-right-to-left {
-  from {right: 0; top: 0}
-  to {right: 100%; top: 0}
+  opacity: 0;
+  transition: opacity 500ms ease-in;
 }
