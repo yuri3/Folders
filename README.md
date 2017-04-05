@@ -1,6 +1,7 @@
 [DEMO](https://my-notes-13.herokuapp.com/)
-To run dev build:
 ```
+To run dev build:
+
 npm install
 npm start
 
