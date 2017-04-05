@@ -1,9 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-//import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-//import { bindActionCreators } from 'redux'
-//import * as actions from '../actions/actions';
 import IconButton from 'material-ui/IconButton';
 import FolderIcon from 'material-ui/svg-icons/file/folder';
 import FolderOpenIcon from 'material-ui/svg-icons/file/folder-open';
@@ -188,14 +185,5 @@ Folder.propTypes = {
   renameFolder: PropTypes.func.isRequired,
   removeFolder: PropTypes.func.isRequired,
 };
-/*
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(actions, dispatch);
-};
-
-Folder = connect(
-  undefined,
-  mapDispatchToProps,
-)(Folder);*/
 
 export default Folder;

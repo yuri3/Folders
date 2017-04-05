@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-//import { routerReducer } from 'react-router-redux';
 import {
   CREATE_FOLDER,
   SELECT_RENAME_INPUT,
@@ -281,7 +280,6 @@ const rootReducer = combineReducers({
   tags,
   options,
   form: formReducer,
-  //router: routerReducer,
 });
 
 export default rootReducer;
