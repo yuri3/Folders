@@ -51,7 +51,7 @@ function collectTarget(connect) {
   };
 }
 
-class DragAndDropFolder extends Component {
+class DragAndDropSubFolder extends Component {
   componentDidMount() {
     const img = new Image();
     img.src = '/ic_folder_black_48px.svg';
@@ -91,7 +91,7 @@ class DragAndDropFolder extends Component {
   }
 }
 
-DragAndDropFolder.propTypes = {
+DragAndDropSubFolder.propTypes = {
   index: PropTypes.number.isRequired,
   folders: PropTypes.arrayOf(PropTypes.shape({
     parentId: PropTypes.string,
@@ -99,6 +99,7 @@ DragAndDropFolder.propTypes = {
     name: PropTypes.string.isRequired,
   })).isRequired,
   folder: PropTypes.shape({
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
@@ -115,6 +116,13 @@ DragAndDropFolder.propTypes = {
 };
 
 export default flow(
-  DragSource(FolderTypes.FOLDER, folderSource, collectSource),
-  DropTarget(FolderTypes.FOLDER, folderTarget, collectTarget)
-)(DragAndDropFolder);
+  DragSource(props => FolderTypes.SUB_FOLDER + props.folder.parentId, folderSource, collectSource),
+  DropTarget(props => FolderTypes.SUB_FOLDER + props.folder.parentId, folderTarget, collectTarget)
+)(DragAndDropSubFolder);
+
+/*export default props => {
+  const id = FolderTypes.SUB_FOLDER + props.folder.parentId;
+  const DragAndDrop = DragSource(id, folderSource, collectSource)(DropTarget(id, folderTarget, collectTarget)(DragAndDropSubFolder));
+  return <DragAndDrop {...props}/>
+}
+*/

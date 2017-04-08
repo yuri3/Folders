@@ -58,7 +58,7 @@ class Note extends Component {
     return(
       <div style={{...styles, opacity}}>
         <i className="material-icons md-36" style={iconStyle}>description</i>
-        <header style={{...linkStyle,}}>
+        <header style={linkStyle}>
           <NavLink
             style={{color}}
             activeStyle={activeStyle}

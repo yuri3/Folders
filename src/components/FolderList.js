@@ -22,7 +22,6 @@ class FolderList extends Component {
   render() {
     const {
       folders,
-      subfolders,
       options,
       match,
       createFolder,
@@ -45,7 +44,6 @@ class FolderList extends Component {
               index={index}
               folders={folders}
               folder={folder}
-              subfolders={subfolders}
               options={options}
               match={match}
               createFolder={createFolder}
@@ -62,11 +60,7 @@ class FolderList extends Component {
 
 FolderList.propTypes = {
   folders: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
-  subfolders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,

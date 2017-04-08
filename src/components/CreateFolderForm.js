@@ -92,6 +92,7 @@ class CreateFolderForm extends Component {
 
 CreateFolderForm.propTypes = {
   folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,

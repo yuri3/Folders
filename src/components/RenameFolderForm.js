@@ -104,6 +104,7 @@ class RenameFolderForm extends Component {
 
 RenameFolderForm.propTypes = {
   folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,

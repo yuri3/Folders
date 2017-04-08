@@ -1,4 +1,4 @@
-.App {
+.Side-Bar {
   border-right: 1px solid gray;
   position: fixed;
   top: 0;
@@ -10,13 +10,13 @@
   z-index: 3;
 }
 
-.App-logo {
+.Side-Bar-logo {
   width: 60px;
   height: 60px;
-  animation: App-logo-spin infinite 20s linear;
+  animation: Side-Bar-logo-spin infinite 20s linear;
 }
 
-@keyframes App-logo-spin {
+@keyframes Side-Bar-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }

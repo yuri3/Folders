@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
-import { getSubFolders } from '../selectors';
 
 const style = {
   margin: '0 0 0 30px',
@@ -16,7 +15,6 @@ class Folders extends Component {
   render() {
     const {
       folders,
-      subfolders,
       options,
       match,
       history,
@@ -33,7 +31,6 @@ class Folders extends Component {
           createFolder={createFolder}/>
         <FolderList
           folders={folders}
-          subfolders={subfolders}
           options={options}
           match={match}
           history={history}
@@ -49,11 +46,7 @@ class Folders extends Component {
 
 Folders.propTypes = {
   folders: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
-  subfolders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
@@ -69,7 +62,6 @@ Folders.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   folders: state.folders,
-  subfolders: getSubFolders(state),
   options: state.options,
 });
 

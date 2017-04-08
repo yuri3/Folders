@@ -210,7 +210,6 @@ const folders = (state = FOLDERS, action) => {
         {
           id: action.id,
           name: action.name,
-          notes: [],
         },
         ...state
       ];

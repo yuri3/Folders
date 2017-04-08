@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-import Logo from './components/Logo';
+import SideBar from './components/SideBar';
 import FoldersContainer from './containers/FoldersContainer';
 import NotesContainer from './containers/NotesContainer';
 import NoteDetailsContainer from './containers/NoteDetailsContainer';
@@ -42,21 +42,21 @@ class App extends Component {
               <Route exact path="/" render={() => <Redirect to="/notes"/>}/>
               <Route path="/notes/search" render={() => (
                 <div style={routeStyle}>
-                  <Logo/>
+                  <SideBar/>
                   <Route component={FoldersContainer}/>
                   <Route component={FoundNotesContainer}/>
                 </div>
               )}/>
               <Route path="/notes/:folderId/:noteId" render={({location}) => (
                 <div style={routeStyle}>
-                  <Logo/>
+                  <SideBar/>
                   <Route component={NotesContainer}/>
                   <Route component={NoteDetailsContainer}/>
                 </div>
               )}/>
               <Route path="/notes" render={({location}) => (
                 <div style={routeStyle}>
-                  <Logo/>
+                  <SideBar/>
                   <Route component={FoldersContainer}/>
                   <Route path="/notes/:folderId" component={NotesContainer}/>
                 </div>

@@ -12,7 +12,7 @@ import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import SearchBarContainer from '../containers/SearchBarContainer';
 import logo from './logo.svg';
-import './css/Logo.css';
+import './css/SideBar.css';
 
 const IconElementLeft = (props) => (
   <IconMenu
@@ -43,7 +43,7 @@ const searchIconStyle = {
   color: 'white'
 };
 
-class Logo extends Component {
+class SideBar extends Component {
   constructor(props) {
     super(props);
     this.state = {isShowDrawer: false};
@@ -75,8 +75,8 @@ class Logo extends Component {
       </div>
     );
     return (
-      <div className="App">
-        <img src={logo} className="App-logo" alt="logo"/>
+      <div className="Side-Bar">
+        <img src={logo} className="Side-Bar-logo" alt="logo"/>
         <ReactCSSTransitionGroup
           transitionName="fade"
           transitionEnterTimeout={500}
@@ -131,10 +131,10 @@ class Logo extends Component {
   }
 }
 
-Logo.propTypes = {
+SideBar.propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
   location: PropTypes.object,
 };
 
-export default withRouter(Logo);
+export default withRouter(SideBar);

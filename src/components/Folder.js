@@ -62,17 +62,17 @@ class Folder extends Component {
     const {
       folders,
       folder,
-      subfolders,
       options,
       match,
       isDragging,
       createFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder
+      removeFolder,
+      moveFolder
     } = this.props;
     const isShowRenameInput = options.renameId === folder.id;
-    const isFolderHasSubFolders = subfolders.some(
+    const isFolderHasSubFolders = folders.some(
       subFolder => subFolder.parentId === folder.id
     );
     const {selectedFolderId} = this.state;
@@ -144,14 +144,14 @@ class Folder extends Component {
           <SubFoldersList
             folders={folders}
             folder={folder}
-            subfolders={subfolders}
             options={options}
             match={match}
             isDragging={isDragging}
             createFolder={createFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}
-            removeFolder={removeFolder}/>}
+            removeFolder={removeFolder}
+            moveFolder={moveFolder}/>}
         </ReactCSSTransitionGroup>
       </div>
     );
@@ -160,18 +160,15 @@ class Folder extends Component {
 
 Folder.propTypes = {
   folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
   folder: PropTypes.shape({
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
-  subfolders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
   options: PropTypes.shape({
     renameId: PropTypes.oneOfType([
       PropTypes.object,
@@ -184,6 +181,7 @@ Folder.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
   removeFolder: PropTypes.func.isRequired,
+  moveFolder: PropTypes.func.isRequired,
 };
 
 export default Folder;

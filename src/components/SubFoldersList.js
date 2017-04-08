@@ -1,26 +1,19 @@
 import React, { PropTypes, Component } from 'react';
-import Folder from './Folder';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-
-const style = {
-  margin: '0 0 20px 0',
-  width: '350px',
-  cursor: 'auto',
-};
+import DragAndDropSubFolder from './DragAndDropSubFolder';
 
 class SubFoldersList extends Component {
   render() {
     const {
       folders,
       folder,
-      subfolders,
       options,
       match,
-      isDragging,
       createFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder
+      removeFolder,
+      moveFolder
     } = this.props;
     return (
       <ul style={{listStyleType: 'none'}}>
@@ -29,21 +22,20 @@ class SubFoldersList extends Component {
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}
         >
-        {subfolders.map(subFolder => (
+        {folders.map((subFolder, index) => (
           folder.id === subFolder.parentId ?
-          <li key={subFolder.id} style={style}>
-            <Folder
+            <DragAndDropSubFolder
+              key={subFolder.id}
+              index={index}
               folders={folders}
               folder={subFolder}
-              subfolders={subfolders}
               match={match}
               options={options}
-              isDragging={isDragging}
               createFolder={createFolder}
               selectRenameInput={selectRenameInput}
               renameFolder={renameFolder}
-              removeFolder={removeFolder}/>
-          </li> : null
+              removeFolder={removeFolder}
+              moveFolder={moveFolder}/> : null
         ))}
         </ReactCSSTransitionGroup>
       </ul>
@@ -53,18 +45,15 @@ class SubFoldersList extends Component {
 
 SubFoldersList.propTypes = {
   folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
   folder: PropTypes.shape({
+    parentId: PropTypes.string,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
-  subfolders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
   options: PropTypes.shape({
     renameId: PropTypes.oneOfType([
       PropTypes.object,
@@ -77,6 +66,7 @@ SubFoldersList.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
   removeFolder: PropTypes.func.isRequired,
+  moveFolder: PropTypes.func.isRequired,
 };
 
 export default SubFoldersList;
