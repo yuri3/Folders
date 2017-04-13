@@ -51,35 +51,35 @@ const FOLDERS = [
 const NOTES = [
   {
     parentFolderId: '3',
-    id: '8',
+    id: '8',// 1
     name: 'ES6',
     description: '',
     hasTags: true,
   },
   {
     parentFolderId: '3',
-    id: '9',
+    id: '9',// 2
     name: 'es7',
     description: '',
     hasTags: true,
   },
   {
     parentFolderId: '4',
-    id: '10',
+    id: '10',// 3
     name: 'React Native',
     description: '',
     hasTags: true,
   },
   {
     parentFolderId: '4',
-    id: '11',
+    id: '11',// 4
     name: 'React Router',
     description: '',
     hasTags: false,
   },
   {
     parentFolderId: '5',
-    id: '12',
+    id: '12',// 5
     name: 'Angular Native',
     description: '',
     hasTags: true,
@@ -88,27 +88,27 @@ const NOTES = [
 
 const TAGS = [
   {
-    parentNoteId: '8',
+    parentNoteId: '8',// 1
     key: '1',
     label: 'ES6',
   },
   {
-    parentNoteId: '9',
+    parentNoteId: '9',// 2
     key: '2',
     label: 'ES7',
   },
   {
-    parentNoteId: '10',
+    parentNoteId: '10',// 3
     key: '3',
     label: 'NATIVE',
   },
   {
-    parentNoteId: '10',
+    parentNoteId: '10',// 3
     key: '4',
     label: 'ES7'
   },
   {
-    parentNoteId: '12',
+    parentNoteId: '12',// 5
     key: '5',
     label: 'ES7'
   }
