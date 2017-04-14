@@ -119,10 +119,3 @@ export default flow(
   DragSource(props => FolderTypes.SUB_FOLDER + props.folder.parentId, folderSource, collectSource),
   DropTarget(props => FolderTypes.SUB_FOLDER + props.folder.parentId, folderTarget, collectTarget)
 )(DragAndDropSubFolder);
-
-/*export default props => {
-  const id = FolderTypes.SUB_FOLDER + props.folder.parentId;
-  const DragAndDrop = DragSource(id, folderSource, collectSource)(DropTarget(id, folderTarget, collectTarget)(DragAndDropSubFolder));
-  return <DragAndDrop {...props}/>
-}
-*/
