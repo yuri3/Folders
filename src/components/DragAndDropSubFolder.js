@@ -65,7 +65,7 @@ class DragAndDropSubFolder extends Component {
       options,
       createNewFolder,
       selectRenameInput,
-      renameFolder,
+      renameSelectedFolder,
       deleteSelectedFolder,
       moveFolder,
       connectDragSource,
@@ -83,7 +83,7 @@ class DragAndDropSubFolder extends Component {
           isDragging={isDragging}
           createNewFolder={createNewFolder}
           selectRenameInput={selectRenameInput}
-          renameFolder={renameFolder}
+          renameSelectedFolder={renameSelectedFolder}
           deleteSelectedFolder={deleteSelectedFolder}
           moveFolder={moveFolder}/>
       </li>
@@ -107,7 +107,7 @@ DragAndDropSubFolder.propTypes = {
   options: PropTypes.object.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
-  renameFolder: PropTypes.func.isRequired,
+  renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,

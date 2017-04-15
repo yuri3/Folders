@@ -1,12 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
   const Folder = sequelize.define('Folder', {
-    parentId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    parentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
   }, {
     classMethods: {

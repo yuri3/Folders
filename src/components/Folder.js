@@ -44,10 +44,10 @@ class Folder extends Component {
     selectRenameInput(id);
   }
   renameFolder(values) {
-    const {folder, renameFolder} = this.props;
+    const {folder, renameSelectedFolder, options} = this.props;
     const {name} = values;
-    this.closeRenameInput();
-    renameFolder(folder.id, name.trim());
+    renameSelectedFolder(folder.id, name.trim());
+    !options.isRenaming && this.closeRenameInput();
   }
   closeRenameInput() {
     const {selectRenameInput} = this.props;
@@ -67,7 +67,7 @@ class Folder extends Component {
       isDragging,
       createNewFolder,
       selectRenameInput,
-      renameFolder,
+      renameSelectedFolder,
       deleteSelectedFolder,
       moveFolder
     } = this.props;
@@ -149,7 +149,7 @@ class Folder extends Component {
             isDragging={isDragging}
             createNewFolder={createNewFolder}
             selectRenameInput={selectRenameInput}
-            renameFolder={renameFolder}
+            renameSelectedFolder={renameSelectedFolder}
             deleteSelectedFolder={deleteSelectedFolder}
             moveFolder={moveFolder}/>}
         </ReactCSSTransitionGroup>
@@ -170,16 +170,14 @@ Folder.propTypes = {
     name: PropTypes.string.isRequired,
   }).isRequired,*/
   options: PropTypes.shape({
-    renameId: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.string,
-    ]),
+    renameId: PropTypes.integer,
+    isRenaming: PropTypes.bool,
   }).isRequired,
   match: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
-  renameFolder: PropTypes.func.isRequired,
+  renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
 };

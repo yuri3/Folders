@@ -101,20 +101,20 @@ class RenameFolderForm extends Component {
     );
   }
 }
-
+/*
 RenameFolderForm.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+  /*folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
-  })).isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  })).isRequired,*/
+  /*onSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   initialValues: PropTypes.shape({
     parentId: PropTypes.string,
     name: PropTypes.string.isRequired,
   }).isRequired,
-};
+};*/
 
 export default props => {
   const Form = reduxForm({

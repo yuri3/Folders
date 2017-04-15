@@ -24,7 +24,7 @@ import {
   CHANGE_DESCRIPTION,
   SEARCH_NOTES,
   MOVE_NOTE
-} from '../actions/actions';
+} from '../actions/folders';
 
 const FOLDERS = [
   {
@@ -210,10 +210,10 @@ const folders = (state = [], action) => {
       return [action.payload, ...state];
     case RENAME_FOLDER_SUCCESS:
       return state.map((folder) => {
-        if(folder.id !== action.id) {return folder;}
+        if(folder.id !== action.payload.id) {return folder;}
         return {
           ...folder,
-          name: action.newName,
+          name: action.payload.name,
         };
       });
     case DELETE_FOLDER_SUCCESS:

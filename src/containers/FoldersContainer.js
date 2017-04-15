@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions/actions';
+import * as actions from '../actions/folders';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
 
@@ -14,8 +14,8 @@ const style = {
 class Folders extends Component {
   componentDidMount() {
     console.log('componentDidMount()');
-    const {fetchFoldersIfNeeded} = this.props;
-    fetchFoldersIfNeeded();
+    const {fetchAllFolders} = this.props;
+    fetchAllFolders();
   }
   render() {
     const {
@@ -25,7 +25,7 @@ class Folders extends Component {
       history,
       createNewFolder,
       selectRenameInput,
-      renameFolder,
+      renameSelectedFolder,
       deleteSelectedFolder,
       moveFolder
     } = this.props;
@@ -45,7 +45,7 @@ class Folders extends Component {
             history={history}
             createNewFolder={createNewFolder}
             selectRenameInput={selectRenameInput}
-            renameFolder={renameFolder}
+            renameSelectedFolder={renameSelectedFolder}
             deleteSelectedFolder={deleteSelectedFolder}
             moveFolder={moveFolder}
           />
@@ -56,17 +56,13 @@ class Folders extends Component {
 }
 
 Folders.propTypes = {
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,*/
+  folders: PropTypes.array.isRequired,
   options: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
-  renameFolder: PropTypes.func.isRequired,
+  renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
 };

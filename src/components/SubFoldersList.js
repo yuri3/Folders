@@ -11,7 +11,7 @@ class SubFoldersList extends Component {
       match,
       createNewFolder,
       selectRenameInput,
-      renameFolder,
+      renameSelectedFolder,
       deleteSelectedFolder,
       moveFolder
     } = this.props;
@@ -33,7 +33,7 @@ class SubFoldersList extends Component {
               options={options}
               createNewFolder={createNewFolder}
               selectRenameInput={selectRenameInput}
-              renameFolder={renameFolder}
+              renameSelectedFolder={renameSelectedFolder}
               deleteSelectedFolder={deleteSelectedFolder}
               moveFolder={moveFolder}/> : null
         ))}
@@ -57,14 +57,14 @@ SubFoldersList.propTypes = {
   options: PropTypes.shape({
     renameId: PropTypes.oneOfType([
       PropTypes.object,
-      PropTypes.string,
+      PropTypes.integer,
     ]),
   }).isRequired,
   match: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
-  renameFolder: PropTypes.func.isRequired,
+  renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
 };
