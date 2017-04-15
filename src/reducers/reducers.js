@@ -1,10 +1,19 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import {
-  CREATE_FOLDER,
+  REQUEST_FETCH_FOLDERS,
+  FETCH_FOLDERS_SUCCESS,
+  FETCH_FOLDERS_FAILURE,
+  REQUEST_CREATE_FOLDER,
+  CREATE_FOLDER_SUCCESS,
+  CREATE_FOLDER_FAILURE,
   SELECT_RENAME_INPUT,
-  RENAME_FOLDER,
-  REMOVE_FOLDER,
+  REQUEST_RENAME_FOLDER,
+  RENAME_FOLDER_SUCCESS,
+  RENAME_FOLDER_FAILURE,
+  REQUEST_DELETE_FOLDER,
+  DELETE_FOLDER_SUCCESS,
+  DELETE_FOLDER_FAILURE,
   MOVE_FOLDER,
   CREATE_NOTE,
   REMOVE_NOTE,
@@ -193,27 +202,13 @@ const notes = (state = NOTES, action) => {
   }
 };
 
-const folders = (state = FOLDERS, action) => {
+const folders = (state = [], action) => {
   switch(action.type) {
-    case CREATE_FOLDER:
-      if(action.name === 'New Folder') {
-        return [
-          {
-            parentId: action.parentId,
-            id: action.id,
-            name: action.name,
-          },
-          ...state
-        ];
-      }
-      return [
-        {
-          id: action.id,
-          name: action.name,
-        },
-        ...state
-      ];
-    case RENAME_FOLDER:
+    case FETCH_FOLDERS_SUCCESS:
+      return action.payload;
+    case CREATE_FOLDER_SUCCESS:
+      return [action.payload, ...state];
+    case RENAME_FOLDER_SUCCESS:
       return state.map((folder) => {
         if(folder.id !== action.id) {return folder;}
         return {
@@ -221,7 +216,7 @@ const folders = (state = FOLDERS, action) => {
           name: action.newName,
         };
       });
-    case REMOVE_FOLDER:
+    case DELETE_FOLDER_SUCCESS:
       return state.filter((folder) => folder.id !== action.id);
     case MOVE_FOLDER:
       const {dragIndex, hoverIndex} = action;
@@ -236,6 +231,10 @@ const folders = (state = FOLDERS, action) => {
 };
 
 const options = (state = {
+  isFetching: false,
+  isCreating: false,
+  isRenaming: false,
+  isDeleting: false,
   renameId: null,
   foundNotes: {
     searchText: '',
@@ -245,6 +244,34 @@ const options = (state = {
   }
 }, action) => {
   switch(action.type) {
+    case REQUEST_FETCH_FOLDERS:
+      return {...state, isFetching: true};
+    case FETCH_FOLDERS_SUCCESS:
+      return {...state, isFetching: false};
+    case FETCH_FOLDERS_FAILURE:
+      return {...state, isFetching: false, error: action.payload};
+
+    case REQUEST_CREATE_FOLDER:
+      return {...state, isCreating: true};
+    case CREATE_FOLDER_SUCCESS:
+      return {...state, isCreating: false};
+    case CREATE_FOLDER_FAILURE:
+      return {...state, isCreating: false, error: action.payload};
+
+    case REQUEST_DELETE_FOLDER:
+      return {...state, isDeleting: true};
+    case DELETE_FOLDER_SUCCESS:
+      return {...state, isDeleting: false};
+    case DELETE_FOLDER_FAILURE:
+      return {...state, isDeleting: false, error: action.payload};
+
+    case REQUEST_RENAME_FOLDER:
+      return {...state, isRenaming: true};
+    case RENAME_FOLDER_SUCCESS:
+      return {...state, isRenaming: false};
+    case RENAME_FOLDER_FAILURE:
+      return {...state, isRenaming: false, error: action.payload};
+
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
     case SEARCH_NOTES:

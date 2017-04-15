@@ -34,7 +34,7 @@ class Folder extends Component {
   }
   createFolder(id) {
     this.selectFolder(id);
-    this.props.createFolder(id);
+    this.props.createNewFolder(id);
   }
   selectFolder(id) {
     this.setState({selectedFolderId: id});
@@ -54,8 +54,8 @@ class Folder extends Component {
     selectRenameInput(null);
   }
   removeFolder(id) {
-    const {removeFolder, options, folder} = this.props;
-    removeFolder(id);
+    const {deleteSelectedFolder, options, folder} = this.props;
+    deleteSelectedFolder(id);
     options.renameId === folder.id && this.showRenameInput(null);
   }
   render() {
@@ -65,10 +65,10 @@ class Folder extends Component {
       options,
       match,
       isDragging,
-      createFolder,
+      createNewFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder,
+      deleteSelectedFolder,
       moveFolder
     } = this.props;
     const isShowRenameInput = options.renameId === folder.id;
@@ -147,10 +147,10 @@ class Folder extends Component {
             options={options}
             match={match}
             isDragging={isDragging}
-            createFolder={createFolder}
+            createNewFolder={createNewFolder}
             selectRenameInput={selectRenameInput}
             renameFolder={renameFolder}
-            removeFolder={removeFolder}
+            deleteSelectedFolder={deleteSelectedFolder}
             moveFolder={moveFolder}/>}
         </ReactCSSTransitionGroup>
       </div>
@@ -159,16 +159,16 @@ class Folder extends Component {
 }
 
 Folder.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+  /*folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
   folder: PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
-  }).isRequired,
+  }).isRequired,*/
   options: PropTypes.shape({
     renameId: PropTypes.oneOfType([
       PropTypes.object,
@@ -177,10 +177,10 @@ Folder.propTypes = {
   }).isRequired,
   match: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
-  createFolder: PropTypes.func.isRequired,
+  createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
-  removeFolder: PropTypes.func.isRequired,
+  deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
 };
 

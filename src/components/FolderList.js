@@ -24,10 +24,10 @@ class FolderList extends Component {
       folders,
       options,
       match,
-      createFolder,
+      createNewFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder,
+      deleteSelectedFolder,
       moveFolder
     } = this.props;
     return (
@@ -46,10 +46,10 @@ class FolderList extends Component {
               folder={folder}
               options={options}
               match={match}
-              createFolder={createFolder}
+              createNewFolder={createNewFolder}
               selectRenameInput={selectRenameInput}
               renameFolder={renameFolder}
-              removeFolder={removeFolder}
+              deleteSelectedFolder={deleteSelectedFolder}
               moveFolder={moveFolder}/> : null
           ))}
         </ReactCSSTransitionGroup>
@@ -59,18 +59,18 @@ class FolderList extends Component {
 }
 
 FolderList.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+  /*folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
-  })).isRequired,
+  })).isRequired,*/
   options: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  createFolder: PropTypes.func.isRequired,
+  createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
-  removeFolder: PropTypes.func.isRequired,
+  deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
 };
 

@@ -4,10 +4,19 @@ const Tag = require('../models').Tag;
 
 module.exports = {
   create(req, res) {
-    return Folder.create({
-      name: req.body.name,
-    })
-      .then(todo => res.status(201).send(todo))
+    let promise;
+    if(req.body.name === 'New Folder') {
+      promise = Folder.create({
+        name: req.body.name,
+        parentId: req.body.parentId,
+      });
+    } else {
+      promise = Folder.create({
+        name: req.body.name,
+      });
+    }
+    return promise
+      .then(folder => res.status(201).send(folder))
       .catch(error => res.status(400).send(error));
   },
   list(req, res) {

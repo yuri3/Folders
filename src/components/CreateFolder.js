@@ -26,10 +26,10 @@ class CreateFolder extends Component {
     this.switchCreateInput();
   }
   handleSubmit(values) {
-    const {createFolder} = this.props;
+    const {createNewFolder, options} = this.props;
     const {name} = values;
-    this.switchCreateInput();
-    createFolder(undefined, name);
+    createNewFolder(undefined, name);
+    !options.isCreating && this.switchCreateInput();
   }
   render() {
     const {folders} = this.props;
@@ -56,12 +56,13 @@ class CreateFolder extends Component {
 }
 
 CreateFolder.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+  /*folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
-  })).isRequired,
-  createFolder: PropTypes.func.isRequired,
+  })).isRequired,*/
+  options: PropTypes.object.isRequired,
+  createNewFolder: PropTypes.func.isRequired,
 };
 
 export default CreateFolder;

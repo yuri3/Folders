@@ -9,10 +9,10 @@ class SubFoldersList extends Component {
       folder,
       options,
       match,
-      createFolder,
+      createNewFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder,
+      deleteSelectedFolder,
       moveFolder
     } = this.props;
     return (
@@ -31,10 +31,10 @@ class SubFoldersList extends Component {
               folder={subFolder}
               match={match}
               options={options}
-              createFolder={createFolder}
+              createNewFolder={createNewFolder}
               selectRenameInput={selectRenameInput}
               renameFolder={renameFolder}
-              removeFolder={removeFolder}
+              deleteSelectedFolder={deleteSelectedFolder}
               moveFolder={moveFolder}/> : null
         ))}
         </ReactCSSTransitionGroup>
@@ -44,16 +44,16 @@ class SubFoldersList extends Component {
 }
 
 SubFoldersList.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+  /*folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
   folder: PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
-  }).isRequired,
+  }).isRequired,*/
   options: PropTypes.shape({
     renameId: PropTypes.oneOfType([
       PropTypes.object,
@@ -62,10 +62,10 @@ SubFoldersList.propTypes = {
   }).isRequired,
   match: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
-  createFolder: PropTypes.func.isRequired,
+  createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
-  removeFolder: PropTypes.func.isRequired,
+  deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
 };
 

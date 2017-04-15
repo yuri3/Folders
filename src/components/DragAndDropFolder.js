@@ -63,10 +63,10 @@ class DragAndDropFolder extends Component {
       folder,
       match,
       options,
-      createFolder,
+      createNewFolder,
       selectRenameInput,
       renameFolder,
-      removeFolder,
+      deleteSelectedFolder,
       moveFolder,
       connectDragSource,
       connectDropTarget,
@@ -81,10 +81,10 @@ class DragAndDropFolder extends Component {
           match={match}
           options={options}
           isDragging={isDragging}
-          createFolder={createFolder}
+          createNewFolder={createNewFolder}
           selectRenameInput={selectRenameInput}
           renameFolder={renameFolder}
-          removeFolder={removeFolder}
+          deleteSelectedFolder={deleteSelectedFolder}
           moveFolder={moveFolder}/>
       </li>
     ));
@@ -93,21 +93,22 @@ class DragAndDropFolder extends Component {
 
 DragAndDropFolder.propTypes = {
   index: PropTypes.number.isRequired,
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.string,
-    id: PropTypes.string.isRequired,
+  /*folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
   folder: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    parentId: PropTypes.integer,
+    id: PropTypes.integer.isRequired,
     name: PropTypes.string.isRequired,
-  }).isRequired,
+  }).isRequired,*/
   match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
-  createFolder: PropTypes.func.isRequired,
+  createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameFolder: PropTypes.func.isRequired,
-  removeFolder: PropTypes.func.isRequired,
+  deleteSelectedFolder: PropTypes.func.isRequired,
   moveFolder: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,
   connectDropTarget: PropTypes.func,
