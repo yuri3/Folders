@@ -1,20 +1,23 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import {
-  REQUEST_FETCH_FOLDERS,
+  FETCH_FOLDERS_REQUEST,
   FETCH_FOLDERS_SUCCESS,
   FETCH_FOLDERS_FAILURE,
-  REQUEST_CREATE_FOLDER,
+  CREATE_FOLDER_REQUEST,
   CREATE_FOLDER_SUCCESS,
   CREATE_FOLDER_FAILURE,
   SELECT_RENAME_INPUT,
-  REQUEST_RENAME_FOLDER,
+  RENAME_FOLDER_REQUEST,
   RENAME_FOLDER_SUCCESS,
   RENAME_FOLDER_FAILURE,
-  REQUEST_DELETE_FOLDER,
+  DELETE_FOLDER_REQUEST,
   DELETE_FOLDER_SUCCESS,
   DELETE_FOLDER_FAILURE,
-  MOVE_FOLDER,
+  MOVE_FOLDER_IN_VIEW,
+  MOVE_FOLDER_REQUEST,
+  MOVE_FOLDER_SUCCESS,
+  MOVE_FOLDER_FAILURE,
   CREATE_NOTE,
   REMOVE_NOTE,
   CHANGE_NOTE_NAME,
@@ -28,15 +31,15 @@ import {
 
 const FOLDERS = [
   {
-    id: '1',
+    id: '7',
     name: 'HTML',
   },
   {
-    id: '2',
+    id: '6',
     name: 'CSS',
   },
   {
-    id: '3',
+    id: '5',
     name: 'JavaScript',
   },
   {
@@ -44,29 +47,29 @@ const FOLDERS = [
     name: 'React',
   },
   {
-    id: '5',
+    id: '3',
     name: 'Angular',
   },
   {
-    id: '6',
+    id: '2',
     name: 'NodeJS',
   },
   {
-    id: '7',
+    id: '1',
     name: 'Webpack',
   },
 ];
-
+/*
 const NOTES = [
   {
-    parentFolderId: '3',
+    parentFolderId: '5',
     id: '8',// 1
     name: 'ES6',
     description: '',
     hasTags: true,
   },
   {
-    parentFolderId: '3',
+    parentFolderId: '5',
     id: '9',// 2
     name: 'es7',
     description: '',
@@ -87,7 +90,7 @@ const NOTES = [
     hasTags: false,
   },
   {
-    parentFolderId: '5',
+    parentFolderId: '3',
     id: '12',// 5
     name: 'Angular Native',
     description: '',
@@ -121,9 +124,9 @@ const TAGS = [
     key: '5',
     label: 'ES7'
   }
-];
+];*/
 
-const tags = (state = TAGS, action) => {
+const tags = (state = [], action) => {
   switch(action.type) {
     case ADD_TAG:
       return [
@@ -144,7 +147,7 @@ const tags = (state = TAGS, action) => {
   }
 };
 
-const notes = (state = NOTES, action) => {
+const notes = (state = [], action) => {
   switch(action.type) {
     case CREATE_NOTE:
       const {parentFolderId, id, name} = action;
@@ -205,20 +208,20 @@ const notes = (state = NOTES, action) => {
 const folders = (state = [], action) => {
   switch(action.type) {
     case FETCH_FOLDERS_SUCCESS:
-      return action.payload;
+      return action.response;
     case CREATE_FOLDER_SUCCESS:
-      return [action.payload, ...state];
+      return [action.response, ...state];
     case RENAME_FOLDER_SUCCESS:
       return state.map((folder) => {
-        if(folder.id !== action.payload.id) {return folder;}
+        if(folder.id !== action.response.id) {return folder;}
         return {
           ...folder,
-          name: action.payload.name,
+          name: action.response.name,
         };
       });
     case DELETE_FOLDER_SUCCESS:
-      return state.filter((folder) => folder.id !== action.id);
-    case MOVE_FOLDER:
+      return state.filter((folder) => folder.id !== action.response.id);
+    case MOVE_FOLDER_IN_VIEW:
       const {dragIndex, hoverIndex} = action;
       const dragFolder = state[dragIndex];
       const newCopyFolders = state.slice();
@@ -235,6 +238,7 @@ const options = (state = {
   isCreating: false,
   isRenaming: false,
   isDeleting: false,
+  isMoving: false,
   renameId: null,
   foundNotes: {
     searchText: '',
@@ -244,33 +248,40 @@ const options = (state = {
   }
 }, action) => {
   switch(action.type) {
-    case REQUEST_FETCH_FOLDERS:
+    case FETCH_FOLDERS_REQUEST:
       return {...state, isFetching: true};
     case FETCH_FOLDERS_SUCCESS:
       return {...state, isFetching: false};
     case FETCH_FOLDERS_FAILURE:
       return {...state, isFetching: false, error: action.payload};
 
-    case REQUEST_CREATE_FOLDER:
+    case CREATE_FOLDER_REQUEST:
       return {...state, isCreating: true};
     case CREATE_FOLDER_SUCCESS:
       return {...state, isCreating: false};
     case CREATE_FOLDER_FAILURE:
       return {...state, isCreating: false, error: action.payload};
 
-    case REQUEST_DELETE_FOLDER:
+    case DELETE_FOLDER_REQUEST:
       return {...state, isDeleting: true};
     case DELETE_FOLDER_SUCCESS:
       return {...state, isDeleting: false};
     case DELETE_FOLDER_FAILURE:
       return {...state, isDeleting: false, error: action.payload};
 
-    case REQUEST_RENAME_FOLDER:
+    case RENAME_FOLDER_REQUEST:
       return {...state, isRenaming: true};
     case RENAME_FOLDER_SUCCESS:
       return {...state, isRenaming: false};
     case RENAME_FOLDER_FAILURE:
       return {...state, isRenaming: false, error: action.payload};
+
+    case MOVE_FOLDER_REQUEST:
+      return {...state, isMoving: true};
+    case MOVE_FOLDER_SUCCESS:
+      return {...state, isMoving: false};
+    case MOVE_FOLDER_FAILURE:
+      return {...state, isMoving: false, error: action.payload};
 
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};

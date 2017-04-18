@@ -26,9 +26,9 @@ class CreateFolder extends Component {
     this.switchCreateInput();
   }
   handleSubmit(values) {
-    const {createNewFolder, options} = this.props;
+    const {folders, options, createNewFolder} = this.props;
     const {name} = values;
-    createNewFolder(undefined, name);
+    createNewFolder(undefined, name, folders.length);
     !options.isCreating && this.switchCreateInput();
   }
   render() {
@@ -56,11 +56,7 @@ class CreateFolder extends Component {
 }
 
 CreateFolder.propTypes = {
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,*/
+  folders: PropTypes.array.isRequired,
   options: PropTypes.object.isRequired,
   createNewFolder: PropTypes.func.isRequired,
 };

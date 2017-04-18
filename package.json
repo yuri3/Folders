@@ -1,21 +1,13 @@
 {
-  "name": "folders-react",
+  "name": "react-notes",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001",
   "devDependencies": {
-    "concurrently": "3.4.0",
-    "nodemon": "1.11.0",
     "react-scripts": "0.9.0"
   },
   "dependencies": {
     "babel-polyfill": "6.23.0",
-    "body-parser": "1.17.1",
-    "express": "4.15.2",
     "material-ui": "0.17.0",
-    "morgan": "1.8.1",
-    "pg": "6.1.5",
-    "pg-hstore": "2.3.2",
     "react": "15.4.2",
     "react-addons-css-transition-group": "15.4.2",
     "react-dnd": "2.2.4",
@@ -32,12 +24,10 @@
     "redux-logger": "2.8.0",
     "redux-thunk": "2.2.0",
     "reselect": "2.5.4",
-    "sequelize": "3.30.4",
     "uuid": "3.0.1"
   },
   "scripts": {
-    "start:dev": "nodemon ./bin/www",
-    "start": "concurrently \"npm run start:dev\" \"react-scripts start\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

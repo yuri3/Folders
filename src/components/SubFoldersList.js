@@ -13,7 +13,7 @@ class SubFoldersList extends Component {
       selectRenameInput,
       renameSelectedFolder,
       deleteSelectedFolder,
-      moveFolder
+      moveSelectedFolder
     } = this.props;
     return (
       <ul style={{listStyleType: 'none'}}>
@@ -35,7 +35,7 @@ class SubFoldersList extends Component {
               selectRenameInput={selectRenameInput}
               renameSelectedFolder={renameSelectedFolder}
               deleteSelectedFolder={deleteSelectedFolder}
-              moveFolder={moveFolder}/> : null
+              moveSelectedFolder={moveSelectedFolder}/> : null
         ))}
         </ReactCSSTransitionGroup>
       </ul>
@@ -44,20 +44,17 @@ class SubFoldersList extends Component {
 }
 
 SubFoldersList.propTypes = {
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  folders: PropTypes.array.isRequired,
   folder: PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-  }).isRequired,*/
+    order: PropTypes.number.isRequired,
+  }).isRequired,
   options: PropTypes.shape({
     renameId: PropTypes.oneOfType([
       PropTypes.object,
-      PropTypes.integer,
+      PropTypes.number,
     ]),
   }).isRequired,
   match: PropTypes.object.isRequired,
@@ -66,7 +63,7 @@ SubFoldersList.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
-  moveFolder: PropTypes.func.isRequired,
+  moveSelectedFolder: PropTypes.func.isRequired,
 };
 
 export default SubFoldersList;

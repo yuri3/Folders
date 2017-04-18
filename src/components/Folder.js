@@ -54,6 +54,7 @@ class Folder extends Component {
     selectRenameInput(null);
   }
   removeFolder(id) {
+    console.log('remove')
     const {deleteSelectedFolder, options, folder} = this.props;
     deleteSelectedFolder(id);
     options.renameId === folder.id && this.showRenameInput(null);
@@ -69,7 +70,7 @@ class Folder extends Component {
       selectRenameInput,
       renameSelectedFolder,
       deleteSelectedFolder,
-      moveFolder
+      moveSelectedFolder
     } = this.props;
     const isShowRenameInput = options.renameId === folder.id;
     const isFolderHasSubFolders = folders.some(
@@ -151,7 +152,7 @@ class Folder extends Component {
             selectRenameInput={selectRenameInput}
             renameSelectedFolder={renameSelectedFolder}
             deleteSelectedFolder={deleteSelectedFolder}
-            moveFolder={moveFolder}/>}
+            moveSelectedFolder={moveSelectedFolder}/>}
         </ReactCSSTransitionGroup>
       </div>
     );
@@ -159,18 +160,15 @@ class Folder extends Component {
 }
 
 Folder.propTypes = {
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  folders: PropTypes.array.isRequired,
   folder: PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-  }).isRequired,*/
+    order: PropTypes.number.isRequired,
+  }).isRequired,
   options: PropTypes.shape({
-    renameId: PropTypes.integer,
+    renameId: PropTypes.number,
     isRenaming: PropTypes.bool,
   }).isRequired,
   match: PropTypes.object.isRequired,
@@ -179,7 +177,7 @@ Folder.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
-  moveFolder: PropTypes.func.isRequired,
+  moveSelectedFolder: PropTypes.func.isRequired,
 };
 
 export default Folder;

@@ -28,7 +28,7 @@ class FolderList extends Component {
       selectRenameInput,
       renameSelectedFolder,
       deleteSelectedFolder,
-      moveFolder
+      moveSelectedFolder
     } = this.props;
     return (
       <ul style={style}>
@@ -50,7 +50,7 @@ class FolderList extends Component {
               selectRenameInput={selectRenameInput}
               renameSelectedFolder={renameSelectedFolder}
               deleteSelectedFolder={deleteSelectedFolder}
-              moveFolder={moveFolder}/> : null
+              moveSelectedFolder={moveSelectedFolder}/> : null
           ))}
         </ReactCSSTransitionGroup>
       </ul>
@@ -59,11 +59,7 @@ class FolderList extends Component {
 }
 
 FolderList.propTypes = {
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,*/
+  folders: PropTypes.array.isRequired,
   options: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
@@ -71,7 +67,7 @@ FolderList.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
-  moveFolder: PropTypes.func.isRequired,
+  moveSelectedFolder: PropTypes.func.isRequired,
 };
 
 export default FolderList;

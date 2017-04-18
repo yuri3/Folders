@@ -27,7 +27,7 @@ class Folders extends Component {
       selectRenameInput,
       renameSelectedFolder,
       deleteSelectedFolder,
-      moveFolder
+      moveSelectedFolder
     } = this.props;
     const {isFetching} = options;
     return (
@@ -47,7 +47,7 @@ class Folders extends Component {
             selectRenameInput={selectRenameInput}
             renameSelectedFolder={renameSelectedFolder}
             deleteSelectedFolder={deleteSelectedFolder}
-            moveFolder={moveFolder}
+            moveSelectedFolder={moveSelectedFolder}
           />
         }
       </div>
@@ -64,7 +64,7 @@ Folders.propTypes = {
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
-  moveFolder: PropTypes.func.isRequired,
+  moveSelectedFolder: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({

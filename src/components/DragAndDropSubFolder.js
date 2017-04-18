@@ -30,7 +30,7 @@ const folderTarget = {
       return;
     }
     if(dragIndex !== hoverIndex) {
-      props.moveFolder(dragIndex, hoverIndex);
+      props.moveSelectedFolder(dragIndex, hoverIndex);
     }
     monitor.getItem().id = hoverId;
     monitor.getItem().index = hoverIndex;
@@ -67,7 +67,7 @@ class DragAndDropSubFolder extends Component {
       selectRenameInput,
       renameSelectedFolder,
       deleteSelectedFolder,
-      moveFolder,
+      moveSelectedFolder,
       connectDragSource,
       connectDropTarget,
       isDragging,
@@ -85,7 +85,7 @@ class DragAndDropSubFolder extends Component {
           selectRenameInput={selectRenameInput}
           renameSelectedFolder={renameSelectedFolder}
           deleteSelectedFolder={deleteSelectedFolder}
-          moveFolder={moveFolder}/>
+          moveSelectedFolder={moveSelectedFolder}/>
       </li>
     ));
   }
@@ -93,23 +93,20 @@ class DragAndDropSubFolder extends Component {
 
 DragAndDropSubFolder.propTypes = {
   index: PropTypes.number.isRequired,
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  folders: PropTypes.array.isRequired,
   folder: PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-  }).isRequired,*/
+    order: PropTypes.number.isRequired,
+  }).isRequired,
   match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
-  moveFolder: PropTypes.func.isRequired,
+  moveSelectedFolder: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,
   connectDropTarget: PropTypes.func,
   isDragging: PropTypes.bool,

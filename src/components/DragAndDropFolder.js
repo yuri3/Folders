@@ -13,9 +13,21 @@ const folderSource = {
   beginDrag(props) {
     return {
       id: props.folder.id,
+      dragIndex: props.index,
       index: props.index,
+      dragAndDropFolders: [],
     };
-  }
+  },
+  /*endDrag(props, monitor) {
+    const item = monitor.getItem();
+    const dragFolder = props.folders[item.dragIndex];
+    const hoverFolder = props.folders[item.index];
+
+    if(dragFolder.id === hoverFolder.id) {
+      return;
+    }
+    props.moveSelectedFolder(item.dragAndDropFolders);
+  },*/
 };
 
 const folderTarget = {
@@ -30,7 +42,13 @@ const folderTarget = {
       return;
     }
     if(dragIndex !== hoverIndex) {
-      props.moveFolder(dragIndex, hoverIndex);
+      /*monitor.getItem().dragAndDropFolders.push({
+        dragId: dragId,
+        dragOrder: dragIndex,
+        hoverId: hoverId,
+        hoverOrder: hoverIndex,
+      });*/
+      props.moveSelectedFolder({dragIndex, hoverIndex});
     }
     monitor.getItem().id = hoverId;
     monitor.getItem().index = hoverIndex;
@@ -67,7 +85,7 @@ class DragAndDropFolder extends Component {
       selectRenameInput,
       renameSelectedFolder,
       deleteSelectedFolder,
-      moveFolder,
+      moveSelectedFolder,
       connectDragSource,
       connectDropTarget,
       isDragging,
@@ -85,7 +103,7 @@ class DragAndDropFolder extends Component {
           selectRenameInput={selectRenameInput}
           renameSelectedFolder={renameSelectedFolder}
           deleteSelectedFolder={deleteSelectedFolder}
-          moveFolder={moveFolder}/>
+          moveSelectedFolder={moveSelectedFolder}/>
       </li>
     ));
   }
@@ -93,23 +111,20 @@ class DragAndDropFolder extends Component {
 
 DragAndDropFolder.propTypes = {
   index: PropTypes.number.isRequired,
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  folders: PropTypes.array.isRequired,
   folder: PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-  }).isRequired,*/
+    order: PropTypes.number.isRequired,
+  }).isRequired,
   match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
-  moveFolder: PropTypes.func.isRequired,
+  moveSelectedFolder: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,
   connectDropTarget: PropTypes.func,
   isDragging: PropTypes.bool,
