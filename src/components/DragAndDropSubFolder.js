@@ -63,9 +63,11 @@ class DragAndDropSubFolder extends Component {
       folder,
       match,
       options,
+      selectCreateFolder,
       createNewFolder,
       selectRenameInput,
       renameSelectedFolder,
+      selectDeleteFolder,
       deleteSelectedFolder,
       moveSelectedFolder,
       connectDragSource,
@@ -81,9 +83,11 @@ class DragAndDropSubFolder extends Component {
           match={match}
           options={options}
           isDragging={isDragging}
+          selectCreateFolder={selectCreateFolder}
           createNewFolder={createNewFolder}
           selectRenameInput={selectRenameInput}
           renameSelectedFolder={renameSelectedFolder}
+          selectDeleteFolder={selectDeleteFolder}
           deleteSelectedFolder={deleteSelectedFolder}
           moveSelectedFolder={moveSelectedFolder}/>
       </li>
@@ -93,7 +97,11 @@ class DragAndDropSubFolder extends Component {
 
 DragAndDropSubFolder.propTypes = {
   index: PropTypes.number.isRequired,
-  folders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   folder: PropTypes.shape({
     parentId: PropTypes.number,
     id: PropTypes.number.isRequired,
@@ -102,9 +110,11 @@ DragAndDropSubFolder.propTypes = {
   }).isRequired,
   match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
+  selectCreateFolder: PropTypes.func.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
+  selectDeleteFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveSelectedFolder: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,

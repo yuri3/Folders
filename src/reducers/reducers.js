@@ -4,6 +4,7 @@ import {
   FETCH_FOLDERS_REQUEST,
   FETCH_FOLDERS_SUCCESS,
   FETCH_FOLDERS_FAILURE,
+  SELECT_CREATE_FOLDER,
   CREATE_FOLDER_REQUEST,
   CREATE_FOLDER_SUCCESS,
   CREATE_FOLDER_FAILURE,
@@ -11,13 +12,11 @@ import {
   RENAME_FOLDER_REQUEST,
   RENAME_FOLDER_SUCCESS,
   RENAME_FOLDER_FAILURE,
+  SELECT_DELETE_FOLDER,
   DELETE_FOLDER_REQUEST,
   DELETE_FOLDER_SUCCESS,
   DELETE_FOLDER_FAILURE,
   MOVE_FOLDER_IN_VIEW,
-  MOVE_FOLDER_REQUEST,
-  MOVE_FOLDER_SUCCESS,
-  MOVE_FOLDER_FAILURE,
   CREATE_NOTE,
   REMOVE_NOTE,
   CHANGE_NOTE_NAME,
@@ -27,9 +26,9 @@ import {
   CHANGE_DESCRIPTION,
   SEARCH_NOTES,
   MOVE_NOTE
-} from '../actions/folders';
+} from '../actions/folder_Actions';
 
-const FOLDERS = [
+/*const FOLDERS = [
   {
     id: '7',
     name: 'HTML',
@@ -58,7 +57,7 @@ const FOLDERS = [
     id: '1',
     name: 'Webpack',
   },
-];
+];*/
 /*
 const NOTES = [
   {
@@ -220,7 +219,21 @@ const folders = (state = [], action) => {
         };
       });
     case DELETE_FOLDER_SUCCESS:
-      return state.filter((folder) => folder.id !== action.response.id);
+      function deleteAllSubFolders(index = 0, newArr = []) {
+        if(index >= state.length) {
+          const parentFolderIndex = newArr.findIndex(
+            folder => folder.id === action.response.id
+          );
+          newArr.splice(parentFolderIndex, 1);
+
+          return newArr;
+        }
+        if(state[index].parentId !== action.response.id) {
+          newArr.push(state[index]);
+        }
+        return deleteAllSubFolders(index + 1, newArr);
+      }
+      return deleteAllSubFolders();
     case MOVE_FOLDER_IN_VIEW:
       const {dragIndex, hoverIndex} = action;
       const dragFolder = state[dragIndex];
@@ -238,8 +251,9 @@ const options = (state = {
   isCreating: false,
   isRenaming: false,
   isDeleting: false,
-  isMoving: false,
+  createId: null,
   renameId: null,
+  deleteId: null,
   foundNotes: {
     searchText: '',
     matchInTitles: [],
@@ -276,15 +290,12 @@ const options = (state = {
     case RENAME_FOLDER_FAILURE:
       return {...state, isRenaming: false, error: action.payload};
 
-    case MOVE_FOLDER_REQUEST:
-      return {...state, isMoving: true};
-    case MOVE_FOLDER_SUCCESS:
-      return {...state, isMoving: false};
-    case MOVE_FOLDER_FAILURE:
-      return {...state, isMoving: false, error: action.payload};
-
+    case SELECT_CREATE_FOLDER:
+      return {...state, createId: action.id};
     case SELECT_RENAME_INPUT:
       return {...state, renameId: action.id};
+    case SELECT_DELETE_FOLDER:
+      return {...state, deleteId: action.id};
     case SEARCH_NOTES:
       const {notes, tags, searchText} = action;
       const matchInTitles = (searchText !== '' &&

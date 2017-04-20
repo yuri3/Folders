@@ -38,15 +38,16 @@ export default store => next => action => {
 
   const [requestType, successType, failureType] = types;
   next({type: requestType});
-
-  return callApi(endpoint, requestOptions).then(
-    response => next({
-      response,
-      type: successType,
-    }),
-    error => next({
-      type: failureType,
-      error: error.message || 'Something bad happened',
-    })
-  )
+  setTimeout(() => {
+    return callApi(endpoint, requestOptions).then(
+      response => next({
+        response,
+        type: successType,
+      }),
+      error => next({
+        type: failureType,
+        error: error.message || 'Something bad happened',
+      })
+    )
+  }, 1000);
 };

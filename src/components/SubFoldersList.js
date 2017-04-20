@@ -9,9 +9,11 @@ class SubFoldersList extends Component {
       folder,
       options,
       match,
+      selectCreateFolder,
       createNewFolder,
       selectRenameInput,
       renameSelectedFolder,
+      selectDeleteFolder,
       deleteSelectedFolder,
       moveSelectedFolder
     } = this.props;
@@ -31,9 +33,11 @@ class SubFoldersList extends Component {
               folder={subFolder}
               match={match}
               options={options}
+              selectCreateFolder={selectCreateFolder}
               createNewFolder={createNewFolder}
               selectRenameInput={selectRenameInput}
               renameSelectedFolder={renameSelectedFolder}
+              selectDeleteFolder={selectDeleteFolder}
               deleteSelectedFolder={deleteSelectedFolder}
               moveSelectedFolder={moveSelectedFolder}/> : null
         ))}
@@ -44,24 +48,24 @@ class SubFoldersList extends Component {
 }
 
 SubFoldersList.propTypes = {
-  folders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   folder: PropTypes.shape({
     parentId: PropTypes.number,
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    order: PropTypes.number.isRequired,
   }).isRequired,
-  options: PropTypes.shape({
-    renameId: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.number,
-    ]),
-  }).isRequired,
+  options: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  selectCreateFolder: PropTypes.func.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
+  selectDeleteFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveSelectedFolder: PropTypes.func.isRequired,
 };

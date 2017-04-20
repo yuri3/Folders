@@ -10,6 +10,7 @@ import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
 import RenameFolderForm from './RenameFolderForm';
 import SubFoldersList from './SubFoldersList';
 import './css/Folder.css';
+import Loading from '../components/Loading';
 
 const style = {
   flex: '1',
@@ -32,9 +33,23 @@ class Folder extends Component {
     this.closeRenameInput = this.closeRenameInput.bind(this);
     this.removeFolder = this.removeFolder.bind(this);
   }
+  componentWillUpdate() {
+    const {folder, options: {isRenaming, renameId}} = this.props;
+    if(isRenaming && renameId === folder.id) {
+      this.closeRenameInput();
+    }
+  }
+  componentDidMount() {
+    const {selectCreateFolder} = this.props;
+    selectCreateFolder(null);
+  }
+  componentWillUnmount() {
+    const {selectDeleteFolder} = this.props;
+    selectDeleteFolder(null);
+  }
   createFolder(id) {
     this.selectFolder(id);
-    this.props.createNewFolder(id);
+    this.props.createNewFolder(id, this.props.folders.length);
   }
   selectFolder(id) {
     this.setState({selectedFolderId: id});
@@ -44,20 +59,17 @@ class Folder extends Component {
     selectRenameInput(id);
   }
   renameFolder(values) {
-    const {folder, renameSelectedFolder, options} = this.props;
+    const {folder, renameSelectedFolder} = this.props;
     const {name} = values;
     renameSelectedFolder(folder.id, name.trim());
-    !options.isRenaming && this.closeRenameInput();
   }
   closeRenameInput() {
     const {selectRenameInput} = this.props;
     selectRenameInput(null);
   }
   removeFolder(id) {
-    console.log('remove')
-    const {deleteSelectedFolder, options, folder} = this.props;
+    const {deleteSelectedFolder} = this.props;
     deleteSelectedFolder(id);
-    options.renameId === folder.id && this.showRenameInput(null);
   }
   render() {
     const {
@@ -66,9 +78,11 @@ class Folder extends Component {
       options,
       match,
       isDragging,
+      selectCreateFolder,
       createNewFolder,
       selectRenameInput,
       renameSelectedFolder,
+      selectDeleteFolder,
       deleteSelectedFolder,
       moveSelectedFolder
     } = this.props;
@@ -78,25 +92,33 @@ class Folder extends Component {
     );
     const {selectedFolderId} = this.state;
     const opacity = isDragging ? 0 : 1;
+    const {isRenaming, createId, deleteId} = options;
     return (
       <div style={{opacity}}>
         {!isShowRenameInput && <div className="parentFolder">
-          {!isFolderHasSubFolders &&
+          {folder.id !== deleteId && folder.id !== createId &&
+            !isFolderHasSubFolders &&
             <IconButton style={style}>
               <FolderIcon/>
             </IconButton>}
-          {isFolderHasSubFolders && selectedFolderId !== folder.id &&
+          {folder.id !== deleteId && folder.id !== createId &&
+            isFolderHasSubFolders && selectedFolderId !== folder.id &&
             <IconButton
               style={style}
               onTouchTap={() => this.selectFolder(folder.id)}>
               <FolderOpenIcon/>
             </IconButton>}
-          {isFolderHasSubFolders && selectedFolderId === folder.id &&
+          {folder.id !== deleteId && folder.id !== createId &&
+            isFolderHasSubFolders && selectedFolderId === folder.id &&
             <IconButton
               style={style}
               onTouchTap={() => this.selectFolder(null)}>
               <FolderOpenIcon/>
             </IconButton>}
+          {(folder.id === deleteId || folder.id === createId) &&
+            <div style={style}>
+              <Loading />
+            </div>}
           <header>
             <NavLink
               to={`/notes/${folder.id}`}
@@ -133,6 +155,7 @@ class Folder extends Component {
         {isShowRenameInput &&
         <RenameFolderForm
            folders={folders}
+           isRenaming={isRenaming}
            onSubmit={this.renameFolder}
            handleClose={this.closeRenameInput}
            initialValues={{parentId: folder.parentId, name: folder.name}}/>}
@@ -148,9 +171,11 @@ class Folder extends Component {
             options={options}
             match={match}
             isDragging={isDragging}
+            selectCreateFolder={selectCreateFolder}
             createNewFolder={createNewFolder}
             selectRenameInput={selectRenameInput}
             renameSelectedFolder={renameSelectedFolder}
+            selectDeleteFolder={selectDeleteFolder}
             deleteSelectedFolder={deleteSelectedFolder}
             moveSelectedFolder={moveSelectedFolder}/>}
         </ReactCSSTransitionGroup>
@@ -160,22 +185,29 @@ class Folder extends Component {
 }
 
 Folder.propTypes = {
-  folders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   folder: PropTypes.shape({
     parentId: PropTypes.number,
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    order: PropTypes.number.isRequired,
   }).isRequired,
   options: PropTypes.shape({
+    createId: PropTypes.number,
     renameId: PropTypes.number,
-    isRenaming: PropTypes.bool,
+    deleteId: PropTypes.number,
+    isRenaming: PropTypes.bool.isRequired,
   }).isRequired,
   match: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
+  selectCreateFolder: PropTypes.func.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
+  selectDeleteFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveSelectedFolder: PropTypes.func.isRequired,
 };

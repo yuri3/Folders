@@ -1,5 +1,4 @@
 import uuidV1 from 'uuid/v1';
-import fetch from 'isomorphic-fetch';
 
 //---NOTES---------------------------------------------------------->
 export const CREATE_NOTE = 'CREATE_NOTE';

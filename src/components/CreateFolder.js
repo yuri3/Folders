@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
+import Loading from '../components/Loading';
 import CreateFolderForm from './CreateFolderForm';
 
 const style = {
@@ -26,28 +27,29 @@ class CreateFolder extends Component {
     this.switchCreateInput();
   }
   handleSubmit(values) {
-    const {folders, options, createNewFolder} = this.props;
+    const {folders, createNewFolder} = this.props;
     const {name} = values;
-    createNewFolder(undefined, name, folders.length);
-    !options.isCreating && this.switchCreateInput();
+    createNewFolder(undefined, folders.length, name);
   }
   render() {
-    const {folders} = this.props;
+    const {options: {isFetching, isCreating}, folders} = this.props;
     const {isSelected} = this.state;
     return (
       <div>
         <div style={style}>
           <strong style={{marginRight: '30px'}}>{'FOLDERS'}</strong>
-          <IconButton
+          {isFetching && <Loading size={36} width={'72px'} height={'72px'} />}
+          {!isFetching && <IconButton
             style={{width: '72px', height: '72px', zIndex: 1}}
             iconStyle={{width: '36px', height: '36px'}}
             tooltip="CREATE NEW FOLDER"
             onTouchTap={this.switchCreateInput}><CreateNewFolderIcon/>
-          </IconButton>
+          </IconButton>}
         </div>
         {isSelected &&
           <CreateFolderForm
             folders={folders}
+            isCreating={isCreating}
             onSubmit={this.handleSubmit}
             handleClose={this.handleClose}/>}
       </div>
@@ -56,8 +58,15 @@ class CreateFolder extends Component {
 }
 
 CreateFolder.propTypes = {
-  folders: PropTypes.array.isRequired,
-  options: PropTypes.object.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  options: PropTypes.shape({
+    isFetching: PropTypes.bool.isFetching,
+    isCreating: PropTypes.bool.isRequired,
+  }).isRequired,
   createNewFolder: PropTypes.func.isRequired,
 };
 

@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
 import UndoIcon from 'material-ui/svg-icons/content/undo';
 import SaveIcon from 'material-ui/svg-icons/content/save';
+import Loading from '../components/Loading';
 
 const style = {
   alignSelf: 'flex-end',
@@ -67,6 +68,7 @@ const renderTextField = (field) => {
 class RenameFolderForm extends Component {
   render() {
     const {
+      isRenaming,
       handleSubmit,
       handleClose,
       invalid,
@@ -89,32 +91,38 @@ class RenameFolderForm extends Component {
               style={style}
               onTouchTap={handleClose}><UndoIcon/>
             </IconButton>
-            <IconButton
+            {isRenaming &&
+              <div style={style}>
+                <Loading />
+              </div>
+            }
+            {!isRenaming && <IconButton
               tooltip="Save"
               style={style}
               disabled={!!invalid || !!pristine}
               onTouchTap={handleSubmit}><SaveIcon/>
-            </IconButton>
+            </IconButton>}
           </div>
         </form>
       </div>
     );
   }
 }
-/*
+
 RenameFolderForm.propTypes = {
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-  })).isRequired,*/
-  /*onSubmit: PropTypes.func.isRequired,
+  })).isRequired,
+  isRenaming: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   initialValues: PropTypes.shape({
-    parentId: PropTypes.string,
+    parentId: PropTypes.number,
     name: PropTypes.string.isRequired,
   }).isRequired,
-};*/
+};
 
 export default props => {
   const Form = reduxForm({

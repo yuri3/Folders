@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
+import Loading from '../components/Loading';
 
 const style = {
   alignSelf: 'flex-end',
@@ -53,8 +54,15 @@ const renderTextField = (field) => {
 };
 
 class CreateFolderForm extends Component {
+  componentDidUpdate(prevProps) {
+    if(this.props.folders.length > prevProps.folders.length) {
+      const {handleClose} = this.props;
+      handleClose();
+    }
+  }
   render() {
     const {
+      isCreating,
       handleSubmit,
       handleClose,
       invalid,
@@ -72,12 +80,17 @@ class CreateFolderForm extends Component {
               handleClose={handleClose}
               style={{width: '200px'}}
               component={renderTextField}/>
-            <IconButton
+            {isCreating &&
+              <div style={style}>
+                <Loading />
+              </div>
+            }
+            {!isCreating && <IconButton
               tooltip="SAVE"
               style={style}
               disabled={!!invalid || !!pristine}
               onTouchTap={handleSubmit}><SaveIcon/>
-            </IconButton>
+            </IconButton>}
             <IconButton
               tooltip="CLOSE"
               style={style}
@@ -91,11 +104,12 @@ class CreateFolderForm extends Component {
 }
 
 CreateFolderForm.propTypes = {
-  /*folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.integer,
-    id: PropTypes.integer.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-  })).isRequired,*/
+  })).isRequired,
+  isCreating: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
 };

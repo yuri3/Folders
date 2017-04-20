@@ -12,8 +12,7 @@ class FolderList extends Component {
   componentWillUpdate(nextProps) {
     const {history} = this.props;
     if(nextProps.folders.length > this.props.folders.length) {
-      const newFolder = nextProps.folders[0];
-      history.push(`/notes/${newFolder.id}`);
+      history.push(`/notes/${nextProps.folders[0].id}`);
     }
     if(nextProps.folders.length < this.props.folders.length) {
       history.push('/notes');
@@ -24,9 +23,11 @@ class FolderList extends Component {
       folders,
       options,
       match,
+      selectCreateFolder,
       createNewFolder,
       selectRenameInput,
       renameSelectedFolder,
+      selectDeleteFolder,
       deleteSelectedFolder,
       moveSelectedFolder
     } = this.props;
@@ -46,9 +47,11 @@ class FolderList extends Component {
               folder={folder}
               options={options}
               match={match}
+              selectCreateFolder={selectCreateFolder}
               createNewFolder={createNewFolder}
               selectRenameInput={selectRenameInput}
               renameSelectedFolder={renameSelectedFolder}
+              selectDeleteFolder={selectDeleteFolder}
               deleteSelectedFolder={deleteSelectedFolder}
               moveSelectedFolder={moveSelectedFolder}/> : null
           ))}
@@ -59,13 +62,19 @@ class FolderList extends Component {
 }
 
 FolderList.propTypes = {
-  folders: PropTypes.array.isRequired,
+  folders: PropTypes.arrayOf(PropTypes.shape({
+    parentId: PropTypes.number,
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   options: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  selectCreateFolder: PropTypes.func.isRequired,
   createNewFolder: PropTypes.func.isRequired,
   selectRenameInput: PropTypes.func.isRequired,
   renameSelectedFolder: PropTypes.func.isRequired,
+  selectDeleteFolder: PropTypes.func.isRequired,
   deleteSelectedFolder: PropTypes.func.isRequired,
   moveSelectedFolder: PropTypes.func.isRequired,
 };

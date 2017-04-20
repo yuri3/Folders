@@ -6,7 +6,7 @@ export const FETCH_FOLDERS_FAILURE = 'FETCH_FOLDERS_FAILURE';
 
 const fetchFolders = () => ({
   [CALL_API]: {
-    types: [FETCH_FOLDERS_REQUEST, FETCH_FOLDERS_SUCCESS, CREATE_FOLDER_FAILURE],
+    types: [FETCH_FOLDERS_REQUEST, FETCH_FOLDERS_SUCCESS, FETCH_FOLDERS_FAILURE],
     endpoint: 'http://localhost:3001/notes',
   }
 });
@@ -15,6 +15,12 @@ export const fetchAllFolders = () => dispatch => {
   dispatch(fetchFolders());
 };
 //---CREATE_FOLDER------------------------------------------------------------>
+export const SELECT_CREATE_FOLDER = 'SELECT_CREATE_FOLDER';
+export const selectCreateFolder = (id) => ({
+  type: SELECT_CREATE_FOLDER,
+  id,
+});
+
 export const CREATE_FOLDER_REQUEST = 'CREATE_FOLDER_REQUEST';
 export const CREATE_FOLDER_SUCCESS = 'CREATE_FOLDER_SUCCESS';
 export const CREATE_FOLDER_FAILURE = 'CREATE_FOLDER_FAILURE';
@@ -27,11 +33,12 @@ const createFolder = (requestOptions) => ({
   }
 });
 
-export const createNewFolder = (parentId = '', name = 'New Folder', order) => dispatch => {
+export const createNewFolder = (parentId = '', order, name = 'New Folder') => dispatch => {
+  parentId && dispatch(selectCreateFolder(parentId));
   dispatch(createFolder({
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({name, parentId, order}),
+    body: JSON.stringify({parentId, order, name}),
   }));
 };
 
@@ -62,6 +69,12 @@ export const renameSelectedFolder = (id, newName) => dispatch => {
   }));
 };
 //---DELETE_FOLDER------------------------------------------------------------>
+export const SELECT_DELETE_FOLDER = 'SELECT_DELETE_FOLDER';
+export const selectDeleteFolder = (id) => ({
+  type: SELECT_DELETE_FOLDER,
+  id,
+});
+
 export const DELETE_FOLDER_REQUEST = 'DELETE_FOLDER_REQUEST';
 export const DELETE_FOLDER_SUCCESS = 'DELETE_FOLDER_SUCCESS';
 export const DELETE_FOLDER_FAILURE = 'DELETE_FOLDER_FAILURE';
@@ -75,6 +88,7 @@ const deleteFolder = (requestOptions) => ({
 });
 
 export const deleteSelectedFolder = (id) => dispatch => {
+  dispatch(selectDeleteFolder(id));
   dispatch(deleteFolder({
     method: 'DELETE',
     headers: {'Content-Type': 'application/json'},
