@@ -40,8 +40,9 @@ class Folder extends Component {
     }
   }
   componentDidMount() {
-    const {selectCreateFolder} = this.props;
-    selectCreateFolder(null);
+    const {options, folder, selectCreateFolder} = this.props;
+    console.log(options.createId, folder.parentId);
+    options.createId === folder.parentId && selectCreateFolder(null);
   }
   componentWillUnmount() {
     const {selectDeleteFolder} = this.props;
@@ -67,9 +68,9 @@ class Folder extends Component {
     const {selectRenameInput} = this.props;
     selectRenameInput(null);
   }
-  removeFolder(id) {
+  removeFolder(id, parentId) {
     const {deleteSelectedFolder} = this.props;
-    deleteSelectedFolder(id);
+    deleteSelectedFolder(id, parentId);
   }
   render() {
     const {
@@ -138,7 +139,7 @@ class Folder extends Component {
               tooltip="REMOVE FOLDER"
               tooltipPosition="bottom-left"
               style={style}
-              onTouchTap={() => this.removeFolder(folder.id)}>
+              onTouchTap={() => this.removeFolder(folder.id, folder.parentId)}>
               <DeleteForeverIcon/>
             </IconButton>
           </span>

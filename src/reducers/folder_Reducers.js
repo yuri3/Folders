@@ -32,20 +32,22 @@ export const folders = (state = [], action) => {
         };
       });
     case DELETE_FOLDER_SUCCESS:
-    function deleteAllSubFolders(index = 0, newArr = []) {
-      if(index >= state.length) {
-        const parentFolderIndex = newArr.findIndex(
-          folder => folder.id === action.response.id
+      function deleteAllSubFolders(
+        index = 0, newArr = state, id = action.response.id, parentId = action.response.parentId
+      ) {
+        if(index >= state.length) {
+          return newArr;
+        }
+        newArr = newArr.filter(
+          folder => folder.id !== action.response.id && folder.parentId !== id
         );
-        newArr.splice(parentFolderIndex, 1);
-
-        return newArr;
+        if(newArr.length === state.length - 1) {
+          return deleteAllSubFolders(state.length, newArr);
+        }
+        id = !parentId ? state[index].id : id;
+        index = parentId ? state.length : index;
+        return deleteAllSubFolders(index + 1, newArr, id);
       }
-      if(state[index].parentId !== action.response.id) {
-        newArr.push(state[index]);
-      }
-      return deleteAllSubFolders(index + 1, newArr);
-    }
       return deleteAllSubFolders();
     case MOVE_FOLDER_IN_VIEW:
       const {dragIndex, hoverIndex} = action;

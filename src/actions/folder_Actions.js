@@ -87,12 +87,12 @@ const deleteFolder = (requestOptions) => ({
   }
 });
 
-export const deleteSelectedFolder = (id) => dispatch => {
+export const deleteSelectedFolder = (id, parentId) => dispatch => {
   dispatch(selectDeleteFolder(id));
   dispatch(deleteFolder({
     method: 'DELETE',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({id}),
+    body: JSON.stringify({id, parentId}),
   }));
 };
 //---MOVE_FOLDER-------------------------------------------------------------->
