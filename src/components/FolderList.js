@@ -12,10 +12,10 @@ class FolderList extends Component {
   componentWillUpdate(nextProps) {
     const {history} = this.props;
     if(nextProps.folders.length > this.props.folders.length) {
-      history.push(`/notes/${nextProps.folders[0].id}`);
+      history.push(`/folders/${nextProps.folders[0].id}/notes`);
     }
     if(nextProps.folders.length < this.props.folders.length) {
-      history.push('/notes');
+      history.push('/folders');
     }
   }
   render() {

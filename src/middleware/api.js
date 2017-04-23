@@ -3,14 +3,16 @@ import fetch from 'isomorphic-fetch';
 export const CALL_API = 'CALL API';
 
 const callApi = (endpoint, requestOptions) => {
-  return fetch(endpoint, requestOptions).then(response => {
-    const json = response.json();
-    if(response.ok) {
-      return json;
-    } else {
-      return Promise.reject(json);
-    }
-  });
+  return fetch(`http://localhost:3001/${endpoint}`, requestOptions)
+    .then(response => {
+      const json = response.json();
+      if(response.ok) {
+        return json;
+      } else {
+        //return json.then((error) => Promise.reject(error));
+        return Promise.reject(json);
+      }
+    });
 };
 
 export default store => next => action => {
@@ -39,15 +41,16 @@ export default store => next => action => {
   const [requestType, successType, failureType] = types;
   next({type: requestType});
   setTimeout(() => {
-    return callApi(endpoint, requestOptions).then(
-      response => next({
-        response,
-        type: successType,
-      }),
-      error => next({
-        type: failureType,
-        error: error.message || 'Something bad happened',
+    return callApi(endpoint, requestOptions)
+      .then(response => {
+        next({type: successType, response})
       })
-    )
+      .catch(error => {
+        //console.log(error);
+        next({
+          type: failureType,
+          error: error.message || 'Something bad happened.',
+        })
+      });
   }, 1000);
 };

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import NoteAddIcon from 'material-ui/svg-icons/action/note-add';
+import Loading from '../components/Loading';
 
 const styles = {
   display: 'flex',
@@ -10,27 +11,38 @@ const styles = {
 
 class CreateNote extends Component {
   createNote = () => {
-    const {folderId, createNote} = this.props;
-    createNote(folderId);
+    const {folderId, order, createNewNote} = this.props;
+    createNewNote(folderId, order);
   };
   render() {
+    const {options: {isFetching, isCreating, isFetchingById, isUpdating}} = this.props;
     return (
       <div style={styles}>
         <strong style={{marginRight: '30px'}}>{'NOTES'}</strong>
-        <IconButton
-          style={{width: '72px', height: '72px'}}
-          iconStyle={{width: '36px', height: '36px'}}
-          tooltip="CREATE NEW NOTE"
-          onTouchTap={this.createNote}><NoteAddIcon/>
-        </IconButton>
+        {(isFetching || isCreating || isFetchingById || isUpdating) &&
+          <Loading size={36} width={'72px'} height={'72px'} />}
+        {!(isFetching || isCreating || isFetchingById || isUpdating) &&
+          <IconButton
+            style={{width: '72px', height: '72px'}}
+            iconStyle={{width: '36px', height: '36px'}}
+            tooltip="CREATE NEW NOTE"
+            onTouchTap={this.createNote}><NoteAddIcon/>
+          </IconButton>}
       </div>
     );
   }
 }
 
 CreateNote.propTypes = {
+  options: PropTypes.shape({
+    isFetching: PropTypes.bool,
+    isCreating: PropTypes.bool,
+    isFetchingById: PropTypes.bool,
+    isUpdating: PropTypes.bool,
+  }).isRequired,
   folderId: PropTypes.string.isRequired,
-  createNote: PropTypes.func.isRequired,
+  order: PropTypes.number.isRequired,
+  createNewNote: PropTypes.func.isRequired,
 };
 
 export default CreateNote;

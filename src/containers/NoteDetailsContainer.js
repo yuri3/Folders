@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Prompt } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions/actions';
+import * as actions from '../actions/note_Actions';
 import NoteForm from '../components/NoteForm';
 
 const style = {
@@ -14,99 +14,150 @@ const style = {
 class NoteDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = {isBlocking: false, errorMessage: ''};
-    this.changeNote = this.changeNote.bind(this);
+    this.state = {
+      isError: false,
+      errorMessage: '',
+      isFormChanged: false,
+      formMessage: '',
+    };
+    this.changeName = this.changeName.bind(this);
     this.handleBlocking = this.handleBlocking.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  componentDidMount() {
+    const {match: {params}, fetchNoteById} = this.props;
+    fetchNoteById(params);
   }
   componentWillReceiveProps(nextProps) {
-    const {match} = this.props;
-    const {isBlocking} = this.state;
-    if (match.params && match.params.noteId !== nextProps.match.params.noteId && isBlocking) {
-      this.changeNote('New Note');
+    const {match, options: {successMsg, errorMsg}} = this.props;
+    const {isError, isFormChanged} = this.state;
+    if (match.params && match.params.noteId !== nextProps.match.params.noteId && (isError || isFormChanged)) {
+      this.changeName('New Note');
+    }// reconsider this part!!!
+    if(successMsg || errorMsg) {
+      this.handleBlocking({error: '', isFormChanged: ''});
     }
   }
   componentWillUnmount() {
-    const {isBlocking} = this.state;
-    if (isBlocking) {
-      this.changeNote('New Note');
+    const {isError} = this.state;
+    if (isError) {
+      this.changeName('New Note');
     }
   }
-  changeNote(value) {
-    const {changeNoteName, match} = this.props;
-    const {noteId} = match.params;
-    changeNoteName(noteId, value);
+  changeName(value) {
+    const {updateNoteName, note} = this.props;
+    updateNoteName(note.id, value);
   }
-  handleBlocking(error) {
-    this.setState({isBlocking: !!error, errorMessage: error});
+  handleBlocking({error, isFormChanged}) {
+    const key = Object.keys(error).find(key => error[key] && error[key]);
+    this.setState({
+      isError: !!error[key],
+      errorMessage: error[key],
+      isFormChanged: !!isFormChanged,
+      formMessage: isFormChanged,
+    });
+  }
+  handleSubmit(values) {
+    console.log('handleSubmit', values);
+    const {updateSelectedNote, match: {params}} = this.props;
+    updateSelectedNote(params, values);
   }
   render() {
     const {
+      note,
       notes,
       tags,
-      updateTagFlag,
+      options,
+      match,
+      fetchNoteById,
+      resetMessages,
       addTag,
       removeTag,
-      changeDescription,
-      match
     } = this.props;
+    console.log(this.state);
+    const {isError, errorMessage, isFormChanged, formMessage} = this.state;
     const {noteId} = match.params;
-    const currentNote = notes.find(note => note.id === noteId);
+    const {isFetchingById} = options;
     return (
       <div style={style}>
         <Prompt
-          when={this.state.isBlocking}
-          message={nextLocation => (`
-              There is an Error "${this.state.errorMessage}"!!!
-              Are you sure you want to go to ${nextLocation.pathname}?
-              If Ok. the Note's name will be set to default Name "New Note."`
-          )}
+          when={isError || isFormChanged}
+          message={nextLocation => {
+            if(isError) {
+              return `
+                There is an Error "${errorMessage}"!!!
+                Are you sure you want to go to ${nextLocation.pathname}?
+                If Ok. The Form will not be save and data will be set to initial."`
+            }
+            if(isFormChanged) {
+              return `
+                ${formMessage}
+                Are you sure you want to go to ${nextLocation.pathname}?
+                If Ok. The Form will not be save and data will be set to initial.`
+            }
+          }}
         />
-        <NoteForm
-          handleBlocking={this.handleBlocking}
-          notes={notes}
-          tags={tags}
-          params={match.params}
-          initialValues={{
-            id: currentNote && currentNote.id,
-            name: currentNote && currentNote.name,
-            description: currentNote && currentNote.description,
-          }}
-          changeNoteName={this.changeNote}
-          addTag={(label) => {
-            !currentNote.hasTags && updateTagFlag(currentNote.id);
-            addTag(noteId, label)
-          }}
-          removeTag={(key) => removeTag(key)}
-          changeDescription={(value) => changeDescription(noteId, value)}/>
+        {!isFetchingById && note.id &&
+          <NoteForm
+            handleBlocking={this.handleBlocking}
+            notes={notes}
+            tags={tags}
+            options={options}
+            params={match.params}
+            initialValues={{
+              id: note.id,
+              name: note.name,
+              tags: [],
+              description: note.description,
+            }}
+            fetchNoteById={fetchNoteById}
+            changeNoteName={this.changeName}
+            onSubmit={this.handleSubmit}
+            resetMessages={resetMessages}
+            addTag={(label) => addTag(noteId, label)}
+            removeTag={(key) => removeTag(key)}
+          />}
       </div>
     );
   }
 }
 
 NoteDetails.propTypes = {
+  note: PropTypes.shape({
+    folderId: PropTypes.number,
+    id: PropTypes.number,
+    name: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentFolderId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    folderId: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    hasTags: PropTypes.bool.isRequired,
+    description: PropTypes.string,
   })).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.shape({
-    parentNoteId: PropTypes.string.isRequired,
-    key: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired
-  })).isRequired,
+  options: PropTypes.shape({
+    successMsg: PropTypes.string,
+    errorMsg: PropTypes.string,
+  }).isRequired,
+  /*tags: PropTypes.arrayOf(PropTypes.shape({
+    noteId: PropTypes.number,
+    id: PropTypes.number.isRequired,
+    label: PropTypes.string
+  })).isRequired,*/
   match: PropTypes.object.isRequired,
-  changeNoteName: PropTypes.func.isRequired,
-  updateTagFlag: PropTypes.func.isRequired,
-  addTag: PropTypes.func.isRequired,
-  removeTag: PropTypes.func.isRequired,
-  changeDescription: PropTypes.func.isRequired,
+  fetchNoteById: PropTypes.func.isRequired,
+  updateNoteName: PropTypes.func.isRequired,
+  updateSelectedNote: PropTypes.func.isRequired,
+  resetMessages: PropTypes.func.isRequired,
+  /*addTag: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,*/
 };
 
 const mapStateToProps = (state, ownProps) => ({
+  note: state.note,
   notes: state.notes,
-  tags: state.tags,
+  //tags: state.tags,
+  options: state.noteOptions,
 });
 
 const mapDispatchToProps = (dispatch) => {

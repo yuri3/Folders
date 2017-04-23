@@ -40,13 +40,12 @@ class Folder extends Component {
     }
   }
   componentDidMount() {
-    const {options, folder, selectCreateFolder} = this.props;
-    console.log(options.createId, folder.parentId);
-    options.createId === folder.parentId && selectCreateFolder(null);
+    const {options, selectCreateFolder} = this.props;
+    options.createId && selectCreateFolder(null);
   }
   componentWillUnmount() {
-    const {selectDeleteFolder} = this.props;
-    selectDeleteFolder(null);
+    const {options, selectDeleteFolder} = this.props;
+    options.deleteId && selectDeleteFolder(null);
   }
   createFolder(id) {
     this.selectFolder(id);

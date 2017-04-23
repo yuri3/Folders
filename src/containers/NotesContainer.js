@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions  from '../actions/actions';
+import * as actions  from '../actions/note_Actions';
 import CreateNote from '../components/CreateNote';
 import NoteList from '../components/NoteList';
 
@@ -10,29 +10,44 @@ const style = {
 };
 
 class Notes extends Component {
+  componentDidMount() {
+    const {fetchAllNotes, match: {params}} = this.props;
+    fetchAllNotes(params);
+  }
+  componentWillReceiveProps(nextProps) {
+    const {match: {params}, fetchAllNotes} = this.props;
+    if(nextProps.match.params.folderId !== params.folderId) {
+      fetchAllNotes(nextProps.match.params);
+    }
+  }
   render() {
     const {
       notes,
+      options,
       match,
-      createNote,
-      moveNote,
-      removeTag,
-      removeNote
+      createNewNote,
+      moveSelectedNote,
+      selectDeleteNote,
+      deleteSelectedNote
     } = this.props;
+    const {isFetching} = options;
     const {folderId, noteId} = match.params;
     const flex = folderId && noteId ? '0 1 223px' : '1';
     return (
       <div style={{...style, flex}}>
         <CreateNote
+          options={options}
           folderId={folderId}
-          createNote={createNote}/>
-        {notes && notes.length > 0 &&
+          order={notes.length}
+          createNewNote={createNewNote}/>
+        {!isFetching && notes.length > 0 &&
           <NoteList
             notes={notes}
+            options={options}
             folderId={folderId}
-            moveNote={moveNote}
-            removeTag={removeTag}
-            removeNote={removeNote}/>}
+            moveSelectedNote={moveSelectedNote}
+            selectDeleteNote={selectDeleteNote}
+            deleteSelectedNote={deleteSelectedNote}/>}
       </div>
     );
   }
@@ -40,21 +55,24 @@ class Notes extends Component {
 
 Notes.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentFolderId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    folderId: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
-    hasTags: PropTypes.bool,
   })).isRequired,
+  options: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+  }),
   match: PropTypes.object.isRequired,
-  createNote: PropTypes.func.isRequired,
-  moveNote: PropTypes.func.isRequired,
-  removeTag: PropTypes.func.isRequired,
-  removeNote: PropTypes.func.isRequired,
+  createNewNote: PropTypes.func.isRequired,
+  moveSelectedNote: PropTypes.func.isRequired,
+  selectDeleteNote: PropTypes.func.isRequired,
+  deleteSelectedNote: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   notes: state.notes,
+  options: state.noteOptions,
 });
 
 const mapDispatchToProps = (dispatch) => {

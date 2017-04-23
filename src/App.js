@@ -39,14 +39,7 @@ class App extends Component {
         <Router getUserConfirmation={getModalConfirmation}>
           <div style={style}>
             <Switch>
-              <Route exact path="/" render={() => <Redirect to="/notes"/>}/>
-              <Route path="/notes/search" render={() => (
-                <div style={routeStyle}>
-                  <SideBar/>
-                  <Route component={FoldersContainer}/>
-                  <Route component={FoundNotesContainer}/>
-                </div>
-              )}/>
+              <Route exact path="/" render={() => <Redirect to="/folders"/>}/>
               <Route path="/notes/:folderId/:noteId" render={({location}) => (
                 <div style={routeStyle}>
                   <SideBar/>
@@ -54,11 +47,24 @@ class App extends Component {
                   <Route component={NoteDetailsContainer}/>
                 </div>
               )}/>
-              <Route path="/notes" render={({location}) => (
+              <Route path="/notes/:folderId" render={({location}) => (
                 <div style={routeStyle}>
                   <SideBar/>
                   <Route component={FoldersContainer}/>
-                  <Route path="/notes/:folderId" component={NotesContainer}/>
+                  <Route component={NotesContainer}/>
+                </div>
+              )}/>
+              <Route path="/notes/search" render={() => (
+                <div style={routeStyle}>
+                  <SideBar/>
+                  <Route component={FoldersContainer}/>
+                  <Route component={FoundNotesContainer}/>
+                </div>
+              )}/>
+              <Route path="/folders" render={({location}) => (
+                <div style={routeStyle}>
+                  <SideBar/>
+                  <Route component={FoldersContainer}/>
                 </div>
               )}/>
               <Route component={NoMatch}/>

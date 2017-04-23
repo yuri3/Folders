@@ -11,10 +11,11 @@ class NoteList extends Component {
   render() {
     const {
       notes,
+      options,
       folderId,
-      moveNote,
-      removeTag,
-      removeNote
+      moveSelectedNote,
+      selectDeleteNote,
+      deleteSelectedNote
     } = this.props;
     return (
       <div style={style}>
@@ -26,13 +27,14 @@ class NoteList extends Component {
         >
           {notes && notes.map((note, index) => (
             <div key={note.id}>
-              {note.parentFolderId === folderId &&
+              {note.folderId === Number.parseInt(folderId, 10) &&
                 <DragAndDropNote
                   index={index}
                   note={note}
-                  moveNote={moveNote}
-                  removeTag={removeTag}
-                  removeNote={removeNote}
+                  options={options}
+                  moveSelectedNote={moveSelectedNote}
+                  selectDeleteNote={selectDeleteNote}
+                  deleteSelectedNote={deleteSelectedNote}
                 />}
             </div>
           ))}
@@ -44,16 +46,16 @@ class NoteList extends Component {
 
 NoteList.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentFolderId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    folderId: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
-    hasTags: PropTypes.bool,
   })).isRequired,
+  options: PropTypes.object.isRequired,
   folderId: PropTypes.string.isRequired,
-  moveNote: PropTypes.func.isRequired,
-  removeTag: PropTypes.func.isRequired,
-  removeNote: PropTypes.func.isRequired,
+  moveSelectedNote: PropTypes.func.isRequired,
+  selectDeleteNote: PropTypes.func.isRequired,
+  deleteSelectedNote: PropTypes.func.isRequired,
 };
 
 export default NoteList;

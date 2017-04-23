@@ -14,7 +14,6 @@ const style = {
 
 class Folders extends Component {
   componentDidMount() {
-    console.log('componentDidMount()');
     const {fetchAllFolders} = this.props;
     fetchAllFolders();
   }

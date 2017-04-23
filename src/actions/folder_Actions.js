@@ -7,7 +7,7 @@ export const FETCH_FOLDERS_FAILURE = 'FETCH_FOLDERS_FAILURE';
 const fetchFolders = () => ({
   [CALL_API]: {
     types: [FETCH_FOLDERS_REQUEST, FETCH_FOLDERS_SUCCESS, FETCH_FOLDERS_FAILURE],
-    endpoint: 'http://localhost:3001/notes',
+    endpoint: 'folders',
   }
 });
 
@@ -28,7 +28,7 @@ export const CREATE_FOLDER_FAILURE = 'CREATE_FOLDER_FAILURE';
 const createFolder = (requestOptions) => ({
   [CALL_API]: {
     types: [CREATE_FOLDER_REQUEST, CREATE_FOLDER_SUCCESS, CREATE_FOLDER_FAILURE],
-    endpoint: 'http://localhost:3001/notes',
+    endpoint: 'folders',
     requestOptions,
   }
 });
@@ -56,7 +56,7 @@ export const RENAME_FOLDER_FAILURE = 'RENAME_FOLDER_FAILURE';
 const renameFolder = (requestOptions) => ({
   [CALL_API]: {
     types: [RENAME_FOLDER_REQUEST, RENAME_FOLDER_SUCCESS, RENAME_FOLDER_FAILURE],
-    endpoint: 'http://localhost:3001/notes',
+    endpoint: 'folders',
     requestOptions,
   }
 });
@@ -82,7 +82,7 @@ export const DELETE_FOLDER_FAILURE = 'DELETE_FOLDER_FAILURE';
 const deleteFolder = (requestOptions) => ({
   [CALL_API]: {
     types: [DELETE_FOLDER_REQUEST, DELETE_FOLDER_SUCCESS, DELETE_FOLDER_FAILURE],
-    endpoint: 'http://localhost:3001/notes',
+    endpoint: 'folders',
     requestOptions,
   }
 });
@@ -105,7 +105,7 @@ export const MOVE_FOLDER_FAILURE = 'MOVE_FOLDER_FAILURE';
 const moveFolder = (requestOptions) => ({
   [CALL_API]: {
     types: [MOVE_FOLDER_REQUEST, MOVE_FOLDER_SUCCESS, MOVE_FOLDER_FAILURE],
-    endpoint: 'http://localhost:3001/notes',
+    endpoint: 'folders',
     requestOptions,
   }
 });

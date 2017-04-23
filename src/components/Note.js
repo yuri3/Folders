@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
+import Loading from '../components/Loading';
 
 const styles = {
   display: 'flex',
@@ -27,7 +28,6 @@ const linkStyle = {
 const activeStyle = {
   textDecoration: 'none',
   pointerEvents: 'none',
-  color: 'dodgerblue',
 };
 
 const removeStyle = {
@@ -41,36 +41,42 @@ class Note extends Component {
     super(props);
     this.handleRemove = this.handleRemove.bind(this);
   }
+  componentWillUnmount() {
+    const {options, selectDeleteNote} = this.props;
+    options.deleteId && selectDeleteNote(null);
+  }
   handleRemove() {
-    const {history, removeNote, removeTag, match: {params: {folderId, noteId}}, note} = this.props;
-    note.hasTags && removeTag(undefined, note.id);
-    removeNote(note.id);
+    const {history, deleteSelectedNote, match: {params: {folderId, noteId}}, note} = this.props;
+    deleteSelectedNote(note.id);
     note.id === noteId && history.push(`/notes/${folderId}`);
   }
   render() {
     const {
       note,
-      isDragging,
+      options: {deleteId},
+      isDragging
     } = this.props;
     const noteName = note.name ? note.name : 'New Note';
-    const color = note.name ? 'black' : 'gray';
+    const color = note.name ? 'dodgerblue' : 'gray';
     const opacity = isDragging ? 0 : 1;
     return(
       <div style={{...styles, opacity}}>
         <i className="material-icons md-36" style={iconStyle}>description</i>
         <header style={linkStyle}>
           <NavLink
-            style={{color}}
-            activeStyle={activeStyle}
-            to={`/notes/${note.parentFolderId}/${note.id}`}>{noteName}
+            style={{color: 'black'}}
+            activeStyle={{...activeStyle, color}}
+            to={`/notes/${note.folderId}/${note.id}`}>{noteName}
           </NavLink>
         </header>
         <span style={removeStyle}>
-          <IconButton
-            iconClassName="material-icons"
-            tooltip="REMOVE NOTE"
-            onTouchTap={this.handleRemove}>delete_forever
-          </IconButton>
+          {note.id === deleteId && <Loading />}
+          {note.id !== deleteId &&
+            <IconButton
+              iconClassName="material-icons"
+              tooltip="REMOVE NOTE"
+              onTouchTap={this.handleRemove}>delete_forever
+            </IconButton>}
         </span>
       </div>
     );
@@ -79,17 +85,19 @@ class Note extends Component {
 
 Note.propTypes = {
   note: PropTypes.shape({
-    parentFolderId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    folderId: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
-    hasTags: PropTypes.bool,
+  }).isRequired,
+  options: PropTypes.shape({
+    deleteId: PropTypes.number,
   }).isRequired,
   match: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
-  removeTag: PropTypes.func.isRequired,
-  removeNote: PropTypes.func.isRequired,
+  selectDeleteNote: PropTypes.func.isRequired,
+  deleteSelectedNote: PropTypes.func.isRequired,
   isDragging: PropTypes.bool,
 };
 

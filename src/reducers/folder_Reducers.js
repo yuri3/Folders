@@ -78,6 +78,8 @@ export const folderOptions = (state = {
     case FETCH_FOLDERS_FAILURE:
       return {...state, isFetching: false, error: action.payload};
 
+    case SELECT_CREATE_FOLDER:
+      return {...state, createId: action.id};
     case CREATE_FOLDER_REQUEST:
       return {...state, isCreating: true};
     case CREATE_FOLDER_SUCCESS:
@@ -85,13 +87,8 @@ export const folderOptions = (state = {
     case CREATE_FOLDER_FAILURE:
       return {...state, isCreating: false, error: action.payload};
 
-    case DELETE_FOLDER_REQUEST:
-      return {...state, isDeleting: true};
-    case DELETE_FOLDER_SUCCESS:
-      return {...state, isDeleting: false};
-    case DELETE_FOLDER_FAILURE:
-      return {...state, isDeleting: false, error: action.payload};
-
+    case SELECT_RENAME_INPUT:
+      return {...state, renameId: action.id};
     case RENAME_FOLDER_REQUEST:
       return {...state, isRenaming: true};
     case RENAME_FOLDER_SUCCESS:
@@ -99,12 +96,15 @@ export const folderOptions = (state = {
     case RENAME_FOLDER_FAILURE:
       return {...state, isRenaming: false, error: action.payload};
 
-    case SELECT_CREATE_FOLDER:
-      return {...state, createId: action.id};
-    case SELECT_RENAME_INPUT:
-      return {...state, renameId: action.id};
     case SELECT_DELETE_FOLDER:
       return {...state, deleteId: action.id};
+    case DELETE_FOLDER_REQUEST:
+      return {...state, isDeleting: true};
+    case DELETE_FOLDER_SUCCESS:
+      return {...state, isDeleting: false};
+    case DELETE_FOLDER_FAILURE:
+      return {...state, isDeleting: false, error: action.payload};
+
     default:
       return state;
   }
