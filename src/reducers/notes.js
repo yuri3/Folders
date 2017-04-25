@@ -18,7 +18,7 @@ import {
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_FAILURE,
   MOVE_NOTE_IN_VIEW
-} from '../actions/note_Actions';
+} from '../actions/notes';
 
 export const note = (state = {}, action) => {
   switch(action.type) {
@@ -55,17 +55,6 @@ export const notes = (state = [], action) => {
         }
         return note;
       });
-    /*
-    case CHANGE_DESCRIPTION:
-      return state.map(note => {
-        if(note.id === action.id) {
-          return {
-            ...note,
-            description: action.description,
-          };
-        }
-        return note;
-      });*/
     default:
       return state;
   }

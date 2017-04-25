@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { Prompt } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions/note_Actions';
+import * as noteActions from '../actions/notes';
+import * as tagActions from '../actions/tags';
 import NoteForm from '../components/NoteForm';
 
 const style = {
@@ -15,6 +16,7 @@ class NoteDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isPristine: true,
       isError: false,
       errorMessage: '',
       isFormChanged: false,
@@ -24,24 +26,27 @@ class NoteDetails extends Component {
     this.handleBlocking = this.handleBlocking.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  setPristine = (flag = true) => {
+    console.log('setPristine()');
+    this.setState({...this.state, isPristine: flag});
+  };
   componentDidMount() {
-    const {match: {params}, fetchNoteById} = this.props;
+    const {match: {params}, fetchNoteById, fetchAllTags} = this.props;
     fetchNoteById(params);
+    fetchAllTags(params.noteId);
   }
   componentWillReceiveProps(nextProps) {
-    const {match, options: {successMsg, errorMsg}} = this.props;
+    const {match: {params: {noteId}}, note, notes, noteOptions: {successMsg, errorMsg}} = this.props;
     const {isError, isFormChanged} = this.state;
-    if (match.params && match.params.noteId !== nextProps.match.params.noteId && (isError || isFormChanged)) {
-      this.changeName('New Note');
-    }// reconsider this part!!!
-    if(successMsg || errorMsg) {
-      this.handleBlocking({error: '', isFormChanged: ''});
+    if (
+        noteId !== nextProps.match.params.noteId &&
+        note.name !== notes.find(note => note.id === Number.parseInt(noteId)).name &&
+        (isError || isFormChanged)
+    ) {
+      this.changeName(note.name);
     }
-  }
-  componentWillUnmount() {
-    const {isError} = this.state;
-    if (isError) {
-      this.changeName('New Note');
+    if(successMsg || errorMsg) {
+      this.handleBlocking({error: {}, isFormChanged: ''});
     }
   }
   changeName(value) {
@@ -51,6 +56,7 @@ class NoteDetails extends Component {
   handleBlocking({error, isFormChanged}) {
     const key = Object.keys(error).find(key => error[key] && error[key]);
     this.setState({
+      ...this.state,
       isError: !!error[key],
       errorMessage: error[key],
       isFormChanged: !!isFormChanged,
@@ -66,18 +72,19 @@ class NoteDetails extends Component {
     const {
       note,
       notes,
+      noteOptions,
       tags,
-      options,
+      tagOptions,
       match,
       fetchNoteById,
+      fetchAllTags,
       resetMessages,
       addTag,
       removeTag,
     } = this.props;
-    console.log(this.state);
-    const {isError, errorMessage, isFormChanged, formMessage} = this.state;
+    const {isPristine, isError, errorMessage, isFormChanged, formMessage} = this.state;
     const {noteId} = match.params;
-    const {isFetchingById} = options;
+    const {isFetchingById} = noteOptions;
     return (
       <div style={style}>
         <Prompt
@@ -99,23 +106,26 @@ class NoteDetails extends Component {
         />
         {!isFetchingById && note.id &&
           <NoteForm
+            isPristine={isPristine}
+            setPristine={this.setPristine}
             handleBlocking={this.handleBlocking}
             notes={notes}
-            tags={tags}
-            options={options}
+            noteOptions={noteOptions}
+            tagOptions={tagOptions}
             params={match.params}
             initialValues={{
               id: note.id,
               name: note.name,
-              tags: [],
               description: note.description,
+              tags,
             }}
             fetchNoteById={fetchNoteById}
+            fetchAllTags={fetchAllTags}
             changeNoteName={this.changeName}
             onSubmit={this.handleSubmit}
             resetMessages={resetMessages}
             addTag={(label) => addTag(noteId, label)}
-            removeTag={(key) => removeTag(key)}
+            removeTag={(id) => removeTag(id)}
           />}
       </div>
     );
@@ -135,33 +145,38 @@ NoteDetails.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
   })).isRequired,
-  options: PropTypes.shape({
+  noteOptions: PropTypes.shape({
     successMsg: PropTypes.string,
     errorMsg: PropTypes.string,
   }).isRequired,
-  /*tags: PropTypes.arrayOf(PropTypes.shape({
+  tags: PropTypes.arrayOf(PropTypes.shape({
     noteId: PropTypes.number,
-    id: PropTypes.number.isRequired,
+    id: PropTypes.number,
     label: PropTypes.string
-  })).isRequired,*/
+  })).isRequired,
+  tagOptions: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+  }).isRequired,
   match: PropTypes.object.isRequired,
   fetchNoteById: PropTypes.func.isRequired,
+  fetchAllTags: PropTypes.func.isRequired,
   updateNoteName: PropTypes.func.isRequired,
   updateSelectedNote: PropTypes.func.isRequired,
   resetMessages: PropTypes.func.isRequired,
-  /*addTag: PropTypes.func.isRequired,
-  removeTag: PropTypes.func.isRequired,*/
+  addTag: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
   note: state.note,
   notes: state.notes,
-  //tags: state.tags,
-  options: state.noteOptions,
+  noteOptions: state.noteOptions,
+  tags: state.tags,
+  tagOptions: state.tagOptions,
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(actions, dispatch);
+  return bindActionCreators({...noteActions, ...tagActions}, dispatch);
 };
 
 const NoteDetailsContainer = connect(

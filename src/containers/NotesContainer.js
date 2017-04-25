@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions  from '../actions/note_Actions';
+import * as actions  from '../actions/notes';
 import CreateNote from '../components/CreateNote';
 import NoteList from '../components/NoteList';
 

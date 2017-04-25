@@ -15,7 +15,7 @@ import {
   DELETE_FOLDER_SUCCESS,
   DELETE_FOLDER_FAILURE,
   MOVE_FOLDER_IN_VIEW,
-} from '../actions/folder_Actions';
+} from '../actions/folders';
 
 export const folders = (state = [], action) => {
   switch(action.type) {

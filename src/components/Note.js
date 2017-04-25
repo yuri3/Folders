@@ -48,7 +48,7 @@ class Note extends Component {
   handleRemove() {
     const {history, deleteSelectedNote, match: {params: {folderId, noteId}}, note} = this.props;
     deleteSelectedNote(note.id);
-    note.id === noteId && history.push(`/notes/${folderId}`);
+    note.id === Number.parseInt(noteId, 10) && history.push(`/notes/${folderId}`);
   }
   render() {
     const {

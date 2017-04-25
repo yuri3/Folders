@@ -26,7 +26,7 @@ import {
   CHANGE_DESCRIPTION,
   SEARCH_NOTES,
   MOVE_NOTE
-} from '../actions/folder_Actions';
+} from '../actions/folders';
 
 /*const FOLDERS = [
   {

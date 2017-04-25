@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions/folder_Actions';
+import * as actions from '../actions/folders';
 import CreateFolder from '../components/CreateFolder';
 import FolderList from '../components/FolderList';
 
