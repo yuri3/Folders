@@ -120,14 +120,14 @@ class SearchBar extends Component {
 
 SearchBar.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    parentFolderId: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    folderId: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     descriptions: PropTypes.string,
   })),
   tags: PropTypes.arrayOf(PropTypes.shape({
-    parentNoteId: PropTypes.string.isRequired,
-    key: PropTypes.string.isRequired,
+    noteId: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
     label: PropTypes.string.isRequired,
   })).isRequired,
   options: PropTypes.shape({

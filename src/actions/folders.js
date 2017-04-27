@@ -41,7 +41,6 @@ export const createNewFolder = (parentId = '', order, name = 'New Folder') => di
     body: JSON.stringify({parentId, order, name}),
   }));
 };
-
 //---RENAME_FOLDER------------------------------------------------------------>
 export const SELECT_RENAME_INPUT = 'SELECT_RENAME_INPUT';
 export const selectRenameInput = (id) => ({

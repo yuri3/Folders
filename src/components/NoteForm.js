@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TextField from 'material-ui/TextField'
@@ -8,6 +7,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { fullWhite } from 'material-ui/styles/colors';
 import DoneAction from 'material-ui/svg-icons/action/done';
 import Snackbar from 'material-ui/Snackbar';
+import Loading from './Loading';
+
+const loadingStyle = {
+  display: 'flex',
+  alignItems: 'flex-end',
+};
 
 const validate = (value, props) => {
   const error = {};
@@ -27,7 +32,7 @@ const validate = (value, props) => {
     error.name = 'This name is already taken!';
   }
   if(
-    value.tags.some(
+    props.tags.some(
       tag => tag && tag.noteId === Number.parseInt(noteId, 10)
                  && tag.label === value.tag
     )
@@ -36,7 +41,7 @@ const validate = (value, props) => {
   }
   props.handleBlocking({
     error: error,
-    isFormChanged: props.dirty || !props.isPristine ? 'You have unsaved data!' : '',
+    isFormChanged: props.dirty ? 'You have unsaved data!' : '',
   });
   return error;
 };
@@ -48,12 +53,8 @@ const renderTextField = (field) => {
     meta: {
       error,
     },
-    initialName,
-    initialDescription,
     changeNoteName,
-    tags,
     addTag,
-    setPristine,
     ...custom
   } = field;
   return (
@@ -67,37 +68,22 @@ const renderTextField = (field) => {
           {...custom}
           onChange={(event) => {
             const value = event.target.value;
-            if(
-                (input.name === 'name' && input.value === initialName) ||
-                (input.name === 'description' && input.value === initialDescription)
-            ) {
-              setPristine(false);
-            }
-            if(
-                (input.name === 'name' && value === initialName) ||
-                (input.name === 'description' && value === initialDescription)
-            ) {
-              setPristine(true);
-            }
             input.onChange(value);
             changeNoteName && changeNoteName(value);
           }}
         /> :
         <TextField
-          hintText={placeholder}
+          hintText={'Type in a tag and hit Enter.'}
           floatingLabelText={placeholder}
           errorText={error}
           {...input}
           {...custom}
           onKeyDown={(event) => {
             const value = event.target.value;
-            if(value === '') {
-              setPristine(false);
-            }
             if(!error && addTag && event.keyCode === 13) {
               event.preventDefault();
-              addTag(value);
               input.onChange('');
+              addTag(value);
             }
           }}
         />}
@@ -123,7 +109,6 @@ class NoteForm extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if(nextProps.params.noteId !== this.props.params.noteId) {
-      this.props.setPristine(true);
       this.props.fetchNoteById(nextProps.params);
       this.props.fetchAllTags(nextProps.params.noteId);
     }
@@ -131,17 +116,13 @@ class NoteForm extends Component {
   componentWillUnmount() {
     clearTimeout(this.timer);
   }
-  handleDeleteTag = (id) => {
-    const {initialValues: {tags}} = this.props;
-
-  };
   renderChip = (tag) => {
-    const {params: {noteId}} = this.props;
+    const {deleteTag, params: {noteId}} = this.props;
     return (
-      <div key={tag.label}>
+      <div key={tag.id}>
         {tag.noteId === Number.parseInt(noteId, 10) &&
           <Chip
-            onRequestDelete={() => this.handleDeleteTag(tag.label)}
+            onRequestDelete={() => deleteTag(tag.id)}
             style={{margin: 5}}
           >
             {tag.label}
@@ -151,28 +132,24 @@ class NoteForm extends Component {
   };
   render() {
     const {
-      isPristine,
-      setPristine,
       noteOptions: {isUpdating, successMsg, errorMsg},
       invalid,
       pristine,
       submitting,
       handleSubmit,
       changeNoteName,
-      initialValues: {tags, name, description},
+      tagOptions: {isCreating, isDeleting},
+      tags,
       addTag,
     } = this.props;
-    console.log(this.props);
     return (
       <div>
         <form>
           <Field
             name="name"
             placeholder="Name"
-            initialName={name}
-            setPristine={setPristine}
             changeNoteName={changeNoteName}
-            component={renderTextField}/><br/>
+            component={renderTextField}/>
           <ReactCSSTransitionGroup
             transitionName="fade"
             transitionEnterTimeout={500}
@@ -181,19 +158,19 @@ class NoteForm extends Component {
           >
             {tags.map(this.renderChip)}
           </ReactCSSTransitionGroup>
-          <Field
-            name="tag"
-            placeholder="Tag..."
-            tags={tags}
-            addTag={addTag}
-            setPristine={setPristine}
-            normalize={(value) => value.toUpperCase()}
-            component={renderTextField}/><br/>
+          <div style={loadingStyle}>
+            <Field
+              name="tag"
+              placeholder="Tag..."
+              addTag={addTag}
+              normalize={(value) => value.toUpperCase()}
+              component={renderTextField}
+            />
+              {(isCreating || isDeleting) && <Loading/>}
+          </div>
           <Field
             name="description"
             placeholder="Description..."
-            initialDescription={description}
-            setPristine={setPristine}
             multiLine={true}
             rows={2}
             fullWidth={true}
@@ -204,7 +181,7 @@ class NoteForm extends Component {
               labelPosition="before"
               backgroundColor="#a4c639"
               icon={<DoneAction color={fullWhite}/>}
-              disabled={isUpdating || invalid || isPristine || submitting}
+              disabled={isUpdating || invalid || pristine || submitting}
               onTouchTap={handleSubmit}
             />
           </div>
@@ -237,22 +214,19 @@ NoteForm.propTypes = {
     successMsg: PropTypes.string,
     errorMsg: PropTypes.string,
   }).isRequired,
-  /*tags: PropTypes.arrayOf(PropTypes.shape({
+  tags: PropTypes.arrayOf(PropTypes.shape({
     noteId: PropTypes.number,
     id: PropTypes.number,
-    label: PropTypes.string,
-  })).isRequired,*/
+    label: PropTypes.string
+  })).isRequired,
   tagOptions: PropTypes.shape({
-    isFetching: PropTypes.bool.isRequired,
+    isCreating: PropTypes.bool.isRequired,
+    isDeleting: PropTypes.bool.isRequired,
   }).isRequired,
-  params: PropTypes.shape({
-    folderId: PropTypes.string.isRequired,
-    noteId: PropTypes.string.isRequired,
-  }).isRequired,
+  params: PropTypes.object.isRequired,
   initialValues: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    tags: PropTypes.array.isRequired,
     description: PropTypes.string,
   }).isRequired,
   handleBlocking: PropTypes.func.isRequired,
@@ -261,7 +235,7 @@ NoteForm.propTypes = {
   changeNoteName: PropTypes.func.isRequired,
   resetMessages: PropTypes.func.isRequired,
   addTag: PropTypes.func.isRequired,
-  removeTag: PropTypes.func.isRequired,
+  deleteTag: PropTypes.func.isRequired,
 };
 
 export default reduxForm({

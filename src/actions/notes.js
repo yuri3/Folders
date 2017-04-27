@@ -46,7 +46,7 @@ export const createNewNote = (folderId, order, name = 'New Note') => dispatch =>
   dispatch(createNote(folderId, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({folderId, order, name, description: ''}),
+    body: JSON.stringify({order, name, description: ''}),
   }));
 };
 //---UPDATE_NOTE------------------------------------------------------------>
@@ -139,46 +139,3 @@ export const moveSelectedNote = (data) => dispatch => {
     });
   }
 };
-
-/*export const changeNoteName = (id, newName) => dispatch => {
-  dispatch(changeName(id, newName));
-};*/
-
-/*const renameFolder = (requestOptions) => ({
-  [CALL_API]: {
-    types: [RENAME_FOLDER_REQUEST, RENAME_FOLDER_SUCCESS, RENAME_FOLDER_FAILURE],
-    endpoint: 'http://localhost:3001/folders',
-    requestOptions,
-  }
-});
-
-export const renameSelectedFolder = (id, newName) => dispatch => {
-  dispatch(renameFolder({
-    method: 'PUT',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({id, name: newName}),
-  }));
-};
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

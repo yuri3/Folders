@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import NoteAddIcon from 'material-ui/svg-icons/action/note-add';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 
 const styles = {
   display: 'flex',

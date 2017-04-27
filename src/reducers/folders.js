@@ -104,7 +104,6 @@ export const folderOptions = (state = {
       return {...state, isDeleting: false};
     case DELETE_FOLDER_FAILURE:
       return {...state, isDeleting: false, error: action.payload};
-
     default:
       return state;
   }

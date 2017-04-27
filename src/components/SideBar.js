@@ -4,7 +4,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import Menu from 'material-ui/svg-icons/navigation/menu';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import ArrowBackIcon from 'material-ui/svg-icons/navigation/arrow-back';
 import SearchIcon from 'material-ui/svg-icons/action/search';
@@ -22,7 +22,7 @@ const IconElementLeft = (props) => (
     anchorOrigin={{horizontal: 'left', vertical: 'top'}}
     iconButtonElement={
       <IconButton tooltip="MENU" tooltipPosition="bottom-right">
-        <MoreVertIcon/>
+        <Menu/>
       </IconButton>
     }
     onItemTouchTap={props.handleToggle}
@@ -30,8 +30,6 @@ const IconElementLeft = (props) => (
     <MenuItem value="1" primaryText="Close"/>
   </IconMenu>
 );
-
-//IconElementLeft.muiTheme = 'IconMenu';
 
 const style = {
   borderRadius: '50%',

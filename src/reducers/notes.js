@@ -109,7 +109,6 @@ export const noteOptions = (state = {
       return {...state, isDeleting: false};
     case DELETE_NOTE_FAILURE:
       return {...state, isDeleting: false, error: action.error};
-
     default:
       return state;
   }

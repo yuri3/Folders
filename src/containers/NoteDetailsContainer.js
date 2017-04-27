@@ -26,10 +26,6 @@ class NoteDetails extends Component {
     this.handleBlocking = this.handleBlocking.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  setPristine = (flag = true) => {
-    console.log('setPristine()');
-    this.setState({...this.state, isPristine: flag});
-  };
   componentDidMount() {
     const {match: {params}, fetchNoteById, fetchAllTags} = this.props;
     fetchNoteById(params);
@@ -64,7 +60,6 @@ class NoteDetails extends Component {
     });
   }
   handleSubmit(values) {
-    console.log('handleSubmit', values);
     const {updateSelectedNote, match: {params}} = this.props;
     updateSelectedNote(params, values);
   }
@@ -80,9 +75,9 @@ class NoteDetails extends Component {
       fetchAllTags,
       resetMessages,
       addTag,
-      removeTag,
+      deleteTag,
     } = this.props;
-    const {isPristine, isError, errorMessage, isFormChanged, formMessage} = this.state;
+    const {isError, errorMessage, isFormChanged, formMessage} = this.state;
     const {noteId} = match.params;
     const {isFetchingById} = noteOptions;
     return (
@@ -106,26 +101,24 @@ class NoteDetails extends Component {
         />
         {!isFetchingById && note.id &&
           <NoteForm
-            isPristine={isPristine}
-            setPristine={this.setPristine}
             handleBlocking={this.handleBlocking}
             notes={notes}
             noteOptions={noteOptions}
+            tags={tags}
             tagOptions={tagOptions}
             params={match.params}
             initialValues={{
               id: note.id,
               name: note.name,
               description: note.description,
-              tags,
             }}
             fetchNoteById={fetchNoteById}
             fetchAllTags={fetchAllTags}
             changeNoteName={this.changeName}
             onSubmit={this.handleSubmit}
             resetMessages={resetMessages}
-            addTag={(label) => addTag(noteId, label)}
-            removeTag={(id) => removeTag(id)}
+            addTag={(label) => addTag(noteId, tags.length, label)}
+            deleteTag={deleteTag}
           />}
       </div>
     );
@@ -164,7 +157,7 @@ NoteDetails.propTypes = {
   updateSelectedNote: PropTypes.func.isRequired,
   resetMessages: PropTypes.func.isRequired,
   addTag: PropTypes.func.isRequired,
-  removeTag: PropTypes.func.isRequired,
+  deleteTag: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({

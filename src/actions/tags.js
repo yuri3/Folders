@@ -14,10 +14,43 @@ const fetchTags = (noteId) => ({
 export const fetchAllTags = (noteId) => dispatch => {
   dispatch(fetchTags(noteId));
 };
-//---ADD_TAG_IN_VIEW------------------------------------------------------------>
-export const ADD_TAG_IN_VIEW = 'ADD_TAG_IN_VIEW';
-export const addTag = (noteId, label) => ({
-  type: ADD_TAG_IN_VIEW,
-  noteId,
-  label,
+//---CREATE_TAG---------------------------------------------------------------->
+export const CREATE_TAG_REQUEST = 'CREATE_TAG_REQUEST';
+export const CREATE_TAG_SUCCESS = 'CREATE_TAG_SUCCESS';
+export const CREATE_TAG_FAILURE = 'CREATE_TAG_FAILURE';
+
+const createTag = (noteId, requestOptions) => ({
+  [CALL_API]: {
+    types: [CREATE_TAG_REQUEST, CREATE_TAG_SUCCESS, CREATE_TAG_FAILURE],
+    endpoint: `tags/${noteId}`,
+    requestOptions,
+  }
 });
+
+export const addTag = (noteId, order, label) => dispatch => {
+  dispatch(createTag(noteId, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({order, label}),
+  }));
+};
+//---DELETE_TAG---------------------------------------------------------------->
+export const DELETE_TAG_REQUEST = 'DELETE_TAG_REQUEST';
+export const DELETE_TAG_SUCCESS = 'DELETE_TAG_SUCCESS';
+export const DELETE_TAG_FAILURE = 'DELETE_TAG_FAILURE';
+
+const removeTag = (requestOptions) => ({
+  [CALL_API]: {
+    types: [DELETE_TAG_REQUEST, DELETE_TAG_SUCCESS, DELETE_TAG_FAILURE],
+    endpoint: 'tags/:folderId',
+    requestOptions,
+  }
+});
+
+export const deleteTag = (id) => dispatch => {
+  dispatch(removeTag({
+    method: 'DELETE',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({id}),
+  }));
+};
