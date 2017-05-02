@@ -7,7 +7,7 @@ export const FETCH_NOTES_FAILURE = 'FETCH_NOTES_FAILURE';
 const fetchNotes = (params) => ({
   [CALL_API]: {
     types: [FETCH_NOTES_REQUEST, FETCH_NOTES_SUCCESS, FETCH_NOTES_FAILURE],
-    endpoint: `notes/${params.folderId}`,
+    endpoint: `notes/${params.folderId ? params.folderId : 'null'}`,
   }
 });
 
@@ -138,4 +138,19 @@ export const moveSelectedNote = (data) => dispatch => {
       hoverIndex: data.hoverIndex,
     });
   }
+};
+//---SEARCH_NOTES---------------------------------------------------------------->
+export const SEARCH_NOTES_REQUEST = 'SEARCH_NOTES_REQUEST';
+export const SEARCH_NOTES_SUCCESS = 'SEARCH_NOTES_SUCCESS';
+export const SEARCH_NOTES_FAILURE = 'SEARCH_NOTES_FAILURE';
+
+const findNotes = (searchText, isDeep) => ({
+  [CALL_API]: {
+    types: [SEARCH_NOTES_REQUEST, SEARCH_NOTES_SUCCESS, SEARCH_NOTES_FAILURE],
+    endpoint: isDeep ? `notes/search?deepQ=${searchText}` : `notes/search?q=${searchText}`,
+  }
+});
+
+export const searchNotes = (searchText, isDeep) => dispatch => {
+  dispatch(findNotes(searchText, isDeep));
 };

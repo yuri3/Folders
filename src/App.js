@@ -40,6 +40,13 @@ class App extends Component {
           <div style={style}>
             <Switch>
               <Route exact path="/" render={() => <Redirect to="/folders"/>}/>
+              <Route path="/notes/search" render={() => (
+                <div style={routeStyle}>
+                  <SideBar/>
+                  <Route component={FoldersContainer}/>
+                  <Route component={FoundNotesContainer}/>
+                </div>
+              )}/>
               <Route path="/notes/:folderId/:noteId" render={({location}) => (
                 <div style={routeStyle}>
                   <SideBar/>
@@ -52,13 +59,6 @@ class App extends Component {
                   <SideBar/>
                   <Route component={FoldersContainer}/>
                   <Route component={NotesContainer}/>
-                </div>
-              )}/>
-              <Route path="/notes/search" render={() => (
-                <div style={routeStyle}>
-                  <SideBar/>
-                  <Route component={FoldersContainer}/>
-                  <Route component={FoundNotesContainer}/>
                 </div>
               )}/>
               <Route path="/folders" render={({location}) => (

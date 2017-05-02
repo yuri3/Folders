@@ -7,7 +7,7 @@ export const FETCH_TAGS_FAILURE = 'FETCH_TAGS_FAILURE';
 const fetchTags = (noteId) => ({
   [CALL_API]: {
     types: [FETCH_TAGS_REQUEST, FETCH_TAGS_SUCCESS, FETCH_TAGS_FAILURE],
-    endpoint: `tags/${noteId}`,
+    endpoint: `tags/${noteId ? noteId : 'null'}`,
   }
 });
 

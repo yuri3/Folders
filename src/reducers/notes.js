@@ -17,7 +17,10 @@ import {
   DELETE_NOTE_REQUEST,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_FAILURE,
-  MOVE_NOTE_IN_VIEW
+  MOVE_NOTE_IN_VIEW,
+  SEARCH_NOTES_REQUEST,
+  SEARCH_NOTES_SUCCESS,
+  SEARCH_NOTES_FAILURE
 } from '../actions/notes';
 
 export const note = (state = {}, action) => {
@@ -66,6 +69,9 @@ export const noteOptions = (state = {
   isCreating: false,
   isUpdating: false,
   isDeleting: false,
+  isSearching: false,
+  matchInTitles: {count: 0, rows: []},
+  matchInTags: {count: 0, rows: []},
   successMsg: '',
   errorMsg: '',
   deleteId: null,
@@ -109,6 +115,18 @@ export const noteOptions = (state = {
       return {...state, isDeleting: false};
     case DELETE_NOTE_FAILURE:
       return {...state, isDeleting: false, error: action.error};
+
+    case SEARCH_NOTES_REQUEST:
+      return {...state, isSearching: true};
+    case SEARCH_NOTES_SUCCESS:
+      return {
+        ...state,
+        isSearching: false,
+        matchInTitles: action.response.notes,
+        matchInTags: action.response.tags ? action.response.tags : {count: 0, rows: []},
+      };
+    case SEARCH_NOTES_FAILURE:
+      return {...state, isSearching: false, error: action.error};
     default:
       return state;
   }

@@ -10,7 +10,7 @@ import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
 import RenameFolderForm from './RenameFolderForm';
 import SubFoldersList from './SubFoldersList';
 import './css/Folder.css';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 
 const style = {
   flex: '1',

@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 
 const style = {
   alignSelf: 'flex-end',

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 import CreateFolderForm from './CreateFolderForm';
 
 const style = {
