@@ -29,14 +29,14 @@ class NoteDetails extends Component {
   componentDidMount() {
     const {match: {params}, fetchNoteById, fetchAllTags} = this.props;
     fetchNoteById(params);
-    fetchAllTags(params.noteId);
+    fetchAllTags();
   }
   componentWillReceiveProps(nextProps) {
     const {match: {params: {noteId}}, note, notes, noteOptions: {successMsg, errorMsg}} = this.props;
     const {isError, isFormChanged} = this.state;
     if (
         noteId !== nextProps.match.params.noteId &&
-        note.name !== notes.find(note => note.id === Number.parseInt(noteId)).name &&
+        note.name !== notes.find(note => note.id === Number.parseInt(noteId, 10)).name &&
         (isError || isFormChanged)
     ) {
       this.changeName(note.name);
@@ -80,6 +80,7 @@ class NoteDetails extends Component {
     const {isError, errorMessage, isFormChanged, formMessage} = this.state;
     const {noteId} = match.params;
     const {isFetchingById} = noteOptions;
+    const {isFetching} = tagOptions;
     return (
       <div style={style}>
         <Prompt
@@ -99,7 +100,7 @@ class NoteDetails extends Component {
             }
           }}
         />
-        {!isFetchingById && note.id &&
+        {!isFetchingById && note.id && !isFetching && tags.length > 0 &&
           <NoteForm
             handleBlocking={this.handleBlocking}
             notes={notes}

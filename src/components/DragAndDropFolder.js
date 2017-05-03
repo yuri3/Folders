@@ -13,21 +13,9 @@ const folderSource = {
   beginDrag(props) {
     return {
       id: props.folder.id,
-      dragIndex: props.index,
       index: props.index,
-      dragAndDropFolders: [],
     };
   },
-  /*endDrag(props, monitor) {
-    const item = monitor.getItem();
-    const dragFolder = props.folders[item.dragIndex];
-    const hoverFolder = props.folders[item.index];
-
-    if(dragFolder.id === hoverFolder.id) {
-      return;
-    }
-    props.moveSelectedFolder(item.dragAndDropFolders);
-  },*/
 };
 
 const folderTarget = {
@@ -42,12 +30,6 @@ const folderTarget = {
       return;
     }
     if(dragIndex !== hoverIndex) {
-      /*monitor.getItem().dragAndDropFolders.push({
-        dragId: dragId,
-        dragOrder: dragIndex,
-        hoverId: hoverId,
-        hoverOrder: hoverIndex,
-      });*/
       props.moveSelectedFolder({dragIndex, hoverIndex});
     }
     monitor.getItem().id = hoverId;

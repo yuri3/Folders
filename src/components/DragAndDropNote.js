@@ -8,28 +8,13 @@ const noteSource = {
   beginDrag(props) {
     return {
       id: props.note.id,
-      dragIndex: props.index,
       index: props.index,
-      dragAndDropNotes: [],
     };
   },
-  /*endDrag(props, monitor) {
-   const item = monitor.getItem();
-   const dragNote = props.notes[item.dragIndex];
-   const hoverNote = props.notes[item.index];
-
-   if(dragNote.id === hoverNote.id) {
-   return;
-   }
-   props.moveSelectedNote(item.dragAndDropNotes);
-   },*/
 };
 
 const noteTarget = {
   hover(props, monitor) {
-    //const dragId = monitor.getItem().id;
-    //const hoverId = props.folder.id;
-
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
     // Don't replace items with themselves
@@ -37,12 +22,6 @@ const noteTarget = {
       return;
     }
     if(dragIndex !== hoverIndex) {
-      /*monitor.getItem().dragAndDropNotes.push({
-       dragId: dragId,
-       dragOrder: dragIndex,
-       hoverId: hoverId,
-       hoverOrder: hoverIndex,
-       });*/
       props.moveSelectedNote({dragIndex, hoverIndex});
     }
     monitor.getItem().index = hoverIndex;

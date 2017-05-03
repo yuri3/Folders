@@ -8,7 +8,7 @@ const callApi = async (endpoint, requestOptions) => {
     if(response.ok) {
       return response.json();
     } else {
-      return Promise.reject(response.json());
+      return Promise.reject(response.json()).catch((error) => error);
     }
   } catch(err) {
     throw new Error(err);
@@ -41,8 +41,8 @@ export default store => next => async action => {
   const [requestType, successType, failureType] = types;
   next({type: requestType});
 
-  const response = await callApi(endpoint, requestOptions);
   try {
+    const response = await callApi(endpoint, requestOptions);
     next({type: successType, response});
   } catch (error) {
     next({type: failureType, error: error.message || 'Something bad happened'});

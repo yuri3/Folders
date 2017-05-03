@@ -4,15 +4,15 @@ export const FETCH_TAGS_REQUEST = 'FETCH_TAGS_REQUEST';
 export const FETCH_TAGS_SUCCESS = 'FETCH_TAGS_SUCCESS';
 export const FETCH_TAGS_FAILURE = 'FETCH_TAGS_FAILURE';
 
-const fetchTags = (noteId) => ({
+const fetchTags = () => ({
   [CALL_API]: {
     types: [FETCH_TAGS_REQUEST, FETCH_TAGS_SUCCESS, FETCH_TAGS_FAILURE],
-    endpoint: `tags/${noteId ? noteId : 'null'}`,
+    endpoint: `tags`,
   }
 });
 
-export const fetchAllTags = (noteId) => dispatch => {
-  dispatch(fetchTags(noteId));
+export const fetchAllTags = () => dispatch => {
+  dispatch(fetchTags());
 };
 //---CREATE_TAG---------------------------------------------------------------->
 export const CREATE_TAG_REQUEST = 'CREATE_TAG_REQUEST';
@@ -42,7 +42,7 @@ export const DELETE_TAG_FAILURE = 'DELETE_TAG_FAILURE';
 const removeTag = (requestOptions) => ({
   [CALL_API]: {
     types: [DELETE_TAG_REQUEST, DELETE_TAG_SUCCESS, DELETE_TAG_FAILURE],
-    endpoint: 'tags/:folderId',
+    endpoint: 'tags',
     requestOptions,
   }
 });

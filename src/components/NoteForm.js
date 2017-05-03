@@ -16,27 +16,20 @@ const loadingStyle = {
 
 const validate = (value, props) => {
   const error = {};
-  const {folderId, noteId} = props.params;
   if(!value.name) {
     error.name = 'The "Name" field is Required!';
   } else if(value.name && value.name.length > 18) {
     error.name = 'The "Name" field must be 18 characters or less!';
   } else if(
     props.notes.some(
-      note => note && note.folderId === Number.parseInt(folderId, 10)
-                   && note.id !== value.id
+      note => note && note.id !== value.id
                    && note.name !== 'New Note'
                    && note.name === value.name.trim()
     )
   ) {
     error.name = 'This name is already taken!';
   }
-  if(
-    props.tags.some(
-      tag => tag && tag.noteId === Number.parseInt(noteId, 10)
-                 && tag.label === value.tag
-    )
-  ) {
+  if(props.tags.some(tag => tag && tag.label === value.tag)) {
     error.tag = 'This tag is already taken!';
   }
   props.handleBlocking({
@@ -110,7 +103,7 @@ class NoteForm extends Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.params.noteId !== this.props.params.noteId) {
       this.props.fetchNoteById(nextProps.params);
-      this.props.fetchAllTags(nextProps.params.noteId);
+      this.props.fetchAllTags();
     }
   }
   componentWillUnmount() {

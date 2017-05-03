@@ -111,34 +111,11 @@ export const deleteSelectedNote = (id) => dispatch => {
 //---MOVE_NOTE----------------------------------------------------------------->
 export const MOVE_NOTE_IN_VIEW = 'MOVE_NOTE_IN_VIEW';
 
-export const MOVE_NOTE_REQUEST = 'MOVE_NOTE_REQUEST';
-export const MOVE_NOTE_SUCCESS = 'MOVE_NOTE_SUCCESS';
-export const MOVE_NOTE_FAILURE = 'MOVE_NOTE_FAILURE';
-
-const moveNote = (requestOptions) => ({
-  [CALL_API]: {
-    types: [MOVE_NOTE_REQUEST, MOVE_NOTE_SUCCESS, MOVE_NOTE_FAILURE],
-    endpoint: `notes/:folderId/drag`,
-    requestOptions,
-  }
+export const moveSelectedNote = (data) => ({
+  type: MOVE_NOTE_IN_VIEW,
+  dragIndex: data.dragIndex,
+  hoverIndex: data.hoverIndex,
 });
-
-export const moveSelectedNote = (data) => dispatch => {
-  if(Array.isArray(data)) {
-    console.log('data', data);
-    dispatch(moveNote({
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data),
-    }));
-  } else {
-    dispatch({
-      type: MOVE_NOTE_IN_VIEW,
-      dragIndex: data.dragIndex,
-      hoverIndex: data.hoverIndex,
-    });
-  }
-};
 //---SEARCH_NOTES---------------------------------------------------------------->
 export const SEARCH_NOTES_REQUEST = 'SEARCH_NOTES_REQUEST';
 export const SEARCH_NOTES_SUCCESS = 'SEARCH_NOTES_SUCCESS';

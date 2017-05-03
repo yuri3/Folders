@@ -97,31 +97,8 @@ export const deleteSelectedFolder = (id, parentId) => dispatch => {
 //---MOVE_FOLDER-------------------------------------------------------------->
 export const MOVE_FOLDER_IN_VIEW = 'MOVE_FOLDER_IN_VIEW';
 
-export const MOVE_FOLDER_REQUEST = 'MOVE_FOLDER_REQUEST';
-export const MOVE_FOLDER_SUCCESS = 'MOVE_FOLDER_SUCCESS';
-export const MOVE_FOLDER_FAILURE = 'MOVE_FOLDER_FAILURE';
-
-const moveFolder = (requestOptions) => ({
-  [CALL_API]: {
-    types: [MOVE_FOLDER_REQUEST, MOVE_FOLDER_SUCCESS, MOVE_FOLDER_FAILURE],
-    endpoint: 'folders',
-    requestOptions,
-  }
+export const moveSelectedFolder = (data) => ({
+  type: MOVE_FOLDER_IN_VIEW,
+  dragIndex: data.dragIndex,
+  hoverIndex: data.hoverIndex,
 });
-
-export const moveSelectedFolder = (data) => dispatch => {
-  if(Array.isArray(data)) {
-    console.log('data', data);
-    dispatch(moveFolder({
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data),
-    }));
-  } else {
-    dispatch({
-      type: MOVE_FOLDER_IN_VIEW,
-      dragIndex: data.dragIndex,
-      hoverIndex: data.hoverIndex,
-    });
-  }
-};

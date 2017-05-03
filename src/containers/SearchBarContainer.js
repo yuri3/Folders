@@ -46,7 +46,7 @@ class SearchBar extends Component {
     } = this.state;
     const {
       noteOptions: {
-        matchInTitles: {count: noteCount, rows: notes},
+        matchInTitles: {count: noteCount},
         matchInTags: {count: tagCount},
       }
     } = this.props;
@@ -91,7 +91,7 @@ class SearchBar extends Component {
           <AutoComplete
             floatingLabelText="Type to search..."
             fullWidth={true}
-            maxSearchResults={3}
+            maxSearchResults={isInputChecked ? 3 : 10}
             filter={filter}
             dataSourceConfig={{text: 'name', value: 'name'}}
             dataSource={!isSearching && (noteCount > 0 || tagCount > 0) ?
