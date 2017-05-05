@@ -158,7 +158,7 @@ class Folder extends Component {
            isRenaming={isRenaming}
            onSubmit={this.renameFolder}
            handleClose={this.closeRenameInput}
-           initialValues={{parentId: folder.parentId, name: folder.name}}/>}
+           initialValues={{id: folder.id, parentId: folder.parentId, name: folder.name}}/>}
         <ReactCSSTransitionGroup
           transitionName="fade"
           transitionEnterTimeout={500}

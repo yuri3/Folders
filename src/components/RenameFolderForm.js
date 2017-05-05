@@ -12,20 +12,21 @@ const style = {
 
 const validate = (value, props) => {
   const error = {};
-  if(!props.dirty) {return;}
   if(!value.name) {
-    error.name = 'Required';
+    error.name = 'The folder name is Required!';
   } else if(value.name && value.name.length > 18) {
-    error.name = 'Must be 18 characters or less!';
+    error.name = 'The folder name must be from 1 to 18 characters!';
   } else if(
-    props.folders.some(
-      folder => !folder.parentId && !value.parentId && folder.name === value.name.trim()
+    props.folders.some(folder =>
+      folder.id !== value.id &&
+      !folder.parentId && !value.parentId && folder.name === value.name.trim()
     )
   ) {
     error.name = 'This name is already taken!'
   } else if(
     props.folders.some(folder => (
-      folder.parentId && value.parentId === folder.parentId && folder.name === value.name.trim()
+      folder.id !== value.id && folder.parentId && value.parentId === folder.parentId &&
+      folder.name !== 'New Folder' && folder.name === value.name.trim()
     ))
   ) {
     error.name = 'This name is already taken!'

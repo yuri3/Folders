@@ -19,7 +19,7 @@ const validate = (value, props) => {
   if(!value.name) {
     error.name = 'The "Name" field is Required!';
   } else if(value.name && value.name.length > 18) {
-    error.name = 'The "Name" field must be 18 characters or less!';
+    error.name = 'The "Name" field must be from 1 to 18 characters!';
   } else if(
     props.notes.some(
       note => note && note.id !== value.id

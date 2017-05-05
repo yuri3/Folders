@@ -14,7 +14,7 @@ const validate = (value, props) => {
   const error = {};
   if(!props.dirty) {return;}
   if(value.name && value.name.length > 18) {
-    error.name = 'Must be 18 characters or less!';
+    error.name = 'The folder name must be from 1 to 18 characters!';
   } else if(props.folders.some(folder => !folder.parentId && folder.name === value.name.trim())) {
     error.name = 'This name is already taken!'
   }
