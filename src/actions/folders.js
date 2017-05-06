@@ -33,12 +33,12 @@ const createFolder = (requestOptions) => ({
   }
 });
 
-export const createNewFolder = (parentId = '', order, name = 'New Folder') => dispatch => {
+export const createNewFolder = (parentId = '', name = 'New Folder') => dispatch => {
   parentId && dispatch(selectCreateFolder(parentId));
   dispatch(createFolder({
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({parentId, order, name}),
+    body: JSON.stringify({parentId, name}),
   }));
 };
 //---RENAME_FOLDER------------------------------------------------------------>

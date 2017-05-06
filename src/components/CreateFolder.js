@@ -27,9 +27,9 @@ class CreateFolder extends Component {
     this.switchCreateInput();
   }
   handleSubmit(values) {
-    const {folders, createNewFolder} = this.props;
+    const {createNewFolder} = this.props;
     const {name} = values;
-    createNewFolder(undefined, folders.length, name);
+    createNewFolder(undefined, name);
   }
   render() {
     const {options: {isFetching, isCreating}, folders} = this.props;

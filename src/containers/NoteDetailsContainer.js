@@ -100,7 +100,7 @@ class NoteDetails extends Component {
             }
           }}
         />
-        {!isFetchingById && note.id && !isFetching && tags.length > 0 &&
+        {!isFetchingById && note.id && !isFetching && tags.length >= 0 &&
           <NoteForm
             handleBlocking={this.handleBlocking}
             notes={notes}
@@ -118,7 +118,7 @@ class NoteDetails extends Component {
             changeNoteName={this.changeName}
             onSubmit={this.handleSubmit}
             resetMessages={resetMessages}
-            addTag={(label) => addTag(noteId, tags.length, label)}
+            addTag={(label) => addTag(noteId, label)}
             deleteTag={deleteTag}
           />}
       </div>

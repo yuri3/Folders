@@ -42,11 +42,11 @@ const createNote = (folderId, requestOptions) => ({
   }
 });
 
-export const createNewNote = (folderId, order, name = 'New Note') => dispatch => {
+export const createNewNote = (folderId, name = 'New Note') => dispatch => {
   dispatch(createNote(folderId, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({order, name, description: ''}),
+    body: JSON.stringify({name, description: ''}),
   }));
 };
 //---UPDATE_NOTE------------------------------------------------------------>

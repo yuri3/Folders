@@ -11,8 +11,8 @@ const styles = {
 
 class CreateNote extends Component {
   createNote = () => {
-    const {folderId, order, createNewNote} = this.props;
-    createNewNote(folderId, order);
+    const {folderId, createNewNote} = this.props;
+    createNewNote(folderId);
   };
   render() {
     const {options: {isFetching, isCreating, isFetchingById, isUpdating}} = this.props;
@@ -41,7 +41,6 @@ CreateNote.propTypes = {
     isUpdating: PropTypes.bool,
   }).isRequired,
   folderId: PropTypes.string.isRequired,
-  order: PropTypes.number.isRequired,
   createNewNote: PropTypes.func.isRequired,
 };
 

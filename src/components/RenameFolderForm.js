@@ -12,9 +12,7 @@ const style = {
 
 const validate = (value, props) => {
   const error = {};
-  if(!value.name) {
-    error.name = 'The folder name is Required!';
-  } else if(value.name && value.name.length > 18) {
+  if(value.name === '' || value.name.length > 18) {
     error.name = 'The folder name must be from 1 to 18 characters!';
   } else if(
     props.folders.some(folder =>

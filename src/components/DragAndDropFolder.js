@@ -106,7 +106,6 @@ DragAndDropFolder.propTypes = {
     parentId: PropTypes.number,
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    order: PropTypes.number.isRequired,
   }).isRequired,
   match: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,

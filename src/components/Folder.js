@@ -49,7 +49,7 @@ class Folder extends Component {
   }
   createFolder(id) {
     this.selectFolder(id);
-    this.props.createNewFolder(id, this.props.folders.length);
+    this.props.createNewFolder(id);
   }
   selectFolder(id) {
     this.setState({selectedFolderId: id});

@@ -27,11 +27,11 @@ const createTag = (noteId, requestOptions) => ({
   }
 });
 
-export const addTag = (noteId, order, label) => dispatch => {
+export const addTag = (noteId, label) => dispatch => {
   dispatch(createTag(noteId, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({order, label}),
+    body: JSON.stringify({label}),
   }));
 };
 //---DELETE_TAG---------------------------------------------------------------->

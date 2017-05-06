@@ -38,7 +38,6 @@ class Notes extends Component {
         <CreateNote
           options={options}
           folderId={folderId}
-          order={notes.length}
           createNewNote={createNewNote}/>
         {!isFetching && notes.length > 0 &&
           <NoteList
