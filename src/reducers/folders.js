@@ -17,6 +17,17 @@ import {
   MOVE_FOLDER_IN_VIEW,
 } from '../actions/folders';
 
+function remove(state, id) {
+  state = state.filter(folder => folder.id !== id);
+  const subFolder = state.find(folder => folder.parentId === id);
+  if(subFolder) {
+    state = remove(state, subFolder.id);
+  } else {
+    return state;
+  }
+  return remove(state, id);
+}
+
 export const folders = (state = [], action) => {
   switch(action.type) {
     case FETCH_FOLDERS_SUCCESS:
@@ -32,23 +43,7 @@ export const folders = (state = [], action) => {
         };
       });
     case DELETE_FOLDER_SUCCESS:
-      function deleteAllSubFolders(
-        index = 0, newArr = state, id = action.response.id, parentId = action.response.parentId
-      ) {
-        if(index >= state.length) {
-          return newArr;
-        }
-        newArr = newArr.filter(
-          folder => folder.id !== action.response.id && folder.parentId !== id
-        );
-        if(newArr.length === state.length - 1) {
-          return deleteAllSubFolders(state.length, newArr);
-        }
-        id = !parentId ? state[index].id : id;
-        index = parentId ? state.length : index;
-        return deleteAllSubFolders(index + 1, newArr, id);
-      }
-      return deleteAllSubFolders();
+      return remove(state, action.response.id);
     case MOVE_FOLDER_IN_VIEW:
       const {dragIndex, hoverIndex} = action;
       const dragFolder = state[dragIndex];
