@@ -72,7 +72,6 @@ class NoteDetails extends Component {
       tagOptions,
       match,
       fetchNoteById,
-      fetchAllTags,
       resetMessages,
       addTag,
       deleteTag,
@@ -111,10 +110,10 @@ class NoteDetails extends Component {
             initialValues={{
               id: note.id,
               name: note.name,
+              tag: '',
               description: note.description,
             }}
             fetchNoteById={fetchNoteById}
-            fetchAllTags={fetchAllTags}
             changeNoteName={this.changeName}
             onSubmit={this.handleSubmit}
             resetMessages={resetMessages}

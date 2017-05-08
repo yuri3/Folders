@@ -30,7 +30,7 @@ const folderTarget = {
       return;
     }
     if(dragIndex !== hoverIndex) {
-      props.moveSelectedFolder(dragIndex, hoverIndex);
+      props.moveSelectedFolder({dragIndex, hoverIndex});
     }
     monitor.getItem().id = hoverId;
     monitor.getItem().index = hoverIndex;

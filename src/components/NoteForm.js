@@ -29,6 +29,8 @@ const validate = (value, props) => {
   }
   if(props.tags.some(tag => tag && tag.label === value.tag)) {
     error.tag = 'This tag is already taken!';
+  } else if(value.tag.length > 18) {
+    error.tag = 'The "Tag" field has to be from 1 to 18 characters!';
   }
   props.handleBlocking({
     error: error,
@@ -101,7 +103,6 @@ class NoteForm extends Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.params.noteId !== this.props.params.noteId) {
       this.props.fetchNoteById(nextProps.params);
-      this.props.fetchAllTags();
     }
   }
   componentWillUnmount() {
@@ -222,7 +223,6 @@ NoteForm.propTypes = {
   }).isRequired,
   handleBlocking: PropTypes.func.isRequired,
   fetchNoteById: PropTypes.func.isRequired,
-  fetchAllTags: PropTypes.func.isRequired,
   changeNoteName: PropTypes.func.isRequired,
   resetMessages: PropTypes.func.isRequired,
   addTag: PropTypes.func.isRequired,
@@ -231,7 +231,5 @@ NoteForm.propTypes = {
 
 export default reduxForm({
   form: 'noteForm',
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true,
   validate,
 })(NoteForm);
