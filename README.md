@@ -1,10 +1,10 @@
 [DEMO](https://my-notes-13.herokuapp.com/)
-```
 To run dev build:
 
+```
 npm install
 npm start
-
+```
 The technologies:
 
 --React
@@ -13,4 +13,3 @@ The technologies:
 --Redux-Form
 --React-DnD
 --Material.IO
-```
