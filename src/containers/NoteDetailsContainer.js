@@ -16,7 +16,6 @@ class NoteDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPristine: true,
       isError: false,
       errorMessage: '',
       isFormChanged: false,
@@ -31,8 +30,12 @@ class NoteDetails extends Component {
     fetchNoteById(params);
     fetchAllTags();
   }
+  componentWillUnmount() {
+    const {successMsg, errorMsg} = this.props.noteOptions;
+    (successMsg || errorMsg) && this.props.resetMessages();
+  }
   componentWillReceiveProps(nextProps) {
-    const {match: {params: {noteId}}, note, notes, noteOptions: {successMsg, errorMsg}} = this.props;
+    const {match: {params: {noteId}}, note, notes} = this.props;
     const {isError, isFormChanged} = this.state;
     if (
         noteId !== nextProps.match.params.noteId &&
@@ -40,9 +43,6 @@ class NoteDetails extends Component {
         (isError || isFormChanged)
     ) {
       this.changeName(note.name);
-    }
-    if(successMsg || errorMsg) {
-      this.handleBlocking({error: {}, isFormChanged: ''});
     }
   }
   changeName(value) {
@@ -52,7 +52,6 @@ class NoteDetails extends Component {
   handleBlocking({error, isFormChanged}) {
     const key = Object.keys(error).find(key => error[key] && error[key]);
     this.setState({
-      ...this.state,
       isError: !!error[key],
       errorMessage: error[key],
       isFormChanged: !!isFormChanged,
@@ -62,6 +61,7 @@ class NoteDetails extends Component {
   handleSubmit(values) {
     const {updateSelectedNote, match: {params}} = this.props;
     updateSelectedNote(params, values);
+    this.handleBlocking({error: {}, isFormChanged: ''});
   }
   render() {
     const {

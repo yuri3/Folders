@@ -3,7 +3,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions/notes';
+import * as noteActions from '../actions/notes';
+import * as tagActions from '../actions/tags';
 import DragAndDropNote from '../components/DragAndDropNote';
 
 const style = {
@@ -25,8 +26,9 @@ class FoundTitles extends Component {
     this.handleLink = this.handleLink.bind(this);
   }
   componentDidMount() {
-    const {match: {params}, fetchAllNotes} = this.props;
+    const {match: {params}, fetchAllNotes, fetchAllTags} = this.props;
     fetchAllNotes(params);
+    fetchAllTags();
   }
   handleLink(label) {
     const {location: {state}} = this.props;
@@ -37,20 +39,28 @@ class FoundTitles extends Component {
     const {
       notes,
       noteOptions,
+      tags,
+      tagOptions: {isFetching: isFetchingTags},
       location: {state},
       moveSelectedNote,
       selectDeleteNote,
       deleteSelectedNote,
     } = this.props;
     const {
-      isFetching: isFetchingNote,
+      isFetching: isFetchingNotes,
       matchInTitles: {rows: matchNotes},
-      matchInTags: {rows: matchTags},
+      matchInTags: {rows},
     } = noteOptions;
+    const matchTags = rows.reduce((prev, curr) => {
+      if(!prev.find(tag => tag.label === curr.label)) {
+        prev.push(curr);
+      }
+      return prev;
+    }, []);
     const {label} = this.state;
     return (
       <div style={style}>
-        {!isFetchingNote && <div>
+        {!isFetchingNotes && !isFetchingTags && <div>
           <div style={headerStyle}>
             <strong>{`FOUND (${label ? label : state.searchText.toUpperCase()}) BY ${state.type ? state.type : 'TAGS'}`}</strong>
           </div>
@@ -102,7 +112,7 @@ class FoundTitles extends Component {
                   transitionEnterTimeout={500}
                   transitionLeaveTimeout={500}
                 >
-                  {note.name === label &&
+                  {tags.find(tag => tag.noteId === note.id && tag.label === label) &&
                     <DragAndDropNote
                       index={index}
                       note={note}
@@ -138,7 +148,16 @@ FoundTitles.propTypes = {
       rows: PropTypes.array,
     }).isRequired,
   }).isRequired,
+  tags: PropTypes.arrayOf(PropTypes.shape({
+    noteId: PropTypes.number,
+    id: PropTypes.number,
+    label: PropTypes.string
+  })).isRequired,
+  tagOptions: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+  }).isRequired,
   fetchAllNotes: PropTypes.func.isRequired,
+  fetchAllTags: PropTypes.func.isRequired,
   moveSelectedNote: PropTypes.func.isRequired,
   selectDeleteNote: PropTypes.func.isRequired,
   deleteSelectedNote: PropTypes.func.isRequired,
@@ -150,10 +169,12 @@ FoundTitles.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
   notes: state.notes,
   noteOptions: state.noteOptions,
+  tags: state.tags,
+  tagOptions: state.tagOptions,
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(actions, dispatch);
+  return bindActionCreators({...noteActions, ...tagActions}, dispatch);
 };
 
 const FoundTitlesContainer = connect(

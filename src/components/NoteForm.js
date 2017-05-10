@@ -27,7 +27,9 @@ const validate = (value, props) => {
   ) {
     error.name = 'This name is already taken!';
   }
-  if(props.tags.some(tag => tag && tag.label === value.tag)) {
+  if(props.tags.some(tag =>
+    tag && tag.noteId === Number.parseInt(props.params.noteId, 10) &&
+    tag.label === value.tag)) {
     error.tag = 'This tag is already taken!';
   } else if(value.tag.length > 18) {
     error.tag = 'The "Tag" field has to be from 1 to 18 characters!';
@@ -85,28 +87,11 @@ const renderTextField = (field) => {
 };
 
 class NoteForm extends Component {
-  constructor(props) {
-    super(props);
-    this.timer = undefined;
-    this.snackbarDuration = 5000;
-  }
-  componentDidUpdate() {
-    const {
-      submitSucceeded,
-      noteOptions: {successMsg, errorMsg},
-      resetMessages,
-    } = this.props;
-    if(submitSucceeded && (successMsg || errorMsg)) {
-      this.timer = setTimeout(() => resetMessages(), this.snackbarDuration);
-    }
-  }
   componentWillReceiveProps(nextProps) {
     if(nextProps.params.noteId !== this.props.params.noteId) {
+      this.props.resetMessages();
       this.props.fetchNoteById(nextProps.params);
     }
-  }
-  componentWillUnmount() {
-    clearTimeout(this.timer);
   }
   renderChip = (tag) => {
     const {deleteTag, params: {noteId}} = this.props;
@@ -124,6 +109,7 @@ class NoteForm extends Component {
   };
   render() {
     const {
+      dirty,
       noteOptions: {isUpdating, successMsg, errorMsg},
       invalid,
       pristine,
@@ -178,9 +164,9 @@ class NoteForm extends Component {
             />
           </div>
           <Snackbar
-            open={!!successMsg || !!errorMsg}
+            open={!dirty && (!!successMsg || !!errorMsg)}
             message={successMsg || errorMsg}
-            autoHideDuration={this.snackbarDuration}
+            autoHideDuration={5000}
             action={
               successMsg ?
                 <i className="material-icons md-36">sentiment_very_satisfied</i> :
