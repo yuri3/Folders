@@ -7,7 +7,7 @@ npm start
 ```
 ### The technologies:
 
-### --React
+#### --React
 #### --React-Router
 #### --Redux
 #### --Redux-Form
