@@ -1,14 +1,13 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { folders, folderOptions } from './folders';
-import { notes, note, noteOptions } from './notes';
+import folders from './folders';
+import notes from './notes';
+import note from './note';
 import { tags, tagOptions } from './tags';
 
 const rootReducer = combineReducers({
   folders,
-  folderOptions,
   notes,
-  noteOptions,
   note,
   tags,
   tagOptions,

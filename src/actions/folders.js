@@ -34,7 +34,6 @@ const createFolder = (requestOptions) => ({
 });
 
 export const createNewFolder = (parentId = '', name = 'New Folder') => dispatch => {
-  parentId && dispatch(selectCreateFolder(parentId));
   dispatch(createFolder({
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -86,12 +85,11 @@ const deleteFolder = (requestOptions) => ({
   }
 });
 
-export const deleteSelectedFolder = (id, parentId) => dispatch => {
-  dispatch(selectDeleteFolder(id));
+export const deleteSelectedFolder = (id) => dispatch => {
   dispatch(deleteFolder({
     method: 'DELETE',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({id, parentId}),
+    body: JSON.stringify({id}),
   }));
 };
 //---MOVE_FOLDER-------------------------------------------------------------->

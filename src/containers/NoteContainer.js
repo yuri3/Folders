@@ -1,4 +1,8 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions  from '../actions/notes';
 import { withRouter } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
@@ -42,20 +46,17 @@ class Note extends Component {
     this.handleRemove = this.handleRemove.bind(this);
   }
   componentWillUnmount() {
-    const {options, selectDeleteNote} = this.props;
-    options.deleteId && selectDeleteNote(null);
+    const {notes: {deleteId}, selectDeleteNote} = this.props;
+    deleteId && selectDeleteNote(null);
   }
   handleRemove() {
-    const {history, deleteSelectedNote, match: {params: {folderId, noteId}}, note} = this.props;
+    const {history, selectDeleteNote, deleteSelectedNote, match: {params: {folderId, noteId}}, note} = this.props;
+    selectDeleteNote(note.id);
     deleteSelectedNote(note.id);
     note.id === Number.parseInt(noteId, 10) && history.push(`/notes/${folderId}`);
   }
   render() {
-    const {
-      note,
-      options: {deleteId},
-      isDragging
-    } = this.props;
+    const {notes: {deleteId}, note, isDragging} = this.props;
     const noteName = note.name ? note.name : 'New Note';
     const color = note.name ? 'dodgerblue' : 'gray';
     const opacity = isDragging ? 0 : 1;
@@ -75,6 +76,7 @@ class Note extends Component {
             <IconButton
               iconClassName="material-icons"
               tooltip="REMOVE NOTE"
+              tooltipPosition="top-center"
               onTouchTap={this.handleRemove}>delete_forever
             </IconButton>}
         </span>
@@ -84,21 +86,33 @@ class Note extends Component {
 }
 
 Note.propTypes = {
+  notes: PropTypes.shape({
+    deleteId: PropTypes.number,
+  }),
   note: PropTypes.shape({
     folderId: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
   }).isRequired,
-  options: PropTypes.shape({
-    deleteId: PropTypes.number,
-  }).isRequired,
+  isDragging: PropTypes.bool.isRequired,
   match: PropTypes.object,
-  location: PropTypes.object,
   history: PropTypes.object,
-  selectDeleteNote: PropTypes.func.isRequired,
-  deleteSelectedNote: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool,
+  selectDeleteNote: PropTypes.func,
+  deleteSelectedNote: PropTypes.func,
 };
 
-export default withRouter(Note);
+const mapStateToProps = (state, ownProps) => ({
+  notes: state.notes,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(actions, dispatch);
+};
+
+const NoteContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Note);
+
+export default withRouter(NoteContainer);

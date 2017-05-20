@@ -6,8 +6,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 import SideBar from './components/SideBar';
-import FoldersContainer from './containers/FoldersContainer';
-import NotesContainer from './containers/NotesContainer';
+import FolderListsContainer from './containers/FolderListsContainer';
+import NoteListsContainer from './containers/NoteListsContainer';
 import NoteDetailsContainer from './containers/NoteDetailsContainer';
 import FoundNotesContainer from './containers/FoundNotesContainer';
 
@@ -43,28 +43,28 @@ class App extends Component {
               <Route path="/notes/search" render={() => (
                 <div style={routeStyle}>
                   <SideBar/>
-                  <Route component={FoldersContainer}/>
+                  <Route component={FolderListsContainer}/>
                   <Route component={FoundNotesContainer}/>
                 </div>
               )}/>
               <Route path="/notes/:folderId/:noteId" render={({location}) => (
                 <div style={routeStyle}>
                   <SideBar/>
-                  <Route component={NotesContainer}/>
+                  <Route component={NoteListsContainer}/>
                   <Route component={NoteDetailsContainer}/>
                 </div>
               )}/>
               <Route path="/notes/:folderId" render={({location}) => (
                 <div style={routeStyle}>
                   <SideBar/>
-                  <Route component={FoldersContainer}/>
-                  <Route component={NotesContainer}/>
+                  <Route component={FolderListsContainer}/>
+                  <Route component={NoteListsContainer}/>
                 </div>
               )}/>
               <Route path="/folders" render={({location}) => (
                 <div style={routeStyle}>
                   <SideBar/>
-                  <Route component={FoldersContainer}/>
+                  <Route component={FolderListsContainer}/>
                 </div>
               )}/>
               <Route component={NoMatch}/>

@@ -1,7 +1,8 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { FolderTypes } from './FolderTypes';
 import { DragSource, DropTarget } from 'react-dnd';
-import Folder from './Folder';
+import FolderContainer from '../containers/FolderContainer';
 import flow from 'lodash/flow';
 
 const style = {
@@ -59,17 +60,7 @@ class DragAndDropSubFolder extends Component {
   }
   render() {
     const {
-      folders,
       folder,
-      match,
-      options,
-      selectCreateFolder,
-      createNewFolder,
-      selectRenameInput,
-      renameSelectedFolder,
-      selectDeleteFolder,
-      deleteSelectedFolder,
-      moveSelectedFolder,
       connectDragSource,
       connectDropTarget,
       isDragging,
@@ -77,19 +68,7 @@ class DragAndDropSubFolder extends Component {
     const border = isDragging ? '1px dashed gray' : '';
     return connectDragSource(connectDropTarget(
       <li style={{...style, border}}>
-        <Folder
-          folders={folders}
-          folder={folder}
-          match={match}
-          options={options}
-          isDragging={isDragging}
-          selectCreateFolder={selectCreateFolder}
-          createNewFolder={createNewFolder}
-          selectRenameInput={selectRenameInput}
-          renameSelectedFolder={renameSelectedFolder}
-          selectDeleteFolder={selectDeleteFolder}
-          deleteSelectedFolder={deleteSelectedFolder}
-          moveSelectedFolder={moveSelectedFolder}/>
+        <FolderContainer folder={folder} isDragging={isDragging}/>
       </li>
     ));
   }
@@ -97,24 +76,11 @@ class DragAndDropSubFolder extends Component {
 
 DragAndDropSubFolder.propTypes = {
   index: PropTypes.number.isRequired,
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.number,
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
   folder: PropTypes.shape({
     parentId: PropTypes.number,
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
-  match: PropTypes.object.isRequired,
-  options: PropTypes.object.isRequired,
-  selectCreateFolder: PropTypes.func.isRequired,
-  createNewFolder: PropTypes.func.isRequired,
-  selectRenameInput: PropTypes.func.isRequired,
-  renameSelectedFolder: PropTypes.func.isRequired,
-  selectDeleteFolder: PropTypes.func.isRequired,
-  deleteSelectedFolder: PropTypes.func.isRequired,
   moveSelectedFolder: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,
   connectDropTarget: PropTypes.func,

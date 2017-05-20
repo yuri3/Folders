@@ -4,7 +4,7 @@ export const CALL_API = 'CALL API';
 
 const callApi = async (endpoint, requestOptions) => {
   try {
-    const response = await fetch(`https://postgresql-notes.herokuapp.com/${endpoint}`, requestOptions);
+    const response = await fetch(`http://localhost:3001/${endpoint}`, requestOptions);
     if(response.ok) {
       return response.json();
     } else {

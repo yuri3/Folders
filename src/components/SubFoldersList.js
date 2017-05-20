@@ -1,22 +1,11 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import DragAndDropSubFolder from './DragAndDropSubFolder';
 
 class SubFoldersList extends Component {
   render() {
-    const {
-      folders,
-      folder,
-      options,
-      match,
-      selectCreateFolder,
-      createNewFolder,
-      selectRenameInput,
-      renameSelectedFolder,
-      selectDeleteFolder,
-      deleteSelectedFolder,
-      moveSelectedFolder
-    } = this.props;
+    const {folders: {lists}, folder, moveSelectedFolder} = this.props;
     return (
       <ul style={{listStyleType: 'none'}}>
         <ReactCSSTransitionGroup
@@ -24,22 +13,14 @@ class SubFoldersList extends Component {
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}
         >
-        {folders.map((subFolder, index) => (
-          folder.id === subFolder.parentId ?
+        {lists.map((subFolder, index) => (
+          folder.id === subFolder.parentId &&
             <DragAndDropSubFolder
               key={subFolder.id}
               index={index}
-              folders={folders}
               folder={subFolder}
-              match={match}
-              options={options}
-              selectCreateFolder={selectCreateFolder}
-              createNewFolder={createNewFolder}
-              selectRenameInput={selectRenameInput}
-              renameSelectedFolder={renameSelectedFolder}
-              selectDeleteFolder={selectDeleteFolder}
-              deleteSelectedFolder={deleteSelectedFolder}
-              moveSelectedFolder={moveSelectedFolder}/> : null
+              moveSelectedFolder={moveSelectedFolder}
+            />
         ))}
         </ReactCSSTransitionGroup>
       </ul>
@@ -48,25 +29,18 @@ class SubFoldersList extends Component {
 }
 
 SubFoldersList.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.number,
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  folders: PropTypes.shape({
+    lists: PropTypes.arrayOf(PropTypes.shape({
+      parentId: PropTypes.number,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+  }).isRequired,
   folder: PropTypes.shape({
     parentId: PropTypes.number,
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
-  options: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  selectCreateFolder: PropTypes.func.isRequired,
-  createNewFolder: PropTypes.func.isRequired,
-  selectRenameInput: PropTypes.func.isRequired,
-  renameSelectedFolder: PropTypes.func.isRequired,
-  selectDeleteFolder: PropTypes.func.isRequired,
-  deleteSelectedFolder: PropTypes.func.isRequired,
   moveSelectedFolder: PropTypes.func.isRequired,
 };
 

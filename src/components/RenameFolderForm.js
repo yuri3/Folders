@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton';
@@ -15,14 +16,14 @@ const validate = (value, props) => {
   if(value.name === '' || value.name.length > 18) {
     error.name = 'The folder name must be from 1 to 18 characters!';
   } else if(
-    props.folders.some(folder =>
+    props.folders.lists.some(folder =>
       folder.id !== value.id &&
       !folder.parentId && !value.parentId && folder.name === value.name.trim()
     )
   ) {
     error.name = 'This name is already taken!'
   } else if(
-    props.folders.some(folder => (
+    props.folders.lists.some(folder => (
       folder.id !== value.id && folder.parentId && value.parentId === folder.parentId &&
       folder.name !== 'New Folder' && folder.name === value.name.trim()
     ))
@@ -109,15 +110,18 @@ class RenameFolderForm extends Component {
 }
 
 RenameFolderForm.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.number,
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  folders: PropTypes.shape({
+    lists: PropTypes.arrayOf(PropTypes.shape({
+      parentId: PropTypes.number,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+  }).isRequired,
   isRenaming: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   initialValues: PropTypes.shape({
+    id: PropTypes.number,
     parentId: PropTypes.number,
     name: PropTypes.string.isRequired,
   }).isRequired,

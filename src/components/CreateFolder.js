@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import CreateNewFolderIcon from 'material-ui/svg-icons/file/create-new-folder';
 import Loading from './Loading';
@@ -19,9 +20,7 @@ class CreateFolder extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   switchCreateInput() {
-    this.setState((prevState) => ({
-      ...prevState, isSelected: !prevState.isSelected,
-    }));
+    this.setState({isSelected: !this.state.isSelected});
   }
   handleClose() {
     this.switchCreateInput();
@@ -32,7 +31,7 @@ class CreateFolder extends Component {
     createNewFolder(undefined, name);
   }
   render() {
-    const {options: {isFetching, isCreating}, folders} = this.props;
+    const {folders: {isFetching, isCreating, lists}} = this.props;
     const {isSelected} = this.state;
     return (
       <div>
@@ -48,7 +47,7 @@ class CreateFolder extends Component {
         </div>
         {isSelected &&
           <CreateFolderForm
-            folders={folders}
+            folders={lists}
             isCreating={isCreating}
             onSubmit={this.handleSubmit}
             handleClose={this.handleClose}/>}
@@ -58,14 +57,14 @@ class CreateFolder extends Component {
 }
 
 CreateFolder.propTypes = {
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    parentId: PropTypes.number,
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
-  options: PropTypes.shape({
-    isFetching: PropTypes.bool.isFetching,
+  folders: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
     isCreating: PropTypes.bool.isRequired,
+    lists: PropTypes.arrayOf(PropTypes.shape({
+      parentId: PropTypes.number,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
   }).isRequired,
   createNewFolder: PropTypes.func.isRequired,
 };

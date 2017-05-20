@@ -1,7 +1,8 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NoteTypes } from './NoteTypes';
 import { DragSource, DropTarget } from 'react-dnd';
-import Note from './Note';
+import NoteContainer from '../containers/NoteContainer';
 import flow from 'lodash/flow';
 
 const noteSource = {
@@ -49,41 +50,25 @@ class DragAndDropNote extends Component {
     img.onload = () => this.props.connectDragPreview(img);
   }
   render() {
-    const {
-      note,
-      options,
-      selectDeleteNote,
-      deleteSelectedNote,
-      connectDragSource,
-      connectDropTarget,
-      isDragging
-    } = this.props;
+    const {note, connectDragSource, connectDropTarget, isDragging} = this.props;
     const border = isDragging ? '1px dashed gray' : '1px solid gray';
     return connectDragSource(connectDropTarget(
-      <div style={{margin: '10px', border}}>
-        <Note
-          note={note}
-          options={options}
-          selectDeleteNote={selectDeleteNote}
-          deleteSelectedNote={deleteSelectedNote}
-          isDragging={isDragging}/>
+      <div style={{margin: 10, border}}>
+        <NoteContainer note={note} isDragging={isDragging}/>
       </div>
     ));
   }
 }
 
 DragAndDropNote.propTypes = {
+  index: PropTypes.number.isRequired,
   note: PropTypes.shape({
     folderId: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
   }).isRequired,
-  index: PropTypes.number.isRequired,
-  options: PropTypes.object.isRequired,
   moveSelectedNote: PropTypes.func.isRequired,
-  selectDeleteNote: PropTypes.func.isRequired,
-  deleteSelectedNote: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func,
   connectDragPreview: PropTypes.func,
   isDragging: PropTypes.bool,
