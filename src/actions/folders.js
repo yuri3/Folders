@@ -11,8 +11,23 @@ const fetchFolders = () => ({
   }
 });
 
-export const fetchAllFolders = () => dispatch => {
-  dispatch(fetchFolders());
+const shouldFetchFolders = (state) => {
+  const {folders: {isFetching, lists}} = state;
+  console.log(lists.length);
+  if(lists.length === 0) {
+    return true;
+  } else if(isFetching) {
+    return false;
+  } else {
+    return false;
+  }
+};
+
+export const fetchAllFolders = () => (dispatch, getState) => {
+  if(shouldFetchFolders(getState())) {
+    console.log('ssssssssssssssssssssss')
+    dispatch(fetchFolders());
+  }
 };
 //---CREATE_FOLDER------------------------------------------------------------>
 export const SELECT_CREATE_FOLDER = 'SELECT_CREATE_FOLDER';

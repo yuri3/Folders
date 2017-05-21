@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/folders';
@@ -26,9 +25,9 @@ class FolderLists extends Component {
     const {fetchAllFolders} = this.props;
     fetchAllFolders();
   }
-  componentWillUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const {folders: {lists}, history} = this.props;
-    if(lists.length > 0 && nextProps.folders.lists.length > lists.length) {
+    if(nextProps.folders.lists.length > lists.length) {
       history.push(`/notes/${nextProps.folders.lists[0].id}`);
     }
     if(nextProps.folders.lists.length < lists.length) {
@@ -94,4 +93,4 @@ const FolderListsContainer = connect(
   mapDispatchToProps
 )(FolderLists);
 
-export default withRouter(FolderListsContainer);
+export default FolderListsContainer;

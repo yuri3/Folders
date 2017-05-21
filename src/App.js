@@ -8,7 +8,7 @@ injectTapEventPlugin();
 import SideBar from './components/SideBar';
 import FolderListsContainer from './containers/FolderListsContainer';
 import NoteListsContainer from './containers/NoteListsContainer';
-import NoteDetailsContainer from './containers/NoteDetailsContainer';
+import NoteFormContainer from './containers/NoteFormContainer';
 import FoundNotesContainer from './containers/FoundNotesContainer';
 
 import ModalConfirmation from './ModalConfirmation';
@@ -51,7 +51,7 @@ class App extends Component {
                 <div style={routeStyle}>
                   <SideBar/>
                   <Route component={NoteListsContainer}/>
-                  <Route component={NoteDetailsContainer}/>
+                  <Route component={NoteFormContainer}/>
                 </div>
               )}/>
               <Route path="/notes/:folderId" render={({location}) => (

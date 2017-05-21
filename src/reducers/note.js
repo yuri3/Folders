@@ -9,32 +9,31 @@ import {
 } from '../actions/note';
 
 const initialState = {
-  isFetchingById: false,
-  isUpdating: false,
-  error: null,
-  note: {},
-  successMsg: null,
+  loading: false,
+  error: '',
+  currentNote: {},
+  success: '',
 };
 
 export default (state = initialState, action) => {
   const {type, response, error} = action;
   switch(type) {
     case FETCH_NOTE_BY_ID_REQUEST:
-      return {...state, isFetchingById: true, error: null, note: {}};
+      return {...state, loading: true, error: '', currentNote: {}};
     case FETCH_NOTE_BY_ID_SUCCESS:
-      return {...state, isFetchingById: false, error: null, note: response};
+      return {...state, loading: false, error: '', currentNote: response};
     case FETCH_NOTE_BY_ID_FAILURE:
-      return {...state, isFetchingById: false, error, note: {}};
+      return {...state, loading: false, error, currentNote: {}};
 
     case UPDATE_NOTE_REQUEST:
-      return {...state, isUpdating: true};
+      return {...state, loading: true};
     case UPDATE_NOTE_SUCCESS:
-      return {...state, isUpdating: false, error: null, note: response, successMsg: 'Update was made successfully!'};
+      return {...state, loading: false, error: '', currentNote: response, success: 'Update was made successfully!'};
     case UPDATE_NOTE_FAILURE:
-      return {...state, isUpdating: false, error, successMsg: null};
+      return {...state, loading: false, error, success: ''};
 
     case RESET_NOTE_STATUS_MESSAGES:
-      return {...state, successMsg: null, error: null};
+      return {...state, success: initialState.success, error: initialState.error};
 
     default:
       return state;

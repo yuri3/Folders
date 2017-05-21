@@ -10,45 +10,35 @@ import {
   DELETE_TAG_FAILURE
 } from '../actions/tags';
 
-export const tags = (state = [], action) => {
-  switch(action.type) {
-    case FETCH_TAGS_SUCCESS:
-      return action.response;
-    case CREATE_TAG_SUCCESS:
-      return [...state, action.response];
-    case DELETE_TAG_SUCCESS:
-      return state.filter(tag => tag.id !== action.response.id);
-    default:
-      return state;
-  }
+const initialState = {
+  loading: false,
+  error: null,
+  lists: [],
 };
 
-export const tagOptions = (state = {
-  isFetching: false,
-  isCreating: false,
-  isDeleting: false,
-}, action) => {
-  switch(action.type) {
+export const tags = (state = initialState, action) => {
+  const {type, response, error} = action;
+  switch(type) {
     case FETCH_TAGS_REQUEST:
-      return {...state, isFetching: true};
+      return {loading: true, error: null, lists: []};
     case FETCH_TAGS_SUCCESS:
-      return {...state, isFetching: false};
+      return {loading: false, error: null, lists: response};
     case FETCH_TAGS_FAILURE:
-      return {...state, isFetching: false, error: action.error};
+      return {loading: false, error, lists: []};
 
     case CREATE_TAG_REQUEST:
-      return {...state, isCreating: true};
+      return {...state, loading: true};
     case CREATE_TAG_SUCCESS:
-      return {...state, isCreating: false};
+      return {loading: false, error: null, lists: [...state.lists, response]};
     case CREATE_TAG_FAILURE:
-      return {...state, isCreating: false, error: action.error};
+      return {...state, loading: false, error};
 
     case DELETE_TAG_REQUEST:
-      return {...state, isDeleting: true};
+      return {...state, loading: true};
     case DELETE_TAG_SUCCESS:
-      return {...state, isDeleting: false};
+      return {loading: false, error: null, lists: state.lists.filter(tag => tag.id !== response.id)};
     case DELETE_TAG_FAILURE:
-      return {...state, isDeleting: false, error: action.error};
+      return {...state, loading: false, error: action.error};
     default:
       return state;
   }

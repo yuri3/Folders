@@ -15,6 +15,11 @@ export const fetchNoteById = (params) => dispatch => {
   dispatch(fetchNote(params));
 };
 //---UPDATE_NOTE------------------------------------------------------------>
+export const RESET_NOTE_STATUS_MESSAGES = 'RESET_NOTE_STATUS_MESSAGES';
+export const resetMessages = () => ({
+  type: RESET_NOTE_STATUS_MESSAGES,
+});
+
 export const UPDATE_NOTE_REQUEST = 'UPDATE_NOTE_REQUEST';
 export const UPDATE_NOTE_SUCCESS = 'UPDATE_NOTE_SUCCESS';
 export const UPDATE_NOTE_FAILURE = 'UPDATE_NOTE_FAILURE';
@@ -32,10 +37,5 @@ export const updateSelectedNote = (params, data) => dispatch => {
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data),
-  }));
+  })).then(() => dispatch(resetMessages()));
 };
-
-export const RESET_NOTE_STATUS_MESSAGES = 'RESET_NOTE_STATUS_MESSAGES';
-export const resetMessages = () => ({
-  type: RESET_NOTE_STATUS_MESSAGES,
-});
