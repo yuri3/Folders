@@ -16,7 +16,7 @@ const initialState = {
   lists: [],
 };
 
-export const tags = (state = initialState, action) => {
+export default (state = initialState, action) => {
   const {type, response, error} = action;
   switch(type) {
     case FETCH_TAGS_REQUEST:

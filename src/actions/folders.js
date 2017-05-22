@@ -13,7 +13,6 @@ const fetchFolders = () => ({
 
 const shouldFetchFolders = (state) => {
   const {folders: {isFetching, lists}} = state;
-  console.log(lists.length);
   if(lists.length === 0) {
     return true;
   } else if(isFetching) {
@@ -25,7 +24,6 @@ const shouldFetchFolders = (state) => {
 
 export const fetchAllFolders = () => (dispatch, getState) => {
   if(shouldFetchFolders(getState())) {
-    console.log('ssssssssssssssssssssss')
     dispatch(fetchFolders());
   }
 };

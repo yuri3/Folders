@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
 import { connect } from 'react-redux';
@@ -37,20 +38,13 @@ class FoundTitles extends Component {
   }
   render() {
     const {
-      notes,
-      noteOptions,
-      tags,
-      tagOptions: {isFetching: isFetchingTags},
+      notes: {loading: isFetchingNotes, lists: noteLists, search: {matchInTitles: {rows: matchNotes}, matchInTags: {rows}}},
+      tags: {loading: isFetchingTags, lists: tagLists},
       location: {state},
       moveSelectedNote,
       selectDeleteNote,
       deleteSelectedNote,
     } = this.props;
-    const {
-      isFetching: isFetchingNotes,
-      matchInTitles: {rows: matchNotes},
-      matchInTags: {rows},
-    } = noteOptions;
     const matchTags = rows.reduce((prev, curr) => {
       if(!prev.find(tag => tag.label === curr.label)) {
         prev.push(curr);
@@ -66,7 +60,7 @@ class FoundTitles extends Component {
           </div>
           {state.type === 'TITLES' &&
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
-              {notes.map((note, index) => (
+              {noteLists.map((note, index) => (
                 <ReactCSSTransitionGroup
                   key={note.id}
                   transitionName="fade"
@@ -77,7 +71,6 @@ class FoundTitles extends Component {
                     <DragAndDropNote
                       index={index}
                       note={note}
-                      options={noteOptions}
                       moveSelectedNote={moveSelectedNote}
                       selectDeleteNote={selectDeleteNote}
                       deleteSelectedNote={deleteSelectedNote}
@@ -105,18 +98,17 @@ class FoundTitles extends Component {
             </div>}
           {state.type === '' && label &&
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
-              {notes.map((note, index) => (
+              {noteLists.map((note, index) => (
                 <ReactCSSTransitionGroup
                   key={note.id}
                   transitionName="fade"
                   transitionEnterTimeout={500}
                   transitionLeaveTimeout={500}
                 >
-                  {tags.find(tag => tag.noteId === note.id && tag.label === label) &&
+                  {tagLists.find(tag => tag.noteId === note.id && tag.label === label) &&
                     <DragAndDropNote
                       index={index}
                       note={note}
-                      options={noteOptions}
                       moveSelectedNote={moveSelectedNote}
                       selectDeleteNote={selectDeleteNote}
                       deleteSelectedNote={deleteSelectedNote}
@@ -131,30 +123,33 @@ class FoundTitles extends Component {
 }
 
 FoundTitles.propTypes = {
-  notes: PropTypes.arrayOf(PropTypes.shape({
-    folderId: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    descriptions: PropTypes.string,
-  })).isRequired,
-  noteOptions: PropTypes.shape({
-    isSearching: PropTypes.bool.isRequired,
-    matchInTitles: PropTypes.shape({
-      count: PropTypes.number.isRequired,
-      rows: PropTypes.array.isRequired,
-    }).isRequired,
-    matchInTags: PropTypes.shape({
-      count: PropTypes.number.isRequired,
-      rows: PropTypes.array,
+  notes: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    lists: PropTypes.arrayOf(PropTypes.shape({
+      folderId: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      descriptions: PropTypes.string,
+    })).isRequired,
+    search: PropTypes.shape({
+      isSearching: PropTypes.bool.isRequired,
+      matchInTitles: PropTypes.shape({
+        count: PropTypes.number.isRequired,
+        rows: PropTypes.array.isRequired,
+      }).isRequired,
+      matchInTags: PropTypes.shape({
+        count: PropTypes.number.isRequired,
+        rows: PropTypes.array,
+      }).isRequired,
     }).isRequired,
   }).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.shape({
-    noteId: PropTypes.number,
-    id: PropTypes.number,
-    label: PropTypes.string
-  })).isRequired,
-  tagOptions: PropTypes.shape({
-    isFetching: PropTypes.bool.isRequired,
+  tags: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    lists: PropTypes.arrayOf(PropTypes.shape({
+      noteId: PropTypes.number,
+      id: PropTypes.number,
+      label: PropTypes.string
+    })).isRequired,
   }).isRequired,
   fetchAllNotes: PropTypes.func.isRequired,
   fetchAllTags: PropTypes.func.isRequired,
@@ -168,9 +163,7 @@ FoundTitles.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   notes: state.notes,
-  noteOptions: state.noteOptions,
   tags: state.tags,
-  tagOptions: state.tagOptions,
 });
 
 const mapDispatchToProps = (dispatch) => {

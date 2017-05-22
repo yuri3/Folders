@@ -27,7 +27,7 @@ class FolderLists extends Component {
   }
   componentWillReceiveProps(nextProps) {
     const {folders: {lists}, history} = this.props;
-    if(nextProps.folders.lists.length > lists.length) {
+    if(lists.length > 0 && nextProps.folders.lists.length > lists.length) {
       history.push(`/notes/${nextProps.folders.lists[0].id}`);
     }
     if(nextProps.folders.lists.length < lists.length) {

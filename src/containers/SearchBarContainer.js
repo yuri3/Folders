@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AutoComplete from 'material-ui/AutoComplete';
 import Toggle from 'material-ui/Toggle';
 import { connect } from 'react-redux';
@@ -23,10 +24,7 @@ class SearchBar extends Component {
     this.handleOnNewRequest = this.handleOnNewRequest.bind(this);
   }
   handleOnToggle(event, isInputChecked) {
-    this.setState({
-      ...this.state,
-      isInputChecked,
-    });
+    this.setState({isInputChecked});
   }
   handleUpdateInput(value, arr, params) {
     const {source} = params;
@@ -41,15 +39,13 @@ class SearchBar extends Component {
     if(index === -1) {
       return;
     }
+    const {isInputChecked} = this.state;
     const {
-      isInputChecked,
-    } = this.state;
-    const {
-      noteOptions: {
+      search: {
         matchInTitles: {count: noteCount},
         matchInTags: {count: tagCount},
       }
-    } = this.props;
+    } = this.props.notes;
     if(index === 0 && isInputChecked && noteCount > 0) {
       history.push({
         pathname: `/notes/search`,
@@ -69,12 +65,12 @@ class SearchBar extends Component {
   }
   render() {
     const {
-      noteOptions: {
+      search: {
         isSearching,
         matchInTitles: {count: noteCount, rows: notes},
         matchInTags: {count: tagCount},
       }
-    } = this.props;
+    } = this.props.notes;
     const {isInputChecked} = this.state;
     const dataSource = isInputChecked ? [
       `${noteCount} match(es) in titl(es).`,
@@ -83,7 +79,7 @@ class SearchBar extends Component {
     const filter = isInputChecked ? AutoComplete.noFilter :
       (searchText, note) => (
         searchText !== '' &&
-        (note.toUpperCase().indexOf(searchText.toUpperCase())) > -1
+        (note.toUpperCase().includes(searchText.toUpperCase()))
       );
     return (
       <div style={style}>
@@ -113,15 +109,17 @@ class SearchBar extends Component {
 }
 
 SearchBar.propTypes = {
-  noteOptions: PropTypes.shape({
-    isSearching: PropTypes.bool.isRequired,
-    matchInTitles: PropTypes.shape({
-      count: PropTypes.number.isRequired,
-      rows: PropTypes.array.isRequired,
-    }).isRequired,
-    matchInTags: PropTypes.shape({
-      count: PropTypes.number.isRequired,
-      rows: PropTypes.array,
+  notes: PropTypes.shape({
+    search: PropTypes.shape({
+      isSearching: PropTypes.bool.isRequired,
+      matchInTitles: PropTypes.shape({
+        count: PropTypes.number.isRequired,
+        rows: PropTypes.array.isRequired,
+      }).isRequired,
+      matchInTags: PropTypes.shape({
+        count: PropTypes.number.isRequired,
+        rows: PropTypes.array,
+      }).isRequired,
     }).isRequired,
   }).isRequired,
   history: PropTypes.object.isRequired,
@@ -130,7 +128,7 @@ SearchBar.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  noteOptions: state.noteOptions,
+  notes: state.notes,
 });
 
 const mapDispatchToProps = (dispatch) => {
